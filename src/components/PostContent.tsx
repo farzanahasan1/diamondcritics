@@ -3,6 +3,7 @@ import type { Post, Page, PostMeta } from "@/lib/content";
 import DiamondQuiz from "@/components/DiamondQuiz";
 import ReadingProgress from "@/components/ReadingProgress";
 import StickyBox from "@/components/StickyBox";
+import TocWidget, { type TocItem } from "@/components/TocWidget";
 
 const categoryLabels: Record<string, string> = {
   "diamond-buying-guides": "Diamond Buying Guides",
@@ -29,15 +30,37 @@ function estimateReadTime(html: string): number {
   return Math.max(1, Math.round(words / 220));
 }
 
+// Extracts <h2> headings, injects id attributes, returns TOC list + modified HTML
+function buildToc(html: string): { toc: TocItem[]; html: string } {
+  const toc: TocItem[] = [];
+  const seen: Record<string, number> = {};
+  const processed = html.replace(/<h2([^>]*)>([\s\S]*?)<\/h2>/gi, (_, attrs, inner) => {
+    const text = inner.replace(/<[^>]+>/g, "").trim();
+    if (!text) return `<h2${attrs}>${inner}</h2>`;
+    // Skip if id already present
+    if (/\bid=/.test(attrs)) { toc.push({ id: /id="([^"]+)"/.exec(attrs)?.[1] ?? "", text }); return `<h2${attrs}>${inner}</h2>`; }
+    const base = text.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+    const n = seen[base] ?? 0;
+    seen[base] = n + 1;
+    const id = n === 0 ? base : `${base}-${n}`;
+    toc.push({ id, text });
+    return `<h2 id="${id}"${attrs}>${inner}</h2>`;
+  });
+  return { toc, html: processed };
+}
+
 const wrap: React.CSSProperties = {
   maxWidth: "1280px",
   margin: "0 auto",
   padding: "0 2rem",
 };
 
-function BlueNileSidebar() {
+function BlueNileSidebar({ toc }: { toc: TocItem[] }) {
   return (
     <div>
+
+      {/* Table of Contents */}
+      <TocWidget items={toc} />
 
       {/* Blue Nile box */}
       <div style={{ border: "1px solid #e5e5e3", padding: "1.5rem", background: "#fff", marginBottom: "1.5rem" }}>
@@ -61,26 +84,6 @@ function BlueNileSidebar() {
         <p style={{ fontFamily: "var(--body)", fontSize: "0.72rem", color: "#bbb", textAlign: "center" }}>
           Affiliate link — no extra cost to you
         </p>
-      </div>
-
-      {/* Quick Tools */}
-      <div style={{ border: "1px solid #f0f0f0", padding: "1.5rem", marginBottom: "1.5rem" }}>
-        <p style={{ fontFamily: "var(--body)", fontSize: "0.68rem", letterSpacing: "0.14em", textTransform: "uppercase", color: "#aaa", marginBottom: "1rem" }}>
-          Quick Tools
-        </p>
-        <div>
-          {[
-            { label: "Diamond Price Calculator", href: "/diamond-price-calculator" },
-            { label: "Resale Value Calculator", href: "/diamond-resale-value-calculator" },
-            { label: "Full Clarity Chart", href: "/diamond-clarity-chart" },
-            { label: "Color Scale Guide", href: "/diamond-color-scale" },
-          ].map((tool) => (
-            <Link key={tool.href} href={tool.href}
-              style={{ display: "block", fontFamily: "var(--body)", fontSize: "0.85rem", color: "#777", padding: "10px 0", textDecoration: "none", borderBottom: "1px solid #f5f5f5" }}>
-              {tool.label} →
-            </Link>
-          ))}
-        </div>
       </div>
 
       {/* Author */}
@@ -112,6 +115,7 @@ function BlueNileSidebar() {
 export default function PostContent({ type, data, related }: Props) {
   const post = data as Post;
   const readTime = estimateReadTime(data.contentHtml);
+  const { toc, html: contentHtml } = buildToc(data.contentHtml);
 
   return (
     <div style={{ fontFamily: "var(--body)" }}>
@@ -231,12 +235,10 @@ export default function PostContent({ type, data, related }: Props) {
             {/* Main article */}
             <article>
               {(() => {
-                const html = data.contentHtml;
-                // Find the first <h2 to split intro from body
-                const h2Index = html.indexOf("<h2");
+                const h2Index = contentHtml.indexOf("<h2");
                 if (type === "post" && h2Index > 0) {
-                  const intro = html.slice(0, h2Index);
-                  const body = html.slice(h2Index);
+                  const intro = contentHtml.slice(0, h2Index);
+                  const body = contentHtml.slice(h2Index);
                   return (
                     <>
                       <div className="prose-article" dangerouslySetInnerHTML={{ __html: intro }} />
@@ -245,7 +247,7 @@ export default function PostContent({ type, data, related }: Props) {
                     </>
                   );
                 }
-                return <div className="prose-article" dangerouslySetInnerHTML={{ __html: html }} />;
+                return <div className="prose-article" dangerouslySetInnerHTML={{ __html: contentHtml }} />;
               })()}
 
               {/* Expert verdict */}
@@ -285,7 +287,7 @@ export default function PostContent({ type, data, related }: Props) {
             {/* Sidebar */}
             <aside className="article-sidebar-wrap">
               <StickyBox>
-                <BlueNileSidebar />
+                <BlueNileSidebar toc={toc} />
               </StickyBox>
             </aside>
 

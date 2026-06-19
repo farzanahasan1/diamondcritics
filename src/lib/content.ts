@@ -97,6 +97,21 @@ function rewriteContentImages(html: string): string {
   );
 }
 
+// Automatically appends affiliate ID to every Blue Nile link in a post.
+// Works whether the link was pasted from Blue Nile's site or typed manually.
+// Uses chan=blue_nile_reviews for review posts, chan=blog-informational for everything else.
+function addBluenileAffiliate(html: string, category = ""): string {
+  const chan = category === "diamond-retailer-reviews" ? "blue_nile_reviews" : "blog-informational";
+  return html.replace(
+    /href="(https?:\/\/(?:www\.)?bluenile\.com[^"]*)"/gi,
+    (_, url: string) => {
+      if (url.includes("a_aid=")) return `href="${url}"`; // already tagged
+      const sep = url.includes("?") ? "&" : "?";
+      return `href="${url}${sep}a_aid=69d7c31a91b8d&a_cid=55e51e63&chan=${chan}"`;
+    }
+  );
+}
+
 function readFile(
   dir: string,
   slug: string
@@ -118,7 +133,10 @@ function readFile(
     for (const key of ["title", "excerpt", "seoTitle", "seoDescription"]) {
       if (typeof data[key] === "string") data[key] = applyShortcodes(data[key]);
     }
-    const contentHtml = rewriteContentImages(marked(processed) as string);
+    const contentHtml = addBluenileAffiliate(
+      rewriteContentImages(marked(processed) as string),
+      data.category
+    );
     return { data, contentHtml };
   }
   return null;

@@ -31,8 +31,13 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://diamondcritics.com"),
   openGraph: { siteName: "Diamond Critics", type: "website" },
   icons: {
-    icon: [{ url: "/images/dc-icon.png", type: "image/png" }],
-    apple: "/images/dc-icon.png",
+    icon: [
+      { url: "/icon.jpg", type: "image/jpeg", sizes: "any" },
+    ],
+    apple: [
+      { url: "/apple-icon.jpg", type: "image/jpeg", sizes: "180x180" },
+    ],
+    shortcut: "/icon.jpg",
   },
 };
 

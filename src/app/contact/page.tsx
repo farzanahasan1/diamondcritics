@@ -3,7 +3,7 @@ import { useState, type FormEvent } from "react";
 import Link from "next/link";
 
 // ── Setup: go to formspree.io → New Form → copy the ID here ──────────────
-const FORMSPREE_ID = "mbdendwp";
+const FORMSPREE_ID = "mbdendep";
 // ─────────────────────────────────────────────────────────────────────────
 
 const wrap: React.CSSProperties = {
@@ -29,16 +29,6 @@ export default function ContactPage() {
     setStatus("sending");
     const form = e.currentTarget;
     const data = new FormData(form);
-
-    if (FORMSPREE_ID === "YOUR_FORMSPREE_ID") {
-      // Fallback: open mailto if Formspree not configured
-      const name    = data.get("name") as string;
-      const subject = data.get("subject") as string;
-      const message = data.get("message") as string;
-      window.location.href = `mailto:farzana@diamondcritics.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(`From: ${name}\n\n${message}`)}`;
-      setStatus("idle");
-      return;
-    }
 
     try {
       const res = await fetch(`https://formspree.io/f/${FORMSPREE_ID}`, {
@@ -68,29 +58,6 @@ export default function ContactPage() {
 
   return (
     <>
-      {/* ContactPage + Person JSON-LD */}
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
-        "@context": "https://schema.org",
-        "@type": "ContactPage",
-        "name": "Contact Farzana Hasan",
-        "url": "https://diamondcritics.com/contact",
-        "description": "Get an independent diamond audit from GIA expert Farzana Hasan.",
-        "mainEntity": {
-          "@type": "Person",
-          "name": "Farzana Hasan",
-          "jobTitle": "GIA-Certified Diamond Expert",
-          "url": "https://diamondcritics.com/about-farzana",
-          "email": "farzana@diamondcritics.com",
-          "sameAs": [
-            "https://x.com/diamondcritics",
-            "https://www.pinterest.com/diamondcritics/",
-            "https://youtube.com/channel/UCP4kx9XpVpeMqkMcD-9fslg/",
-            "https://www.linkedin.com/company/diamondcritics/",
-          ],
-          "worksFor": { "@type": "Organization", "name": "Diamond Critics", "url": "https://diamondcritics.com" },
-        },
-      })}} />
-
       <div style={{ fontFamily: "var(--body)" }}>
 
         {/* ── Dark hero ── */}

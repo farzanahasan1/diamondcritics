@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 export default function StickyBox({ children, top = 96 }: { children: ReactNode; top?: number }) {
   const ref = useRef<HTMLDivElement>(null);
   const [mode, setMode] = useState<"natural" | "fixed" | "pinned">("natural");
+  const [fixedTop, setFixedTop] = useState(top);
   const nat = useRef({ pageY: 0, left: 0, width: 0, height: 0 });
 
   useEffect(() => {
@@ -25,20 +26,26 @@ export default function StickyBox({ children, top = 96 }: { children: ReactNode;
       const { pageY, height } = nat.current;
       const scrollY = window.scrollY;
 
-      // Boundary = the article-grid container (grandparent: aside → grid)
+      // Article grid = grandparent of this wrapper (wrapper → aside → .article-grid)
       const grid = el!.parentElement?.parentElement;
-      const gridBottom = grid
-        ? grid.getBoundingClientRect().bottom + scrollY
-        : Infinity;
+      // gridBottom in VIEWPORT coordinates (changes as user scrolls)
+      const gridBottomVP = grid ? grid.getBoundingClientRect().bottom : Infinity;
 
-      const pastStart   = scrollY + top >= pageY;
-      const hitBottom   = scrollY + top + height >= gridBottom - 24; // 24px breathing room
+      const pastStart = scrollY + top >= pageY;
+      // Sidebar bottom (at normal fixed position) would hit the article bottom
+      const hitBottom = top + height >= gridBottomVP - 24;
 
       if (!pastStart) {
         setMode("natural");
+        setFixedTop(top);
       } else if (hitBottom) {
-        setMode("pinned"); // stays at bottom of article, scrolls away naturally
+        // Track the article bottom: top = articleBottom - sidebarHeight - breathing room
+        // As the user scrolls past the article, gridBottomVP shrinks → fixedTop decreases
+        // → sidebar slides upward off the viewport (scrolls away with the article)
+        setFixedTop(gridBottomVP - height - 24);
+        setMode("pinned");
       } else {
+        setFixedTop(top);
         setMode("fixed");
       }
     }
@@ -59,26 +66,23 @@ export default function StickyBox({ children, top = 96 }: { children: ReactNode;
 
   const { left, width, height } = nat.current;
 
-  // "pinned" = absolutely positioned at the bottom of the grid so it
-  // sits flush with the article end and scrolls away with the page.
-  const innerStyle: React.CSSProperties =
-    mode === "fixed"
-      ? { position: "fixed", top, left, width }
-      : mode === "pinned"
-      ? { position: "absolute", bottom: 0, left: 0, width: "100%" }
-      : {};
-
   return (
-    // Use position:relative so "pinned" absolute child anchors correctly
-    <div ref={ref}
+    <div
+      ref={ref}
       style={{
-        height: mode === "fixed" ? height : undefined,
+        // Placeholder height keeps the aside column from collapsing when fixed
+        height: mode !== "natural" ? height : undefined,
         position: "relative",
-        // Make the wrapper fill the aside (= full grid row height)
         alignSelf: "stretch",
       }}
     >
-      <div style={innerStyle}>
+      <div
+        style={
+          mode !== "natural"
+            ? { position: "fixed", top: fixedTop, left, width }
+            : {}
+        }
+      >
         {children}
       </div>
     </div>
