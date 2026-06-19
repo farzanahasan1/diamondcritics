@@ -46,6 +46,57 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
+const categoryLabelsSchema: Record<string, string> = {
+  "diamond-buying-guides": "Diamond Buying Guides",
+  "diamond-retailer-reviews": "Retailer Reviews",
+  "gemstone-guides": "Gemstone Guides",
+  "market-value-price-trends": "Market & Price Trends",
+};
+
+function extractFAQSchema(html: string): object | null {
+  const faqMatch = html.match(/<h2[^>]*>[^<]*[Ff]requently[^<]*<\/h2>([\s\S]*?)(?:<h2|$)/);
+  if (!faqMatch) return null;
+  const faqHtml = faqMatch[1];
+  const pairs: { question: string; answer: string }[] = [];
+  const regex = /<p><strong>([^<]+)<\/strong><\/p>\s*<p>([\s\S]*?)<\/p>/g;
+  let match;
+  while ((match = regex.exec(faqHtml)) !== null) {
+    const question = match[1].trim();
+    const answer = match[2].replace(/<[^>]+>/g, "").trim();
+    if (question && answer) pairs.push({ question, answer });
+  }
+  if (pairs.length === 0) return null;
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": pairs.map(({ question, answer }) => ({
+      "@type": "Question",
+      "name": question,
+      "acceptedAnswer": { "@type": "Answer", "text": answer },
+    })),
+  };
+}
+
+function buildBreadcrumbSchema(slug: string, category: string, title: string): object {
+  const items: { name: string; url: string }[] = [
+    { name: "Home", url: "https://diamondcritics.com" },
+  ];
+  if (category && categoryLabelsSchema[category]) {
+    items.push({ name: categoryLabelsSchema[category], url: `https://diamondcritics.com/category/${category}` });
+  }
+  items.push({ name: title, url: `https://diamondcritics.com/${slug}` });
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": items.map(({ name, url }, i) => ({
+      "@type": "ListItem",
+      "position": i + 1,
+      "name": name,
+      "item": url,
+    })),
+  };
+}
+
 const reviewSchemas: Record<string, object> = {
   "blue-nile-review": {
     "@context": "https://schema.org",
@@ -124,12 +175,18 @@ export default async function SlugPage({ params }: Props) {
       "url": `https://diamondcritics.com/${slug}`,
       "mainEntityOfPage": `https://diamondcritics.com/${slug}`,
     };
+    const faqSchema = extractFAQSchema(post.contentHtml);
+    const breadcrumbSchema = buildBreadcrumbSchema(slug, post.category, post.title);
     return (
       <>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
         {reviewSchema && (
           <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(reviewSchema) }} />
         )}
+        {faqSchema && (
+          <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
+        )}
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
         <PostContent type="post" data={post} related={related} />
       </>
     );
