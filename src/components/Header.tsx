@@ -71,9 +71,30 @@ export default function Header() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link href="/" className="flex-shrink-0">
-            <span style={{ fontFamily: "var(--font-marcellus)" }} className="text-xl font-normal text-black tracking-wide">
-              Diamond<span className="text-gray-400">Critics</span>
+          <Link href="/" className="flex-shrink-0 flex items-baseline gap-1.5">
+            <span
+              style={{
+                fontFamily: "var(--heading)",
+                fontStyle: "italic",
+                fontSize: "1.6rem",
+                fontWeight: 300,
+                lineHeight: 1,
+                color: "var(--gold)",
+                letterSpacing: "-0.01em",
+              }}
+            >
+              D◆
+            </span>
+            <span
+              style={{
+                fontFamily: "var(--heading)",
+                fontSize: "1.1rem",
+                fontWeight: 300,
+                letterSpacing: "0.05em",
+                color: "var(--ink)",
+              }}
+            >
+              Diamond <em className="italic not-italic" style={{ fontStyle: "italic" }}>Critics</em>
             </span>
           </Link>
 
@@ -87,7 +108,7 @@ export default function Header() {
                   onMouseEnter={() => setOpenDropdown(item.label)}
                   onMouseLeave={() => setOpenDropdown(null)}
                 >
-                  <button className="flex items-center gap-1 px-3 py-2 text-sm text-gray-700 hover:text-black transition-colors">
+                  <button className="flex items-center gap-1 px-3 py-2 text-sm text-gray-700 hover:text-black transition-colors" style={{ fontFamily: "var(--body)" }}>
                     {item.label}
                     <svg className="w-3 h-3 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />

@@ -7,13 +7,25 @@ export default function Footer() {
         <div className="grid sm:grid-cols-3 gap-12 mb-16">
           {/* Brand */}
           <div>
-            <div className="flex items-center gap-3 mb-6">
-              <span style={{ fontFamily: "var(--font-heading)" }} className="text-4xl text-white italic font-normal leading-none">
+            <div className="flex items-baseline gap-2 mb-6">
+              <span
+                style={{
+                  fontFamily: "var(--heading)",
+                  fontStyle: "italic",
+                  fontSize: "2rem",
+                  fontWeight: 300,
+                  color: "var(--gold)",
+                  lineHeight: 1,
+                }}
+              >
                 D◆
               </span>
             </div>
-            <p style={{ fontFamily: "var(--font-heading)" }} className="text-lg text-white font-normal mb-3">
-              Diamond Critics
+            <p
+              className="text-lg font-normal mb-3"
+              style={{ fontFamily: "var(--heading)", fontWeight: 300 }}
+            >
+              Diamond <em className="italic" style={{ color: "var(--gold)" }}>Critics</em>
             </p>
             <p className="text-xs text-gray-500 leading-relaxed max-w-xs">
               Independent, technical critiques of the world's leading diamond retailers. We analyze light performance and value so you can buy with total confidence.

@@ -1,191 +1,441 @@
 import Link from "next/link";
 import { getAllPosts } from "@/lib/content";
 
-const categoryLabels: Record<string, string> = {
-  "diamond-buying-guides": "Diamond Buying Guides",
-  "diamond-retailer-reviews": "Retailer Reviews",
-  "gemstone-guides": "Gemstone Guides",
-  "market-value-price-trends": "Market & Price Trends",
+const catLabel: Record<string, string> = {
+  "diamond-buying-guides": "Buying Guide",
+  "diamond-retailer-reviews": "Retailer Review",
+  "gemstone-guides": "Gemstone",
+  "market-value-price-trends": "Market & Price",
 };
 
 export default function HomePage() {
   const posts = getAllPosts();
-  const latest = posts.slice(0, 8);
+  const hero = posts[0];
+  const secondaries = posts.slice(1, 4);
+  const grid = posts.slice(4, 12);
 
   return (
-    <div style={{ fontFamily: "var(--font-body)" }}>
+    <>
+      {/* ── Top bar ──────────────────────────────────────────── */}
+      <div
+        className="border-b border-gray-200 py-2.5 px-6"
+        style={{ background: "var(--cream)" }}
+      >
+        <div
+          className="max-w-screen-xl mx-auto flex items-center justify-between text-xs"
+          style={{ fontFamily: "var(--body)", color: "var(--muted)", letterSpacing: "0.1em" }}
+        >
+          <span className="uppercase tracking-widest hidden sm:flex items-center gap-2">
+            <em style={{ fontFamily: "var(--heading)", fontSize: "0.9rem", fontStyle: "italic", letterSpacing: 0 }}>Expert</em>
+            <span>Diamond Analysis · GIA-Backed · No Sponsored Content</span>
+          </span>
+          <a
+            href="https://www.bluenile.com/diamond-search?a_aid=69d7c31a91b8d&a_cid=55e51e63&chan=blog-informational"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="uppercase tracking-widest hover:text-black transition-colors ml-auto sm:ml-0"
+          >
+            Shop Blue Nile — Up to 40% Less →
+          </a>
+        </div>
+      </div>
 
       {/* ── Hero ─────────────────────────────────────────────── */}
-      <section className="text-center px-6 py-24 sm:py-32 border-b border-gray-100">
-        <p className="text-xs tracking-widest uppercase text-gray-400 mb-8">
-          Objective Expertise
-        </p>
-        <h1 style={{ fontFamily: "var(--font-heading)" }} className="text-4xl sm:text-5xl lg:text-6xl font-normal text-black max-w-3xl mx-auto leading-tight">
-          Stop overpaying for{" "}
-          <em className="italic">"invisible" diamond features.</em>
-        </h1>
-        <p className="mt-8 text-base text-gray-500 max-w-xl mx-auto leading-relaxed">
-          Confusing jargon is used to sell grades you can't see. We provide technical audits to help you save thousands without sacrificing brilliance.
-        </p>
-        <div className="mt-10 flex flex-wrap justify-center gap-8 text-xs tracking-widest uppercase text-black">
-          <Link href="/diamond-clarity-chart" className="border-b border-black pb-0.5 hover:text-gray-500 transition-colors">
-            Diamond Audits
-          </Link>
-          <Link href="/lab-grown-vs-natural-diamond-price" className="border-b border-black pb-0.5 hover:text-gray-500 transition-colors">
-            Natural vs Lab Comparison
-          </Link>
-          <Link href="/diamond-prices" className="border-b border-black pb-0.5 hover:text-gray-500 transition-colors">
-            Market Value & Price Trends
-          </Link>
-        </div>
+      <section className="max-w-screen-xl mx-auto px-6 sm:px-8 pt-16 pb-12 border-b border-gray-200">
+        {hero ? (
+          <div className="grid lg:grid-cols-[1fr_480px] gap-12 lg:gap-20 items-center">
+            <div>
+              {hero.category && (
+                <div className="flex items-center gap-3 mb-6">
+                  <span className="block w-8 h-px" style={{ background: "var(--gold)" }} />
+                  <p
+                    className="text-xs font-semibold tracking-widest uppercase"
+                    style={{ color: "var(--gold)", fontFamily: "var(--body)" }}
+                  >
+                    {catLabel[hero.category] ?? hero.category}
+                  </p>
+                </div>
+              )}
+              <h1
+                className="font-light leading-none mb-4"
+                style={{
+                  fontFamily: "var(--heading)",
+                  fontSize: "clamp(2.6rem, 5.5vw, 4.8rem)",
+                  letterSpacing: "-0.02em",
+                  lineHeight: 1.08,
+                }}
+              >
+                {hero.title}
+              </h1>
+              <p
+                className="mb-7 text-sm"
+                style={{
+                  fontFamily: "var(--heading)",
+                  fontStyle: "italic",
+                  color: "var(--muted)",
+                  fontSize: "1.15rem",
+                  lineHeight: 1.5,
+                }}
+              >
+                — An independent audit by{" "}
+                <span style={{ color: "var(--ink)" }}>Farzana</span>
+              </p>
+              {hero.excerpt && (
+                <p
+                  className="text-base leading-relaxed mb-8 max-w-lg"
+                  style={{ color: "var(--muted)", fontFamily: "var(--body)" }}
+                >
+                  {hero.excerpt}
+                </p>
+              )}
+              <Link
+                href={`/${hero.slug}`}
+                className="inline-flex items-center gap-3 text-xs font-semibold tracking-widest uppercase border-b border-black pb-1 hover:text-gray-500 hover:border-gray-500 transition-colors"
+                style={{ fontFamily: "var(--body)" }}
+              >
+                Read the Full Audit
+              </Link>
+            </div>
+            <div className="relative">
+              {hero.featuredImage ? (
+                <img
+                  src={hero.featuredImage}
+                  alt={hero.title}
+                  className="w-full aspect-[4/3] object-cover"
+                  style={{ filter: "contrast(1.02)" }}
+                />
+              ) : (
+                <div className="w-full aspect-[4/3] bg-gray-100 flex items-center justify-center">
+                  <span
+                    className="text-6xl"
+                    style={{ fontFamily: "var(--heading)", color: "var(--border)", fontStyle: "italic" }}
+                  >
+                    ◆
+                  </span>
+                </div>
+              )}
+              {hero.featuredImage && (
+                <div className="absolute -bottom-4 -left-4 w-24 h-24 border border-gray-200 -z-10 hidden lg:block" />
+              )}
+            </div>
+          </div>
+        ) : (
+          <div className="text-center py-20">
+            <h1 style={{ fontFamily: "var(--heading)", fontSize: "4rem" }}>
+              Diamond <em className="italic" style={{ color: "var(--gold)" }}>Critics</em>
+            </h1>
+          </div>
+        )}
       </section>
 
-      {/* ── Feature pillars ──────────────────────────────────── */}
-      <section className="max-w-5xl mx-auto px-6 py-20 grid sm:grid-cols-2 gap-16">
-        <div>
-          <div className="w-8 h-px bg-black mb-6" />
-          <h2 style={{ fontFamily: "var(--font-heading)" }} className="text-2xl font-normal mb-4">
-            The Eye-Clean <em className="italic">Standard</em>
-          </h2>
-          <p className="text-sm text-gray-500 leading-relaxed">
-            We analyze 4K 360-degree imagery to find SI1 and VS2 diamonds that are eye-clean, avoiding the "Flawless" markup.
+      {/* ── Three secondary posts ─────────────────────────────── */}
+      {secondaries.length > 0 && (
+        <section className="max-w-screen-xl mx-auto px-6 sm:px-8 py-12 border-b border-gray-200">
+          <div className="grid sm:grid-cols-3 gap-8 lg:gap-12">
+            {secondaries.map((p) => (
+              <Link key={p.slug} href={`/${p.slug}`} className="group block">
+                <div className="aspect-[3/2] overflow-hidden bg-gray-100 mb-5">
+                  {p.featuredImage ? (
+                    <img
+                      src={p.featuredImage}
+                      alt={p.title}
+                      className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-700"
+                    />
+                  ) : (
+                    <div className="w-full h-full" style={{ background: "var(--cream)" }} />
+                  )}
+                </div>
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="block w-5 h-px" style={{ background: "var(--gold)" }} />
+                  <p
+                    className="text-xs font-semibold tracking-widest uppercase"
+                    style={{ color: "var(--gold)", fontFamily: "var(--body)" }}
+                  >
+                    {catLabel[p.category] ?? p.category}
+                  </p>
+                </div>
+                <h2
+                  className="font-light leading-snug group-hover:opacity-60 transition-opacity line-clamp-2"
+                  style={{
+                    fontFamily: "var(--heading)",
+                    fontSize: "clamp(1.2rem, 2vw, 1.5rem)",
+                    lineHeight: 1.2,
+                  }}
+                >
+                  {p.title}
+                </h2>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* ── Pull quote strip ─────────────────────────────────── */}
+      <div
+        className="py-10 px-6 border-b border-gray-200"
+        style={{ background: "var(--cream)" }}
+      >
+        <div className="max-w-screen-xl mx-auto text-center">
+          <p
+            style={{
+              fontFamily: "var(--heading)",
+              fontStyle: "italic",
+              fontSize: "clamp(1.3rem, 2.5vw, 1.8rem)",
+              color: "var(--ink)",
+              lineHeight: 1.5,
+              letterSpacing: "-0.01em",
+            }}
+          >
+            "The difference between a good diamond and a great one is invisible to most —
+            <span style={{ color: "var(--gold)" }}> our audits make it visible."</span>
+          </p>
+          <p
+            className="mt-3 text-xs tracking-widest uppercase"
+            style={{ fontFamily: "var(--body)", color: "var(--muted)" }}
+          >
+            — Farzana, Founder &amp; Lead Analyst
           </p>
         </div>
-        <div>
-          <div className="w-8 h-px bg-black mb-6" />
-          <h2 style={{ fontFamily: "var(--font-heading)" }} className="text-2xl font-normal mb-4">
-            <em className="italic">Light</em> Performance
-          </h2>
-          <p className="text-sm text-gray-500 leading-relaxed">
-            We critique table, crown, and pavilion angles to ensure maximum fire and brilliance beyond the basic certificate.
-          </p>
-        </div>
-      </section>
+      </div>
 
-      {/* ── Dark section: Expert Audits ───────────────────────── */}
-      <section className="bg-black text-white py-24 px-6">
-        <div className="max-w-5xl mx-auto">
-          <p className="text-xs tracking-widest uppercase text-gray-500 text-center mb-4">
-            Technical Audits
-          </p>
-          <h2 style={{ fontFamily: "var(--font-heading)" }} className="text-3xl sm:text-4xl font-normal text-center text-white mb-16">
-            Expert Diamond <em className="italic">Audits</em>
-          </h2>
+      {/* ── Dark: Expert Audits ───────────────────────────────── */}
+      <section className="py-24 px-6 sm:px-8" style={{ background: "var(--ink)" }}>
+        <div className="max-w-screen-xl mx-auto">
+          <div className="flex items-end justify-between mb-14">
+            <div>
+              <p
+                className="text-xs tracking-widest uppercase mb-3"
+                style={{ color: "var(--muted)", fontFamily: "var(--body)" }}
+              >
+                Technical Audits
+              </p>
+              <h2
+                className="font-light text-white"
+                style={{ fontFamily: "var(--heading)", fontSize: "clamp(2rem, 4vw, 3.2rem)" }}
+              >
+                Expert Diamond{" "}
+                <em className="italic" style={{ color: "var(--gold)" }}>
+                  Audits
+                </em>
+              </h2>
+            </div>
+            <Link
+              href="/category/diamond-buying-guides"
+              className="hidden sm:block text-xs tracking-widest uppercase border-b pb-0.5 transition-colors"
+              style={{ color: "var(--muted)", borderColor: "var(--muted)", fontFamily: "var(--body)" }}
+            >
+              All Guides →
+            </Link>
+          </div>
 
-          <div className="grid sm:grid-cols-3 gap-1">
+          <div className="grid sm:grid-cols-3 gap-px" style={{ background: "#333" }}>
             {[
               {
                 label: "Mastering the 4Cs",
+                sub: "Carat · Cut · Color · Clarity",
                 href: "/diamond-4cs",
                 img: "/images/infographic-for-diamond-4c-clarity.jpg",
               },
               {
                 label: "Diamond Prices & Trends",
+                sub: "2026 market data, crash analysis",
                 href: "/diamond-prices",
                 img: "/images/diamond-prices-2026-march-market-crash-report.jpg",
               },
               {
-                label: "Clarity Grade Guides",
+                label: "Clarity Grade Audits",
+                sub: "FL through SI — what to actually buy",
                 href: "/diamond-clarity-chart",
                 img: "/images/diamond-clarity-chart-beware-clouds-not-shown-milky.jpg",
               },
-            ].map((item) => (
-              <Link key={item.href} href={item.href} className="relative aspect-[4/3] overflow-hidden bg-gray-900 group block">
-                {item.img && (
+            ].map((card) => (
+              <Link
+                key={card.href}
+                href={card.href}
+                className="relative group block overflow-hidden aspect-[4/3]"
+                style={{ background: "#1a1a1a" }}
+              >
+                {card.img && (
                   <img
-                    src={item.img}
-                    alt={item.label}
-                    className="w-full h-full object-cover opacity-40 group-hover:opacity-55 transition-opacity duration-500"
+                    src={card.img}
+                    alt={card.label}
+                    className="absolute inset-0 w-full h-full object-cover opacity-30 group-hover:opacity-45 transition-opacity duration-500"
                   />
                 )}
-                <div className="absolute inset-0 flex items-end p-6">
-                  <h3 style={{ fontFamily: "var(--font-heading)" }} className="text-white text-xl font-normal">
-                    {item.label}
+                <div className="relative h-full flex flex-col justify-end p-8">
+                  <p
+                    className="text-xs tracking-widest uppercase mb-2"
+                    style={{ color: "var(--gold)", fontFamily: "var(--body)" }}
+                  >
+                    {card.sub}
+                  </p>
+                  <h3
+                    className="font-light text-white leading-tight"
+                    style={{ fontFamily: "var(--heading)", fontSize: "1.6rem" }}
+                  >
+                    {card.label}
                   </h3>
+                  <p
+                    className="mt-3 text-xs"
+                    style={{
+                      fontFamily: "var(--heading)",
+                      fontStyle: "italic",
+                      color: "rgba(255,255,255,0.4)",
+                    }}
+                  >
+                    Read the audit →
+                  </p>
                 </div>
               </Link>
             ))}
-          </div>
-
-          <div className="text-center mt-12">
-            <Link
-              href="/category/diamond-buying-guides"
-              className="inline-block border border-white text-white text-xs tracking-widest uppercase px-8 py-4 hover:bg-white hover:text-black transition-colors"
-            >
-              View All Guides
-            </Link>
           </div>
         </div>
       </section>
 
       {/* ── Where to Buy ─────────────────────────────────────── */}
-      <section className="max-w-4xl mx-auto px-6 py-24">
-        <h2 style={{ fontFamily: "var(--font-heading)" }} className="text-3xl sm:text-4xl font-normal text-center mb-16">
-          Where to Buy <em className="italic">in 2026</em>
-        </h2>
+      <section className="max-w-screen-xl mx-auto px-6 sm:px-8 py-24 border-b border-gray-200">
+        <div className="max-w-3xl mx-auto">
+          <p
+            className="text-xs tracking-widest uppercase mb-4 text-center"
+            style={{ color: "var(--muted)", fontFamily: "var(--body)" }}
+          >
+            Verified Retailer
+          </p>
+          <h2
+            className="font-light text-center mb-2"
+            style={{ fontFamily: "var(--heading)", fontSize: "clamp(2rem, 4vw, 3rem)" }}
+          >
+            Where to Buy <em className="italic" style={{ color: "var(--gold)" }}>in 2026</em>
+          </h2>
+          <p
+            className="text-center mb-14 text-sm"
+            style={{
+              fontFamily: "var(--heading)",
+              fontStyle: "italic",
+              color: "var(--muted)",
+              fontSize: "1.05rem",
+            }}
+          >
+            Based on price, selection &amp; verified customer experience
+          </p>
 
-        <div className="border-t border-black">
-          {/* Header row */}
-          <div className="grid grid-cols-4 py-3 border-b border-gray-200">
-            {["RETAILER", "THE VERDICT", "BEST FOR", "ACTION"].map((h) => (
-              <span key={h} className="text-xs tracking-widest uppercase text-gray-400 font-medium">{h}</span>
-            ))}
-          </div>
-
-          {/* Blue Nile row */}
-          <div className="grid grid-cols-4 items-center py-7 border-b border-gray-100">
-            <span style={{ fontFamily: "var(--font-heading)" }} className="text-2xl font-normal">Blue Nile</span>
-            <span className="text-sm font-semibold text-green-700">4.6/5 – TRUSTED ORIGINAL</span>
-            <span className="text-sm text-gray-500">Inventory Depth</span>
-            <a
-              href="https://www.bluenile.com/diamond-search?a_aid=69d7c31a91b8d&a_cid=55e51e63&chan=blue_nile_reviews"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block bg-black text-white text-xs font-semibold tracking-widest uppercase px-5 py-3 hover:bg-gray-800 transition-colors w-fit"
-            >
-              Full Audit
-            </a>
+          <div className="border-t border-b border-gray-200 divide-y divide-gray-100">
+            <div className="grid grid-cols-4 py-3 gap-4">
+              {["Retailer", "Verdict", "Best For", ""].map((h) => (
+                <span
+                  key={h}
+                  className="text-xs tracking-widest uppercase"
+                  style={{ color: "var(--muted)", fontFamily: "var(--body)" }}
+                >
+                  {h}
+                </span>
+              ))}
+            </div>
+            <div className="grid grid-cols-4 items-center py-7 gap-4">
+              <span
+                className="font-light"
+                style={{ fontFamily: "var(--heading)", fontSize: "1.8rem" }}
+              >
+                Blue Nile
+              </span>
+              <div>
+                <span className="text-xs font-semibold tracking-wide text-green-700">4.6 / 5</span>
+                <p
+                  className="text-xs mt-0.5"
+                  style={{
+                    color: "var(--muted)",
+                    fontFamily: "var(--heading)",
+                    fontStyle: "italic",
+                  }}
+                >
+                  Trusted Original
+                </p>
+              </div>
+              <span
+                className="text-sm"
+                style={{ color: "var(--muted)", fontFamily: "var(--body)" }}
+              >
+                Inventory Depth
+              </span>
+              <a
+                href="https://www.bluenile.com/diamond-search?a_aid=69d7c31a91b8d&a_cid=55e51e63&chan=blue_nile_reviews"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs font-semibold tracking-widest uppercase px-5 py-3 text-white text-center hover:opacity-80 transition-opacity w-fit"
+                style={{ background: "var(--ink)", fontFamily: "var(--body)" }}
+              >
+                Full Audit
+              </a>
+            </div>
           </div>
 
           <div className="text-center mt-10">
             <Link
               href="/blue-nile-review"
-              className="inline-block border border-black text-black text-xs tracking-widest uppercase px-8 py-4 hover:bg-black hover:text-white transition-colors"
+              className="text-xs tracking-widest uppercase border-b pb-0.5 hover:text-gray-500 transition-colors"
+              style={{ fontFamily: "var(--body)", borderColor: "var(--ink)" }}
             >
-              View All Retailer Reviews
+              View All Retailer Reviews →
             </Link>
           </div>
         </div>
       </section>
 
       {/* ── Knowledge Hub ────────────────────────────────────── */}
-      <section className="border-t border-gray-100 py-24 px-6">
-        <div className="max-w-6xl mx-auto">
-          <h2 style={{ fontFamily: "var(--font-heading)" }} className="text-3xl sm:text-4xl font-normal text-center mb-16">
-            Knowledge <em className="italic">Hub</em>
-          </h2>
+      {grid.length > 0 && (
+        <section className="max-w-screen-xl mx-auto px-6 sm:px-8 py-24">
+          <div className="flex items-end justify-between mb-14">
+            <div>
+              <p
+                className="text-xs tracking-widest uppercase mb-2"
+                style={{ fontFamily: "var(--body)", color: "var(--muted)" }}
+              >
+                Learn &amp; Compare
+              </p>
+              <h2
+                className="font-light"
+                style={{ fontFamily: "var(--heading)", fontSize: "clamp(2rem, 4vw, 3rem)" }}
+              >
+                Knowledge <em className="italic" style={{ color: "var(--gold)" }}>Hub</em>
+              </h2>
+            </div>
+            <Link
+              href="/category/diamond-buying-guides"
+              className="hidden sm:block text-xs tracking-widest uppercase border-b pb-0.5 hover:text-gray-400 transition-colors"
+              style={{ fontFamily: "var(--body)", color: "var(--muted)", borderColor: "var(--muted)" }}
+            >
+              All Guides →
+            </Link>
+          </div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {latest.map((post) => (
-              <Link key={post.slug} href={`/${post.slug}`} className="group block">
-                <div className="aspect-[4/3] bg-gray-100 overflow-hidden mb-4">
-                  {post.featuredImage ? (
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10">
+            {grid.map((p) => (
+              <Link key={p.slug} href={`/${p.slug}`} className="group block">
+                <div className="aspect-[3/2] overflow-hidden bg-gray-100 mb-4">
+                  {p.featuredImage ? (
                     <img
-                      src={post.featuredImage}
-                      alt={post.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      src={p.featuredImage}
+                      alt={p.title}
+                      className="w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-700"
                     />
                   ) : (
-                    <div className="w-full h-full bg-gray-100 flex items-center justify-center">
-                      <span style={{ fontFamily: "var(--font-heading)" }} className="text-3xl text-gray-300 italic">D◆</span>
-                    </div>
+                    <div className="w-full h-full" style={{ background: "var(--cream)" }} />
                   )}
                 </div>
-                <span className="text-xs tracking-widest uppercase text-gray-400 block mb-1.5">
-                  {categoryLabels[post.category] ?? post.category}
-                </span>
-                <h3 style={{ fontFamily: "var(--font-heading)" }} className="text-base font-normal text-black group-hover:text-gray-500 transition-colors leading-snug line-clamp-2">
-                  {post.title}
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="block w-4 h-px" style={{ background: "var(--gold)" }} />
+                  <p
+                    className="text-xs font-semibold tracking-widest uppercase"
+                    style={{ color: "var(--gold)", fontFamily: "var(--body)" }}
+                  >
+                    {catLabel[p.category] ?? p.category}
+                  </p>
+                </div>
+                <h3
+                  className="font-light leading-snug group-hover:opacity-60 transition-opacity line-clamp-2"
+                  style={{ fontFamily: "var(--heading)", fontSize: "1.15rem", lineHeight: 1.3 }}
+                >
+                  {p.title}
                 </h3>
               </Link>
             ))}
@@ -194,14 +444,46 @@ export default function HomePage() {
           <div className="text-center mt-14">
             <Link
               href="/category/diamond-buying-guides"
-              className="inline-block border border-black text-black text-xs tracking-widest uppercase px-8 py-4 hover:bg-black hover:text-white transition-colors"
+              className="inline-block text-xs font-semibold tracking-widest uppercase border border-black px-10 py-4 hover:bg-black hover:text-white transition-colors"
+              style={{ fontFamily: "var(--body)" }}
             >
               View All Buying Guides
             </Link>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
-    </div>
+      {/* ── Bottom CTA strip ─────────────────────────────────── */}
+      <div className="py-16 px-6" style={{ background: "var(--cream)", borderTop: "1px solid var(--border)" }}>
+        <div className="max-w-screen-xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-8">
+          <div>
+            <h3
+              className="font-light mb-1"
+              style={{ fontFamily: "var(--heading)", fontSize: "clamp(1.5rem, 3vw, 2.2rem)" }}
+            >
+              Ready to find your{" "}
+              <em className="italic" style={{ color: "var(--gold)" }}>
+                perfect diamond?
+              </em>
+            </h3>
+            <p
+              className="text-sm"
+              style={{ fontFamily: "var(--heading)", fontStyle: "italic", color: "var(--muted)" }}
+            >
+              We recommend Blue Nile — 40% less than mall jewellers, GIA-certified.
+            </p>
+          </div>
+          <a
+            href="https://www.bluenile.com/diamond-search?a_aid=69d7c31a91b8d&a_cid=55e51e63&chan=homepage-cta"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="shrink-0 text-xs font-semibold tracking-widest uppercase px-8 py-4 text-white hover:opacity-80 transition-opacity"
+            style={{ background: "var(--ink)", fontFamily: "var(--body)" }}
+          >
+            Shop Blue Nile →
+          </a>
+        </div>
+      </div>
+    </>
   );
 }
