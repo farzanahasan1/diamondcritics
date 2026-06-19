@@ -58,7 +58,7 @@ function extractFAQSchema(html: string): object | null {
   if (!faqMatch) return null;
   const faqHtml = faqMatch[1];
   const pairs: { question: string; answer: string }[] = [];
-  const regex = /<p><strong>([^<]+)<\/strong><\/p>\s*<p>([\s\S]*?)<\/p>/g;
+  const regex = /<h3[^>]*>([^<]+\?)<\/h3>\s*<p>([\s\S]*?)<\/p>/g;
   let match;
   while ((match = regex.exec(faqHtml)) !== null) {
     const question = match[1].trim();
