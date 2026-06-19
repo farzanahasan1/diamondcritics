@@ -30,15 +30,6 @@ export const metadata: Metadata = {
     "GIA-backed diamond buying guides covering clarity, color, cut, and carat. Data-driven advice from Farzana Hasan, GIA Expert.",
   metadataBase: new URL("https://diamondcritics.com"),
   openGraph: { siteName: "Diamond Critics", type: "website" },
-  icons: {
-    icon: [
-      { url: "/icon.jpg", type: "image/jpeg", sizes: "any" },
-    ],
-    apple: [
-      { url: "/apple-icon.jpg", type: "image/jpeg", sizes: "180x180" },
-    ],
-    shortcut: "/icon.jpg",
-  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
