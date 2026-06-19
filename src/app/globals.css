@@ -235,7 +235,6 @@ body {
   display: grid;
   grid-template-columns: 1fr 300px;
   gap: 4rem;
-  align-items: start;
 }
 
 .article-sidebar-wrap { display: block; }
