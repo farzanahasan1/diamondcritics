@@ -39,6 +39,22 @@ export interface Page extends PageMeta {
   contentHtml: string;
 }
 
+// ── Dynamic shortcodes ────────────────────────────────────────
+// Usage in any .mdoc file: {{month}}, {{year}}, {{month_year}}, {{date}}
+// Posts using shortcodes automatically get dateModified = today (signals freshness to Google)
+const _now = new Date();
+const SHORTCODE_MAP: Record<string, string> = {
+  "{{year}}":       _now.getFullYear().toString(),
+  "{{month}}":      _now.toLocaleString("en-US", { month: "long" }),
+  "{{month_year}}": _now.toLocaleString("en-US", { month: "long", year: "numeric" }),
+  "{{date}}":       _now.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" }),
+};
+const SHORTCODE_RE = /\{\{(year|month|month_year|date)\}\}/g;
+
+function applyShortcodes(text: string): string {
+  return text.replace(SHORTCODE_RE, (match) => SHORTCODE_MAP[match] ?? match);
+}
+
 function readDir(dir: string): string[] {
   if (!fs.existsSync(dir)) return [];
   return fs
@@ -91,9 +107,18 @@ function readFile(
     if (!fs.existsSync(filePath)) continue;
     const raw = fs.readFileSync(filePath, "utf-8");
     const { data, content } = matter(raw);
-    // Ensure a blank line before every ATX heading so marked always converts ## → <h2>
-    const normalized = content.replace(/([^\n])\n(#{1,6} )/g, "$1\n\n$2");
-    const contentHtml = rewriteContentImages(marked(normalized) as string);
+    // Auto-set updatedAt for posts using shortcodes (signals freshness to Google each rebuild)
+    if (SHORTCODE_RE.test(content)) {
+      SHORTCODE_RE.lastIndex = 0; // reset after .test()
+      if (!data.updatedAt) data.updatedAt = _now.toISOString().slice(0, 10);
+    }
+    // Apply shortcodes, then ensure blank line before headings
+    const processed = applyShortcodes(content).replace(/([^\n])\n(#{1,6} )/g, "$1\n\n$2");
+    // Apply shortcodes to frontmatter text fields too
+    for (const key of ["title", "excerpt", "seoTitle", "seoDescription"]) {
+      if (typeof data[key] === "string") data[key] = applyShortcodes(data[key]);
+    }
+    const contentHtml = rewriteContentImages(marked(processed) as string);
     return { data, contentHtml };
   }
   return null;

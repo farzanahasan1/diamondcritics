@@ -261,6 +261,11 @@ body {
 }
 
 /* ─── Blue Nile review card (bn26-rev) ──────────────────── */
+/* Override prose-article img styles inside review card */
+.prose-article .bn26-rev-card img { margin: 0; max-width: 100%; height: auto; }
+.prose-article .bn26-rev-logo { max-width: 180px; }
+.prose-article .bn26-rev-avatar { width: 64px; height: 64px; border-radius: 50%; object-fit: cover; }
+
 .bn26-rev-card {
   max-width: 800px;
   margin: 2.5rem auto;
