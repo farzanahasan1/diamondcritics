@@ -438,6 +438,14 @@ body {
   }
 }
 
+/* ─── Category grid ─────────────────────────────────────── */
+@media (max-width: 900px) {
+  .cat-grid { grid-template-columns: repeat(2, 1fr) !important; }
+}
+@media (max-width: 540px) {
+  .cat-grid { grid-template-columns: 1fr !important; }
+}
+
 /* ─── About page ticker ──────────────────────────────────── */
 @keyframes ticker-loop {
   0% { transform: translateX(0); }
