@@ -437,3 +437,15 @@ body {
     grid-template-columns: 1fr !important;
   }
 }
+
+/* ─── About page ticker ──────────────────────────────────── */
+@keyframes ticker-loop {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.about-ticker-track {
+  display: flex;
+  white-space: nowrap;
+  width: max-content;
+  animation: ticker-loop 40s linear infinite;
+}

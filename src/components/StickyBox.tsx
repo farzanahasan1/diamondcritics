@@ -1,35 +1,51 @@
 "use client";
-import { useEffect, useRef, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 
-export default function StickyBox({ children, topOffset = 96 }: { children: ReactNode; topOffset?: number }) {
-  const innerRef = useRef<HTMLDivElement>(null);
+export default function StickyBox({ children, top = 96 }: { children: ReactNode; top?: number }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [isFixed, setIsFixed] = useState(false);
+  const nat = useRef({ pageY: 0, left: 0, width: 0, height: 0 });
 
   useEffect(() => {
-    const inner = innerRef.current;
-    const outer = inner?.parentElement; // the <aside> grid item
-    if (!inner || !outer) return;
+    const el = ref.current;
+    if (!el) return;
 
-    function update() {
-      if (!inner || !outer) return;
-      const outerRect = outer.getBoundingClientRect();
-      const innerH = inner.offsetHeight;
-      if (outerRect.top < topOffset) {
-        const max = Math.max(0, outerRect.height - innerH);
-        const y = Math.min(Math.max(0, topOffset - outerRect.top), max);
-        inner.style.transform = `translateY(${y}px)`;
-      } else {
-        inner.style.transform = "translateY(0)";
-      }
+    function snap() {
+      const r = el!.getBoundingClientRect();
+      nat.current = {
+        pageY: r.top + window.scrollY,
+        left: r.left,
+        width: r.width,
+        height: r.height,
+      };
     }
 
-    window.addEventListener("scroll", update, { passive: true });
-    window.addEventListener("resize", update);
-    update();
-    return () => {
-      window.removeEventListener("scroll", update);
-      window.removeEventListener("resize", update);
-    };
-  }, [topOffset]);
+    function tick() {
+      if (!nat.current.width) return;
+      setIsFixed(window.scrollY + top >= nat.current.pageY);
+    }
 
-  return <div ref={innerRef}>{children}</div>;
+    function onResize() {
+      setIsFixed(false);
+      requestAnimationFrame(snap);
+    }
+
+    requestAnimationFrame(snap);
+    window.addEventListener("scroll", tick, { passive: true });
+    window.addEventListener("resize", onResize);
+    return () => {
+      window.removeEventListener("scroll", tick);
+      window.removeEventListener("resize", onResize);
+    };
+  }, [top]);
+
+  const { left, width, height } = nat.current;
+
+  return (
+    <div ref={ref} style={{ height: isFixed ? height : undefined }}>
+      <div style={isFixed ? { position: "fixed", top, left, width } : undefined}>
+        {children}
+      </div>
+    </div>
+  );
 }

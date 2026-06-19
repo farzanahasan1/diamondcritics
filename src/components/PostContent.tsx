@@ -84,17 +84,19 @@ function BlueNileSidebar() {
       </div>
 
       {/* Author */}
-      <div style={{ padding: "1.5rem", background: "var(--cream)" }}>
+      <div itemScope itemType="https://schema.org/Person" style={{ padding: "1.5rem", background: "var(--cream)" }}>
+        <meta itemProp="url" content="https://diamondcritics.com/about-farzana" />
+        <meta itemProp="image" content="https://diamondcritics.com/images/farzana-hasan-headshot-imagee.avif" />
         <p style={{ fontFamily: "var(--body)", fontSize: "0.68rem", letterSpacing: "0.14em", textTransform: "uppercase", color: "#aaa", marginBottom: "0.75rem" }}>
           Written by
         </p>
-        <p style={{ fontFamily: "var(--heading)", fontSize: "1.15rem", fontWeight: 300, color: "#111", marginBottom: "3px" }}>
+        <p itemProp="name" style={{ fontFamily: "var(--heading)", fontSize: "1.15rem", fontWeight: 300, color: "#111", marginBottom: "3px" }}>
           Farzana Hasan
         </p>
-        <p style={{ fontFamily: "var(--heading)", fontStyle: "italic", color: "var(--gold)", fontSize: "0.82rem", marginBottom: "0.75rem" }}>
+        <p itemProp="jobTitle" style={{ fontFamily: "var(--heading)", fontStyle: "italic", color: "var(--gold)", fontSize: "0.82rem", marginBottom: "0.75rem" }}>
           GIA-Certified Diamond Expert
         </p>
-        <p style={{ fontFamily: "var(--body)", fontSize: "0.78rem", color: "#888", lineHeight: 1.6, marginBottom: "0.75rem" }}>
+        <p itemProp="description" style={{ fontFamily: "var(--body)", fontSize: "0.78rem", color: "#888", lineHeight: 1.6, marginBottom: "0.75rem" }}>
           Skeptical, data-backed diamond analysis. No sponsored content.
         </p>
         <Link href="/about-farzana"
