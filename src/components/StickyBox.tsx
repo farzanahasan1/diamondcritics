@@ -3,7 +3,7 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 
 export default function StickyBox({ children, top = 96 }: { children: ReactNode; top?: number }) {
   const ref = useRef<HTMLDivElement>(null);
-  const [isFixed, setIsFixed] = useState(false);
+  const [mode, setMode] = useState<"natural" | "fixed" | "pinned">("natural");
   const nat = useRef({ pageY: 0, left: 0, width: 0, height: 0 });
 
   useEffect(() => {
@@ -23,21 +23,28 @@ export default function StickyBox({ children, top = 96 }: { children: ReactNode;
     function tick() {
       if (!nat.current.width) return;
       const { pageY, height } = nat.current;
+      const scrollY = window.scrollY;
 
-      // The aside (parent) stretches to article height — use it as the boundary
-      const aside = el!.parentElement;
-      if (!aside) return;
-      const asideBottom = aside.getBoundingClientRect().bottom + window.scrollY;
+      // Boundary = the article-grid container (grandparent: aside → grid)
+      const grid = el!.parentElement?.parentElement;
+      const gridBottom = grid
+        ? grid.getBoundingClientRect().bottom + scrollY
+        : Infinity;
 
-      // Stop fixing once the sidebar bottom would go past the article bottom
-      const wouldGoBelow = window.scrollY + top + height > asideBottom;
-      const pastStart    = window.scrollY + top >= pageY;
+      const pastStart   = scrollY + top >= pageY;
+      const hitBottom   = scrollY + top + height >= gridBottom - 24; // 24px breathing room
 
-      setIsFixed(pastStart && !wouldGoBelow);
+      if (!pastStart) {
+        setMode("natural");
+      } else if (hitBottom) {
+        setMode("pinned"); // stays at bottom of article, scrolls away naturally
+      } else {
+        setMode("fixed");
+      }
     }
 
     function onResize() {
-      setIsFixed(false);
+      setMode("natural");
       requestAnimationFrame(snap);
     }
 
@@ -52,9 +59,26 @@ export default function StickyBox({ children, top = 96 }: { children: ReactNode;
 
   const { left, width, height } = nat.current;
 
+  // "pinned" = absolutely positioned at the bottom of the grid so it
+  // sits flush with the article end and scrolls away with the page.
+  const innerStyle: React.CSSProperties =
+    mode === "fixed"
+      ? { position: "fixed", top, left, width }
+      : mode === "pinned"
+      ? { position: "absolute", bottom: 0, left: 0, width: "100%" }
+      : {};
+
   return (
-    <div ref={ref} style={{ height: isFixed ? height : undefined }}>
-      <div style={isFixed ? { position: "fixed", top, left, width } : undefined}>
+    // Use position:relative so "pinned" absolute child anchors correctly
+    <div ref={ref}
+      style={{
+        height: mode === "fixed" ? height : undefined,
+        position: "relative",
+        // Make the wrapper fill the aside (= full grid row height)
+        alignSelf: "stretch",
+      }}
+    >
+      <div style={innerStyle}>
         {children}
       </div>
     </div>
