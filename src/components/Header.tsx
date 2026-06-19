@@ -67,27 +67,36 @@ export default function Header() {
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
 
   return (
-    <header className="bg-white border-b border-gray-100 sticky top-0 z-50 shadow-sm">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+    <header style={{
+      background: "#fff",
+      borderBottom: "1px solid #ebebeb",
+      position: "sticky",
+      top: 0,
+      zIndex: 50,
+    }}>
+      <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "0 2rem" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", height: "64px" }}>
+
           {/* Logo */}
-          <Link href="/" className="flex-shrink-0">
-            <picture className="hidden sm:block">
+          <Link href="/" style={{ flexShrink: 0, textDecoration: "none" }}>
+            {/* Full logo — desktop */}
+            <picture style={{ display: "block" }} className="header-logo-full">
               <source srcSet="/images/diamond-critics-main-logo-small.avif" type="image/avif" />
               <img
                 src="/images/diamond-critics-main-logo-small.png"
                 alt="Diamond Critics"
-                className="h-10 w-auto"
+                style={{ height: "38px", width: "auto", display: "block" }}
                 fetchPriority="high"
                 decoding="async"
               />
             </picture>
-            <picture className="sm:hidden">
+            {/* Icon logo — mobile */}
+            <picture style={{ display: "none" }} className="header-logo-icon">
               <source srcSet="/images/diamond-critics-icon-logo-small.avif" type="image/avif" />
               <img
                 src="/images/diamond-critics-icon-logo-small.png"
                 alt="Diamond Critics"
-                className="h-10 w-auto"
+                style={{ height: "38px", width: "auto", display: "block" }}
                 fetchPriority="high"
                 decoding="async"
               />
@@ -95,28 +104,42 @@ export default function Header() {
           </Link>
 
           {/* Desktop Nav */}
-          <nav className="hidden lg:flex items-center gap-1">
+          <nav style={{ display: "flex", alignItems: "center", gap: "2px" }} className="header-nav">
             {nav.map((item) =>
               item.children ? (
                 <div
                   key={item.label}
-                  className="relative group"
+                  style={{ position: "relative" }}
                   onMouseEnter={() => setOpenDropdown(item.label)}
                   onMouseLeave={() => setOpenDropdown(null)}
                 >
-                  <button className="flex items-center gap-1 px-3 py-2 text-sm text-gray-700 hover:text-black transition-colors" style={{ fontFamily: "var(--body)" }}>
+                  <button style={{
+                    display: "flex", alignItems: "center", gap: "4px",
+                    padding: "8px 12px",
+                    fontFamily: "var(--body)", fontSize: "0.82rem", fontWeight: 500,
+                    color: "#555", background: "none", border: "none", cursor: "pointer",
+                  }}>
                     {item.label}
-                    <svg className="w-3 h-3 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    <svg width="10" height="6" viewBox="0 0 10 6" fill="none" style={{ opacity: 0.4 }}>
+                      <path d="M1 1l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                   </button>
                   {openDropdown === item.label && (
-                    <div className="absolute top-full left-0 bg-white border border-gray-100 shadow-xl rounded-sm py-2 min-w-48 z-50">
+                    <div style={{
+                      position: "absolute", top: "100%", left: 0,
+                      background: "#fff", border: "1px solid #ebebeb",
+                      boxShadow: "0 8px 32px rgba(0,0,0,0.08)",
+                      minWidth: "180px", zIndex: 100, padding: "6px 0",
+                    }}>
                       {item.children.map((child) => (
                         <Link
                           key={child.href}
                           href={child.href}
-                          className="block px-5 py-2.5 text-sm text-gray-600 hover:text-black hover:bg-gray-50 transition-colors"
+                          style={{
+                            display: "block", padding: "9px 20px",
+                            fontFamily: "var(--body)", fontSize: "0.82rem",
+                            color: "#555", textDecoration: "none",
+                          }}
                           onClick={() => setOpenDropdown(null)}
                         >
                           {child.label}
@@ -129,7 +152,11 @@ export default function Header() {
                 <Link
                   key={item.label}
                   href={item.href!}
-                  className="px-3 py-2 text-sm text-gray-700 hover:text-black transition-colors"
+                  style={{
+                    padding: "8px 12px",
+                    fontFamily: "var(--body)", fontSize: "0.82rem", fontWeight: 500,
+                    color: "#555", textDecoration: "none",
+                  }}
                 >
                   {item.label}
                 </Link>
@@ -137,44 +164,65 @@ export default function Header() {
             )}
           </nav>
 
-          {/* CTA */}
-          <a
-            href="https://www.bluenile.com/diamond-search?a_aid=69d7c31a91b8d&a_cid=55e51e63&chan=blog-informational"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hidden lg:block bg-black text-white text-xs font-medium px-4 py-2.5 hover:bg-gray-800 transition-colors tracking-wider uppercase"
-          >
-            Shop Blue Nile →
-          </a>
+          {/* CTA + Hamburger */}
+          <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+            <a
+              href="https://www.bluenile.com/diamond-search?a_aid=69d7c31a91b8d&a_cid=55e51e63&chan=blog-informational"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                background: "#141414", color: "#fff",
+                fontFamily: "var(--body)", fontSize: "0.72rem", fontWeight: 600,
+                padding: "9px 18px", textDecoration: "none",
+                letterSpacing: "0.12em", textTransform: "uppercase",
+              }}
+              className="header-cta"
+            >
+              Shop Blue Nile →
+            </a>
 
-          {/* Mobile menu button */}
-          <button
-            className="lg:hidden p-2"
-            onClick={() => setMobileOpen(!mobileOpen)}
-            aria-label="Menu"
-          >
-            <div className="w-5 h-0.5 bg-black mb-1" />
-            <div className="w-5 h-0.5 bg-black mb-1" />
-            <div className="w-5 h-0.5 bg-black" />
-          </button>
+            {/* Hamburger — mobile only */}
+            <button
+              style={{ background: "none", border: "none", cursor: "pointer", padding: "8px", display: "none" }}
+              className="header-hamburger"
+              onClick={() => setMobileOpen(!mobileOpen)}
+              aria-label="Menu"
+            >
+              <div style={{ width: "22px", height: "1.5px", background: "#111", marginBottom: "5px" }} />
+              <div style={{ width: "22px", height: "1.5px", background: "#111", marginBottom: "5px" }} />
+              <div style={{ width: "22px", height: "1.5px", background: "#111" }} />
+            </button>
+          </div>
+
         </div>
       </div>
 
       {/* Mobile menu */}
       {mobileOpen && (
-        <div className="lg:hidden border-t border-gray-100 bg-white max-h-[80vh] overflow-y-auto">
+        <div style={{
+          borderTop: "1px solid #ebebeb", background: "#fff",
+          maxHeight: "80vh", overflowY: "auto",
+        }} className="header-mobile-menu">
           {nav.map((item) => (
-            <div key={item.label} className="border-b border-gray-50">
+            <div key={item.label} style={{ borderBottom: "1px solid #f5f5f5" }}>
               {item.children ? (
                 <>
-                  <div className="px-6 py-3 text-xs font-semibold uppercase tracking-wider text-gray-400">
+                  <div style={{
+                    padding: "10px 24px",
+                    fontFamily: "var(--body)", fontSize: "0.65rem", fontWeight: 600,
+                    letterSpacing: "0.14em", textTransform: "uppercase", color: "#aaa",
+                  }}>
                     {item.label}
                   </div>
                   {item.children.map((child) => (
                     <Link
                       key={child.href}
                       href={child.href}
-                      className="block px-8 py-2.5 text-sm text-gray-700"
+                      style={{
+                        display: "block", padding: "9px 32px",
+                        fontFamily: "var(--body)", fontSize: "0.85rem", color: "#555",
+                        textDecoration: "none",
+                      }}
                       onClick={() => setMobileOpen(false)}
                     >
                       {child.label}
@@ -184,7 +232,11 @@ export default function Header() {
               ) : (
                 <Link
                   href={item.href!}
-                  className="block px-6 py-3 text-sm font-medium text-gray-700"
+                  style={{
+                    display: "block", padding: "12px 24px",
+                    fontFamily: "var(--body)", fontSize: "0.85rem", fontWeight: 500,
+                    color: "#444", textDecoration: "none",
+                  }}
                   onClick={() => setMobileOpen(false)}
                 >
                   {item.label}
@@ -192,12 +244,18 @@ export default function Header() {
               )}
             </div>
           ))}
-          <div className="p-4">
+          <div style={{ padding: "16px 24px" }}>
             <a
               href="https://www.bluenile.com/diamond-search?a_aid=69d7c31a91b8d&a_cid=55e51e63&chan=blog-informational"
               target="_blank"
               rel="noopener noreferrer"
-              className="block w-full text-center bg-black text-white text-xs font-medium px-4 py-3 tracking-wider uppercase"
+              style={{
+                display: "block", width: "100%", textAlign: "center",
+                background: "#141414", color: "#fff",
+                fontFamily: "var(--body)", fontSize: "0.72rem", fontWeight: 600,
+                padding: "12px", textDecoration: "none",
+                letterSpacing: "0.12em", textTransform: "uppercase",
+              }}
             >
               Shop Blue Nile →
             </a>

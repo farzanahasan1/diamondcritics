@@ -90,7 +90,9 @@ function readFile(
     if (!fs.existsSync(filePath)) continue;
     const raw = fs.readFileSync(filePath, "utf-8");
     const { data, content } = matter(raw);
-    const contentHtml = rewriteContentImages(marked(content) as string);
+    // Ensure a blank line before every ATX heading so marked always converts ## → <h2>
+    const normalized = content.replace(/([^\n])\n(#{1,6} )/g, "$1\n\n$2");
+    const contentHtml = rewriteContentImages(marked(normalized) as string);
     return { data, contentHtml };
   }
   return null;
