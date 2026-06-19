@@ -10,245 +10,198 @@ const categoryLabels: Record<string, string> = {
 
 export default function HomePage() {
   const posts = getAllPosts();
-  const [hero, ...rest] = posts;
-  const featured = rest.slice(0, 6);
-  const latest = rest.slice(6, 12);
+  const latest = posts.slice(0, 8);
 
   return (
-    <div>
-      {/* ── Announcement bar ─────────────────────────────── */}
-      <div className="bg-black text-white text-center text-xs py-2.5 tracking-widest uppercase" style={{ fontFamily: "var(--font-poppins)" }}>
-        Expert Diamond Advice — GIA-Backed · Data-Driven · Anti-Fluff
-      </div>
+    <div style={{ fontFamily: "var(--font-body)" }}>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* ── Hero ─────────────────────────────────────────────── */}
+      <section className="text-center px-6 py-24 sm:py-32 border-b border-gray-100">
+        <p className="text-xs tracking-widest uppercase text-gray-400 mb-8">
+          Objective Expertise
+        </p>
+        <h1 style={{ fontFamily: "var(--font-heading)" }} className="text-4xl sm:text-5xl lg:text-6xl font-normal text-black max-w-3xl mx-auto leading-tight">
+          Stop overpaying for{" "}
+          <em className="italic">"invisible" diamond features.</em>
+        </h1>
+        <p className="mt-8 text-base text-gray-500 max-w-xl mx-auto leading-relaxed">
+          Confusing jargon is used to sell grades you can't see. We provide technical audits to help you save thousands without sacrificing brilliance.
+        </p>
+        <div className="mt-10 flex flex-wrap justify-center gap-8 text-xs tracking-widest uppercase text-black">
+          <Link href="/diamond-clarity-chart" className="border-b border-black pb-0.5 hover:text-gray-500 transition-colors">
+            Diamond Audits
+          </Link>
+          <Link href="/lab-grown-vs-natural-diamond-price" className="border-b border-black pb-0.5 hover:text-gray-500 transition-colors">
+            Natural vs Lab Comparison
+          </Link>
+          <Link href="/diamond-prices" className="border-b border-black pb-0.5 hover:text-gray-500 transition-colors">
+            Market Value & Price Trends
+          </Link>
+        </div>
+      </section>
 
-        {/* ── Hero post ────────────────────────────────────── */}
-        {hero && (
-          <section className="py-12 border-b border-gray-100">
-            <div className="grid lg:grid-cols-2 gap-12 items-center">
-              <div>
-                <span className="text-xs font-semibold tracking-widest uppercase text-gray-400" style={{ fontFamily: "var(--font-poppins)" }}>
-                  {categoryLabels[hero.category] ?? hero.category}
-                </span>
-                <h1 style={{ fontFamily: "var(--font-marcellus)" }} className="mt-3 text-4xl sm:text-5xl lg:text-6xl text-black leading-tight font-normal">
-                  {hero.title}
-                </h1>
-                {hero.excerpt && (
-                  <p className="mt-5 text-base text-gray-500 leading-relaxed max-w-lg" style={{ fontFamily: "var(--font-poppins)" }}>
-                    {hero.excerpt}
-                  </p>
-                )}
-                <div className="mt-8 flex items-center gap-6">
-                  <Link
-                    href={`/${hero.slug}`}
-                    className="bg-black text-white text-xs font-semibold px-6 py-3.5 tracking-widest uppercase hover:bg-gray-800 transition-colors"
-                    style={{ fontFamily: "var(--font-poppins)" }}
-                  >
-                    Read the Guide
-                  </Link>
-                  <span className="text-xs text-gray-400" style={{ fontFamily: "var(--font-poppins)" }}>
-                    By Farzana Hasan · GIA Expert
-                  </span>
-                </div>
-              </div>
-              {hero.featuredImage ? (
-                <div className="relative aspect-[4/3] overflow-hidden bg-gray-50">
-                  <img
-                    src={hero.featuredImage}
-                    alt={hero.title}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              ) : (
-                <div className="aspect-[4/3] bg-gray-50 flex items-center justify-center">
-                  <span style={{ fontFamily: "var(--font-marcellus)" }} className="text-6xl text-gray-200">◆</span>
-                </div>
-              )}
-            </div>
-          </section>
-        )}
+      {/* ── Feature pillars ──────────────────────────────────── */}
+      <section className="max-w-5xl mx-auto px-6 py-20 grid sm:grid-cols-2 gap-16">
+        <div>
+          <div className="w-8 h-px bg-black mb-6" />
+          <h2 style={{ fontFamily: "var(--font-heading)" }} className="text-2xl font-normal mb-4">
+            The Eye-Clean <em className="italic">Standard</em>
+          </h2>
+          <p className="text-sm text-gray-500 leading-relaxed">
+            We analyze 4K 360-degree imagery to find SI1 and VS2 diamonds that are eye-clean, avoiding the "Flawless" markup.
+          </p>
+        </div>
+        <div>
+          <div className="w-8 h-px bg-black mb-6" />
+          <h2 style={{ fontFamily: "var(--font-heading)" }} className="text-2xl font-normal mb-4">
+            <em className="italic">Light</em> Performance
+          </h2>
+          <p className="text-sm text-gray-500 leading-relaxed">
+            We critique table, crown, and pavilion angles to ensure maximum fire and brilliance beyond the basic certificate.
+          </p>
+        </div>
+      </section>
 
-        {/* ── Trusted Retailer Banner ───────────────────────── */}
-        <section className="py-10 border-b border-gray-100">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
-            <div>
-              <p className="text-xs tracking-widest uppercase text-gray-400 mb-1" style={{ fontFamily: "var(--font-poppins)" }}>Audited Retailer</p>
-              <p style={{ fontFamily: "var(--font-marcellus)" }} className="text-2xl text-black">Blue Nile — Our Verified Pick</p>
-            </div>
-            <div className="flex flex-wrap gap-4">
-              <a
-                href="https://www.bluenile.com/diamond-search?a_aid=69d7c31a91b8d&a_cid=55e51e63&chan=blog-informational"
-                target="_blank" rel="noopener noreferrer"
-                className="flex items-center gap-3 border border-black px-5 py-3 hover:bg-black hover:text-white transition-colors group"
-              >
-                <span className="text-sm font-medium" style={{ fontFamily: "var(--font-poppins)" }}>Search Diamonds</span>
-                <span className="text-xs text-gray-400 group-hover:text-gray-300">200,000+ stones →</span>
-              </a>
-              <Link
-                href="/blue-nile-review"
-                className="flex items-center gap-2 px-5 py-3 border border-gray-200 hover:border-black transition-colors text-sm"
-                style={{ fontFamily: "var(--font-poppins)" }}
-              >
-                Read Our Audit →
-              </Link>
-            </div>
-          </div>
-        </section>
+      {/* ── Dark section: Expert Audits ───────────────────────── */}
+      <section className="bg-black text-white py-24 px-6">
+        <div className="max-w-5xl mx-auto">
+          <p className="text-xs tracking-widest uppercase text-gray-500 text-center mb-4">
+            Technical Audits
+          </p>
+          <h2 style={{ fontFamily: "var(--font-heading)" }} className="text-3xl sm:text-4xl font-normal text-center text-white mb-16">
+            Expert Diamond <em className="italic">Audits</em>
+          </h2>
 
-        {/* ── Featured grid ────────────────────────────────── */}
-        {featured.length > 0 && (
-          <section className="py-14 border-b border-gray-100">
-            <div className="flex items-baseline justify-between mb-8">
-              <h2 style={{ fontFamily: "var(--font-marcellus)" }} className="text-2xl font-normal text-black">
-                Latest Guides
-              </h2>
-              <Link href="/category/diamond-buying-guides" className="text-xs tracking-widest uppercase text-gray-400 hover:text-black transition-colors" style={{ fontFamily: "var(--font-poppins)" }}>
-                All Guides →
-              </Link>
-            </div>
-
-            {/* Large + small 2-col layout */}
-            <div className="grid lg:grid-cols-3 gap-0.5 bg-gray-100">
-              {/* Big left card */}
-              {featured[0] && (
-                <div className="lg:col-span-2 bg-white group">
-                  <Link href={`/${featured[0].slug}`} className="block">
-                    <div className="aspect-[16/9] overflow-hidden bg-gray-50">
-                      {featured[0].featuredImage ? (
-                        <img src={featured[0].featuredImage} alt={featured[0].title}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                      ) : (
-                        <div className="w-full h-full bg-gray-100 flex items-center justify-center">
-                          <span className="text-5xl text-gray-200" style={{ fontFamily: "var(--font-marcellus)" }}>◆</span>
-                        </div>
-                      )}
-                    </div>
-                    <div className="p-8">
-                      <span className="text-xs tracking-widest uppercase text-gray-400" style={{ fontFamily: "var(--font-poppins)" }}>
-                        {categoryLabels[featured[0].category] ?? featured[0].category}
-                      </span>
-                      <h3 style={{ fontFamily: "var(--font-marcellus)" }} className="mt-2 text-2xl text-black leading-snug group-hover:text-gray-600 transition-colors">
-                        {featured[0].title}
-                      </h3>
-                      {featured[0].excerpt && (
-                        <p className="mt-3 text-sm text-gray-500 line-clamp-2 leading-relaxed" style={{ fontFamily: "var(--font-poppins)" }}>
-                          {featured[0].excerpt}
-                        </p>
-                      )}
-                      <span className="mt-5 inline-block text-xs font-semibold tracking-widest uppercase text-black border-b border-black pb-0.5" style={{ fontFamily: "var(--font-poppins)" }}>
-                        Read →
-                      </span>
-                    </div>
-                  </Link>
-                </div>
-              )}
-
-              {/* Small right column */}
-              <div className="flex flex-col gap-0.5">
-                {featured.slice(1, 4).map((post) => (
-                  <Link key={post.slug} href={`/${post.slug}`}
-                    className="bg-white p-6 flex gap-4 items-start group hover:bg-gray-50 transition-colors flex-1">
-                    {post.featuredImage && (
-                      <div className="w-20 h-20 flex-shrink-0 overflow-hidden bg-gray-100">
-                        <img src={post.featuredImage} alt={post.title}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                      </div>
-                    )}
-                    <div className="min-w-0">
-                      <span className="text-xs tracking-widest uppercase text-gray-400" style={{ fontFamily: "var(--font-poppins)" }}>
-                        {categoryLabels[post.category] ?? post.category}
-                      </span>
-                      <h3 style={{ fontFamily: "var(--font-marcellus)" }} className="mt-1 text-base text-black leading-snug group-hover:text-gray-600 transition-colors line-clamp-2">
-                        {post.title}
-                      </h3>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            </div>
-
-            {/* Second row */}
-            {featured.slice(4).length > 0 && (
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-0.5 bg-gray-100 mt-0.5">
-                {featured.slice(4).map((post) => (
-                  <Link key={post.slug} href={`/${post.slug}`}
-                    className="bg-white group block">
-                    <div className="aspect-[3/2] overflow-hidden bg-gray-50">
-                      {post.featuredImage ? (
-                        <img src={post.featuredImage} alt={post.title}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                      ) : (
-                        <div className="w-full h-full bg-gray-100" />
-                      )}
-                    </div>
-                    <div className="p-6">
-                      <span className="text-xs tracking-widest uppercase text-gray-400" style={{ fontFamily: "var(--font-poppins)" }}>
-                        {categoryLabels[post.category] ?? post.category}
-                      </span>
-                      <h3 style={{ fontFamily: "var(--font-marcellus)" }} className="mt-1.5 text-lg text-black leading-snug group-hover:text-gray-600 transition-colors line-clamp-2">
-                        {post.title}
-                      </h3>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            )}
-          </section>
-        )}
-
-        {/* ── Clarity Quick-Nav ─────────────────────────────── */}
-        <section className="py-12 border-b border-gray-100">
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-0.5 bg-gray-100">
+          <div className="grid sm:grid-cols-3 gap-1">
             {[
-              { label: "IF & FL", href: "/if-and-fl-diamond-clarity" },
-              { label: "VVS1", href: "/vvs1-diamond-clarity" },
-              { label: "VVS2", href: "/vvs2-diamond-clarity" },
-              { label: "VS1", href: "/vs1-clarity-diamonds" },
-              { label: "VS2", href: "/vs2-clarity-diamond" },
-              { label: "SI", href: "/si-clarity-diamond" },
+              {
+                label: "Mastering the 4Cs",
+                href: "/diamond-4cs",
+                img: "/images/infographic-for-diamond-4c-clarity.jpg",
+              },
+              {
+                label: "Diamond Prices & Trends",
+                href: "/diamond-prices",
+                img: "/images/diamond-prices-2026-march-market-crash-report.jpg",
+              },
+              {
+                label: "Clarity Grade Guides",
+                href: "/diamond-clarity-chart",
+                img: "/images/diamond-clarity-chart-beware-clouds-not-shown-milky.jpg",
+              },
             ].map((item) => (
-              <Link key={item.href} href={item.href}
-                className="bg-white px-4 py-6 text-center hover:bg-black hover:text-white transition-colors group">
-                <span style={{ fontFamily: "var(--font-marcellus)" }} className="text-2xl text-black group-hover:text-white block">
-                  {item.label}
-                </span>
-                <span className="text-xs tracking-widest uppercase text-gray-400 group-hover:text-gray-300 mt-1 block" style={{ fontFamily: "var(--font-poppins)" }}>
-                  Clarity
-                </span>
+              <Link key={item.href} href={item.href} className="relative aspect-[4/3] overflow-hidden bg-gray-900 group block">
+                {item.img && (
+                  <img
+                    src={item.img}
+                    alt={item.label}
+                    className="w-full h-full object-cover opacity-40 group-hover:opacity-55 transition-opacity duration-500"
+                  />
+                )}
+                <div className="absolute inset-0 flex items-end p-6">
+                  <h3 style={{ fontFamily: "var(--font-heading)" }} className="text-white text-xl font-normal">
+                    {item.label}
+                  </h3>
+                </div>
               </Link>
             ))}
           </div>
-        </section>
 
-        {/* ── More posts ───────────────────────────────────── */}
-        {latest.length > 0 && (
-          <section className="py-14">
-            <h2 style={{ fontFamily: "var(--font-marcellus)" }} className="text-2xl font-normal text-black mb-8">
-              More Guides
-            </h2>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
-              {latest.map((post) => (
-                <Link key={post.slug} href={`/${post.slug}`} className="group block">
-                  <div className="aspect-[4/3] overflow-hidden bg-gray-100 mb-4">
-                    {post.featuredImage ? (
-                      <img src={post.featuredImage} alt={post.title}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                    ) : <div className="w-full h-full bg-gray-50" />}
-                  </div>
-                  <span className="text-xs tracking-widest uppercase text-gray-400" style={{ fontFamily: "var(--font-poppins)" }}>
-                    {categoryLabels[post.category] ?? post.category}
-                  </span>
-                  <h3 style={{ fontFamily: "var(--font-marcellus)" }} className="mt-1.5 text-base text-black group-hover:text-gray-600 transition-colors line-clamp-2 leading-snug">
-                    {post.title}
-                  </h3>
-                </Link>
-              ))}
-            </div>
-          </section>
-        )}
+          <div className="text-center mt-12">
+            <Link
+              href="/category/diamond-buying-guides"
+              className="inline-block border border-white text-white text-xs tracking-widest uppercase px-8 py-4 hover:bg-white hover:text-black transition-colors"
+            >
+              View All Guides
+            </Link>
+          </div>
+        </div>
+      </section>
 
-      </div>
+      {/* ── Where to Buy ─────────────────────────────────────── */}
+      <section className="max-w-4xl mx-auto px-6 py-24">
+        <h2 style={{ fontFamily: "var(--font-heading)" }} className="text-3xl sm:text-4xl font-normal text-center mb-16">
+          Where to Buy <em className="italic">in 2026</em>
+        </h2>
+
+        <div className="border-t border-black">
+          {/* Header row */}
+          <div className="grid grid-cols-4 py-3 border-b border-gray-200">
+            {["RETAILER", "THE VERDICT", "BEST FOR", "ACTION"].map((h) => (
+              <span key={h} className="text-xs tracking-widest uppercase text-gray-400 font-medium">{h}</span>
+            ))}
+          </div>
+
+          {/* Blue Nile row */}
+          <div className="grid grid-cols-4 items-center py-7 border-b border-gray-100">
+            <span style={{ fontFamily: "var(--font-heading)" }} className="text-2xl font-normal">Blue Nile</span>
+            <span className="text-sm font-semibold text-green-700">4.6/5 – TRUSTED ORIGINAL</span>
+            <span className="text-sm text-gray-500">Inventory Depth</span>
+            <a
+              href="https://www.bluenile.com/diamond-search?a_aid=69d7c31a91b8d&a_cid=55e51e63&chan=blue_nile_reviews"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block bg-black text-white text-xs font-semibold tracking-widest uppercase px-5 py-3 hover:bg-gray-800 transition-colors w-fit"
+            >
+              Full Audit
+            </a>
+          </div>
+
+          <div className="text-center mt-10">
+            <Link
+              href="/blue-nile-review"
+              className="inline-block border border-black text-black text-xs tracking-widest uppercase px-8 py-4 hover:bg-black hover:text-white transition-colors"
+            >
+              View All Retailer Reviews
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Knowledge Hub ────────────────────────────────────── */}
+      <section className="border-t border-gray-100 py-24 px-6">
+        <div className="max-w-6xl mx-auto">
+          <h2 style={{ fontFamily: "var(--font-heading)" }} className="text-3xl sm:text-4xl font-normal text-center mb-16">
+            Knowledge <em className="italic">Hub</em>
+          </h2>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            {latest.map((post) => (
+              <Link key={post.slug} href={`/${post.slug}`} className="group block">
+                <div className="aspect-[4/3] bg-gray-100 overflow-hidden mb-4">
+                  {post.featuredImage ? (
+                    <img
+                      src={post.featuredImage}
+                      alt={post.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-gray-100 flex items-center justify-center">
+                      <span style={{ fontFamily: "var(--font-heading)" }} className="text-3xl text-gray-300 italic">D◆</span>
+                    </div>
+                  )}
+                </div>
+                <span className="text-xs tracking-widest uppercase text-gray-400 block mb-1.5">
+                  {categoryLabels[post.category] ?? post.category}
+                </span>
+                <h3 style={{ fontFamily: "var(--font-heading)" }} className="text-base font-normal text-black group-hover:text-gray-500 transition-colors leading-snug line-clamp-2">
+                  {post.title}
+                </h3>
+              </Link>
+            ))}
+          </div>
+
+          <div className="text-center mt-14">
+            <Link
+              href="/category/diamond-buying-guides"
+              className="inline-block border border-black text-black text-xs tracking-widest uppercase px-8 py-4 hover:bg-black hover:text-white transition-colors"
+            >
+              View All Buying Guides
+            </Link>
+          </div>
+        </div>
+      </section>
+
     </div>
   );
 }
