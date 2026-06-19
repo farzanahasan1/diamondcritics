@@ -64,7 +64,7 @@ export default function HomePage() {
                 </span>
               ))}
             </div>
-            <a href="https://www.bluenile.com/diamond-search?a_aid=69d7c31a91b8d&a_cid=55e51e63&chan=homepage-hero"
+            <a href="https://www.bluenile.com/diamond-search?a_aid=69d7c31a91b8d&a_cid=55e51e63&chan=blog-informational"
               target="_blank" rel="noopener noreferrer"
               style={{ display: "block", background: "#111", padding: "1rem 1.25rem", textDecoration: "none" }}>
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
@@ -132,7 +132,7 @@ export default function HomePage() {
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: "12px" }}>
             {[
-              { name: "Blue Nile", badge: "Best Overall", badgeColor: "#111", desc: "200,000+ GIA-certified diamonds online. Up to 40% less.", href: "/blue-nile-review", affiliate: "https://www.bluenile.com/diamond-search?a_aid=69d7c31a91b8d&a_cid=55e51e63&chan=trusted-retailers" },
+              { name: "Blue Nile", badge: "Best Overall", badgeColor: "#111", desc: "200,000+ GIA-certified diamonds online. Up to 40% less.", href: "/blue-nile-review", affiliate: "https://www.bluenile.com/diamond-search?a_aid=69d7c31a91b8d&a_cid=55e51e63&chan=blog-informational" },
             ].map((r) => (
               <div key={r.name} style={{ border: "1px solid #ebebeb", padding: "1.25rem", background: "#fafafa" }}>
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "0.5rem" }}>
@@ -378,7 +378,7 @@ export default function HomePage() {
                 <div style={{ fontFamily: "var(--heading)", fontSize: "5rem", color: "rgba(255,255,255,0.06)", fontWeight: 300, lineHeight: 1 }}>
                   SAVINGS
                 </div>
-                <a href="https://www.bluenile.com/diamond-search?a_aid=69d7c31a91b8d&a_cid=55e51e63&chan=dark-banner"
+                <a href="https://www.bluenile.com/diamond-search?a_aid=69d7c31a91b8d&a_cid=55e51e63&chan=blog-informational"
                   target="_blank" rel="noopener noreferrer"
                   style={{ display: "inline-block", fontFamily: "var(--body)", fontSize: "0.72rem", letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--gold)", marginTop: "1rem" }}>
                   Blue Nile — Up to 40% Off →
