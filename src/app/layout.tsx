@@ -4,6 +4,8 @@ import { DM_Sans } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import SearchModal from "@/components/SearchModal";
+import { getAllPosts } from "@/lib/content";
 
 const ivyPresto = localFont({
   src: "./fonts/ivy-presto-headline-light.woff2",
@@ -33,6 +35,13 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const searchPosts = getAllPosts().map(p => ({
+    slug: p.slug,
+    title: p.title,
+    excerpt: p.excerpt ?? "",
+    category: p.category,
+  }));
+
   return (
     <html lang="en" className={`${ivyPresto.variable} ${dmSans.variable}`}>
       <head>
@@ -42,6 +51,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Header />
         <main className="flex-1">{children}</main>
         <Footer />
+        <SearchModal posts={searchPosts} />
       </body>
     </html>
   );
