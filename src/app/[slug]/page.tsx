@@ -33,6 +33,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description: post.seoDescription,
       url: `https://diamondcritics.com/${slug}`,
       type: "article",
+      images: ("featuredImage" in post && post.featuredImage)
+        ? [{ url: `https://diamondcritics.com${post.featuredImage}`, width: 1200, height: 630 }]
+        : undefined,
     },
   };
 }

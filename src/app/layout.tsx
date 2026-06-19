@@ -1,7 +1,25 @@
 import type { Metadata } from "next";
+import localFont from "next/font/local";
+import { DM_Sans } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+
+const ivyPresto = localFont({
+  src: "./fonts/ivy-presto-headline-light.woff2",
+  variable: "--font-ivy",
+  weight: "300",
+  style: "normal",
+  display: "swap",
+  preload: true,
+});
+
+const dmSans = DM_Sans({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600"],
+  variable: "--font-dm",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: {
@@ -20,17 +38,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${ivyPresto.variable} ${dmSans.variable}`}>
       <head>
-        {/* Preload IvyPresto headline font — used in every heading above the fold */}
-        <link
-          rel="preload"
-          href="/fonts/ivy-presto-headline-light.woff2"
-          as="font"
-          type="font/woff2"
-          crossOrigin="anonymous"
-        />
-        {/* DNS prefetch for Blue Nile affiliate */}
         <link rel="dns-prefetch" href="https://www.bluenile.com" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
