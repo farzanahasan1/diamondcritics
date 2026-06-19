@@ -36,7 +36,7 @@ const wrap: React.CSSProperties = {
 
 function BlueNileSidebar() {
   return (
-    <div style={{ position: "sticky", top: "6rem" }}>
+    <div>
 
       {/* Blue Nile box */}
       <div style={{ border: "1px solid #e5e5e3", padding: "1.5rem", background: "#fff", marginBottom: "1.5rem" }}>
@@ -265,7 +265,7 @@ export default function PostContent({ type, data, related }: Props) {
             </article>
 
             {/* Sidebar */}
-            <aside className="article-sidebar-wrap">
+            <aside className="article-sidebar-wrap" style={{ position: "sticky", top: "6rem" }}>
               <BlueNileSidebar />
             </aside>
 
