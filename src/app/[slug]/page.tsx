@@ -34,10 +34,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description: post.seoDescription,
       url: `https://diamondcritics.com/${slug}`,
       type: "article",
-      ...(isPost && {
-        publishedTime: (post as import("@/lib/content").PostMeta).publishedAt,
-        modifiedTime: (post as import("@/lib/content").PostMeta).updatedAt ||
-                      (post as import("@/lib/content").PostMeta).publishedAt,
+      ...(isPost && "publishedAt" in post && {
+        publishedTime: (post as { publishedAt: string }).publishedAt,
+        modifiedTime: ("updatedAt" in post ? (post as { updatedAt: string }).updatedAt : "") ||
+                      (post as { publishedAt: string }).publishedAt,
       }),
       images: ("featuredImage" in post && post.featuredImage)
         ? [{ url: `https://diamondcritics.com${post.featuredImage}`, width: 1200, height: 630 }]
