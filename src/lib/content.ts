@@ -55,6 +55,16 @@ export function getAllPageSlugs(): string[] {
 
 const publicImagesDir = path.join(process.cwd(), "public/images");
 
+function decodeEntities(str: string): string {
+  return str
+    .replace(/&amp;/g, "&")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&#039;/g, "'")
+    .replace(/&apos;/g, "'");
+}
+
 function toAvif(src: string): string {
   if (!src) return src;
   const avifPath = src.replace(/\.(jpe?g|png|webp)$/i, ".avif");
@@ -92,12 +102,12 @@ export function getPostBySlug(slug: string): Post | null {
   const { data, contentHtml } = result;
   return {
     slug,
-    title: data.title ?? slug,
-    excerpt: data.excerpt ?? "",
+    title: decodeEntities(data.title ?? slug),
+    excerpt: decodeEntities(data.excerpt ?? ""),
     publishedAt: data.publishedAt ?? "",
     category: data.category ?? "diamond-buying-guides",
-    seoTitle: data.seoTitle ?? data.title ?? slug,
-    seoDescription: data.seoDescription ?? data.excerpt ?? "",
+    seoTitle: decodeEntities(data.seoTitle ?? data.title ?? slug),
+    seoDescription: decodeEntities(data.seoDescription ?? data.excerpt ?? ""),
     featuredImage: toAvif(data.featuredImage ?? ""),
     contentHtml,
   };
@@ -109,9 +119,9 @@ export function getPageBySlug(slug: string): Page | null {
   const { data, contentHtml } = result;
   return {
     slug,
-    title: data.title ?? slug,
-    seoTitle: data.seoTitle ?? data.title ?? slug,
-    seoDescription: data.seoDescription ?? "",
+    title: decodeEntities(data.title ?? slug),
+    seoTitle: decodeEntities(data.seoTitle ?? data.title ?? slug),
+    seoDescription: decodeEntities(data.seoDescription ?? ""),
     contentHtml,
   };
 }
