@@ -13,6 +13,9 @@
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+/* Prevent any element from causing horizontal page scroll */
+html { overflow-x: clip; }
+
 html { scroll-behavior: smooth; }
 
 body {
@@ -157,12 +160,15 @@ body {
 }
 .prose-article ol li { margin-bottom: 0.6rem; }
 
-/* Tables */
+/* Tables — scrollable on mobile */
 .prose-article table {
   width: 100%;
   border-collapse: collapse;
   font-size: 14px;
   margin: 2.5rem 0;
+  display: block;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 .prose-article table th {
   font-family: var(--body);
@@ -236,6 +242,9 @@ body {
   grid-template-columns: 1fr 300px;
   gap: 4rem;
 }
+
+/* Prevent grid items from overflowing their tracks */
+.article-grid > * { min-width: 0; }
 
 .article-sidebar-wrap { display: block; }
 .article-mobile-cta { display: none; }
@@ -480,6 +489,17 @@ body {
   white-space: nowrap;
   width: max-content;
   animation: ticker-loop 40s linear infinite;
+}
+
+/* ─── Homepage responsive ───────────────────────────────────── */
+@media (max-width: 768px) {
+  .home-featured-card { grid-template-columns: 1fr !important; }
+  .home-cta-grid { grid-template-columns: 1fr !important; }
+  .home-grid-3 { grid-template-columns: repeat(2, 1fr) !important; }
+  .home-grid-4 { grid-template-columns: repeat(2, 1fr) !important; }
+}
+@media (max-width: 480px) {
+  .home-grid-3 { grid-template-columns: 1fr !important; }
 }
 
 /* ─── Mega menu ──────────────────────────────────────────────── */

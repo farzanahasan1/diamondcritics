@@ -215,9 +215,9 @@ export default function HomePage() {
             ))}
           </div>
 
-          {/* Featured post */}
+          {/* Featured post — entire card is clickable */}
           {featured && (
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", border: "1px solid #ebebeb", marginBottom: "2rem" }}>
+            <Link href={`/${featured.slug}`} className="home-featured-card" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", border: "1px solid #ebebeb", marginBottom: "2rem", textDecoration: "none", color: "inherit" }}>
               <div style={{ overflow: "hidden", aspectRatio: "3/2" }}>
                 {featured.featuredImage ? (
                   <img src={featured.featuredImage} alt={featured.title}
@@ -245,16 +245,16 @@ export default function HomePage() {
                       {new Date(featured.publishedAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
                     </span>
                   )}
-                  <Link href={`/${featured.slug}`} style={{ fontSize: "0.8rem", fontWeight: 600, color: "#111", textDecoration: "none" }}>
+                  <span style={{ fontSize: "0.8rem", fontWeight: 600, color: "#111" }}>
                     Read guide →
-                  </Link>
+                  </span>
                 </div>
               </div>
-            </div>
+            </Link>
           )}
 
           {/* 3-col grid */}
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1.5rem" }}>
+          <div className="home-grid-3" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1.5rem" }}>
             {grid1.map((p) => (
               <Link key={p.slug} href={`/${p.slug}`} style={{ textDecoration: "none", display: "block" }}>
                 <div style={{ overflow: "hidden", aspectRatio: "3/2", background: "#f0f0f0", marginBottom: "0.75rem" }}>
@@ -288,7 +288,7 @@ export default function HomePage() {
       {/* ── More Guides row 2 ────────────────────────────────── */}
       <section style={{ borderBottom: "1px solid #ebebeb", padding: "2.5rem 0" }}>
         <div style={wrap}>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1.5rem" }}>
+          <div className="home-grid-3" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1.5rem" }}>
             {grid2.map((p) => (
               <Link key={p.slug} href={`/${p.slug}`} style={{ textDecoration: "none", display: "block" }}>
                 <div style={{ overflow: "hidden", aspectRatio: "3/2", background: "#f0f0f0", marginBottom: "0.75rem" }}>
@@ -330,7 +330,7 @@ export default function HomePage() {
               </div>
               <Link href="/category/diamond-buying-guides" style={{ fontSize: "0.78rem", color: "#888", textDecoration: "none" }}>All Guides →</Link>
             </div>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "1.25rem" }}>
+            <div className="home-grid-4" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "1.25rem" }}>
               {guides.map((p) => (
                 <Link key={p.slug} href={`/${p.slug}`} style={{ textDecoration: "none", display: "block" }}>
                   <div style={{ overflow: "hidden", aspectRatio: "3/2", background: "#f0f0f0", marginBottom: "0.6rem" }}>
@@ -361,7 +361,7 @@ export default function HomePage() {
 
       {/* ── Dark CTA ─────────────────────────────────────────── */}
       <section style={{ background: "#111" }}>
-        <div style={{ ...wrap, display: "grid", gridTemplateColumns: "1fr 1fr", minHeight: "200px" }}>
+        <div className="home-cta-grid" style={{ ...wrap, display: "grid", gridTemplateColumns: "1fr 1fr", minHeight: "200px" }}>
           <div style={{ padding: "3rem 0", display: "flex", flexDirection: "column", justifyContent: "center" }}>
             <p style={{ fontFamily: "var(--body)", fontSize: "0.68rem", letterSpacing: "0.14em", textTransform: "uppercase", color: "#666", marginBottom: "0.5rem" }}>
               Interactive Tool

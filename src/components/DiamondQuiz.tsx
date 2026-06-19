@@ -55,6 +55,8 @@ export default function DiamondQuiz({
       margin: "3rem 0",
       textAlign: "center",
       fontFamily: "var(--body)",
+      width: "100%",
+      overflowX: "hidden",
     }}>
       {/* Header */}
       <p style={{ fontSize: "0.65rem", fontWeight: 700, letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--gold)", marginBottom: "0.75rem" }}>
