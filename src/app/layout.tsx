@@ -37,8 +37,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className={`${ivyPresto.variable} ${dmSans.variable}`}>
       <head>
         <link rel="dns-prefetch" href="https://www.bluenile.com" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
       <body className="bg-white text-gray-900 antialiased min-h-full flex flex-col">
         <Header />

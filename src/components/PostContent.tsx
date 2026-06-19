@@ -2,7 +2,6 @@ import Link from "next/link";
 import type { Post, Page, PostMeta } from "@/lib/content";
 import DiamondQuiz from "@/components/DiamondQuiz";
 import ReadingProgress from "@/components/ReadingProgress";
-import StickyBox from "@/components/StickyBox";
 import TocWidget, { type TocItem } from "@/components/TocWidget";
 
 const categoryLabels: Record<string, string> = {
@@ -286,9 +285,7 @@ export default function PostContent({ type, data, related }: Props) {
 
             {/* Sidebar */}
             <aside className="article-sidebar-wrap">
-              <StickyBox>
-                <BlueNileSidebar toc={toc} />
-              </StickyBox>
+              <BlueNileSidebar toc={toc} />
             </aside>
 
           </div>

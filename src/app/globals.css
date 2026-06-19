@@ -1,5 +1,4 @@
 @import "tailwindcss";
-@plugin "@tailwindcss/typography";
 
 :root {
   --heading: var(--font-ivy), Georgia, serif;
@@ -246,7 +245,14 @@ body {
 /* Prevent grid items from overflowing their tracks */
 .article-grid > * { min-width: 0; }
 
-.article-sidebar-wrap { display: block; }
+.article-sidebar-wrap {
+  display: block;
+  position: sticky;
+  top: 96px;
+  align-self: start;
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
+}
 .article-mobile-cta { display: none; }
 
 @media (max-width: 1024px) {
