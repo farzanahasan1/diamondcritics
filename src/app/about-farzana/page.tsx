@@ -38,7 +38,14 @@ const schema = {
       "name": "Diamond Critics",
       "url": "https://diamondcritics.com",
     },
-    "sameAs": ["https://diamondcritics.com"],
+    "email": "farzana@diamondcritics.com",
+    "sameAs": [
+      "https://diamondcritics.com",
+      "https://x.com/diamondcritics",
+      "https://www.pinterest.com/diamondcritics/",
+      "https://youtube.com/channel/UCP4kx9XpVpeMqkMcD-9fslg/",
+      "https://www.linkedin.com/company/diamondcritics/",
+    ],
   },
 };
 

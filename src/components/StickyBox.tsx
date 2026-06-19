@@ -22,7 +22,18 @@ export default function StickyBox({ children, top = 96 }: { children: ReactNode;
 
     function tick() {
       if (!nat.current.width) return;
-      setIsFixed(window.scrollY + top >= nat.current.pageY);
+      const { pageY, height } = nat.current;
+
+      // The aside (parent) stretches to article height — use it as the boundary
+      const aside = el!.parentElement;
+      if (!aside) return;
+      const asideBottom = aside.getBoundingClientRect().bottom + window.scrollY;
+
+      // Stop fixing once the sidebar bottom would go past the article bottom
+      const wouldGoBelow = window.scrollY + top + height > asideBottom;
+      const pastStart    = window.scrollY + top >= pageY;
+
+      setIsFixed(pastStart && !wouldGoBelow);
     }
 
     function onResize() {

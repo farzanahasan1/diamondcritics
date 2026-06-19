@@ -35,7 +35,7 @@ export default function ContactPage() {
       const name    = data.get("name") as string;
       const subject = data.get("subject") as string;
       const message = data.get("message") as string;
-      window.location.href = `mailto:hello@diamondcritics.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(`From: ${name}\n\n${message}`)}`;
+      window.location.href = `mailto:farzana@diamondcritics.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(`From: ${name}\n\n${message}`)}`;
       setStatus("idle");
       return;
     }
@@ -80,7 +80,13 @@ export default function ContactPage() {
           "name": "Farzana Hasan",
           "jobTitle": "GIA-Certified Diamond Expert",
           "url": "https://diamondcritics.com/about-farzana",
-          "email": "hello@diamondcritics.com",
+          "email": "farzana@diamondcritics.com",
+          "sameAs": [
+            "https://x.com/diamondcritics",
+            "https://www.pinterest.com/diamondcritics/",
+            "https://youtube.com/channel/UCP4kx9XpVpeMqkMcD-9fslg/",
+            "https://www.linkedin.com/company/diamondcritics/",
+          ],
           "worksFor": { "@type": "Organization", "name": "Diamond Critics", "url": "https://diamondcritics.com" },
         },
       })}} />
@@ -202,7 +208,7 @@ export default function ContactPage() {
 
                     {status === "error" && (
                       <p style={{ fontSize: "0.82rem", color: "#c0392b", marginBottom: "1rem" }}>
-                        Something went wrong. Please email directly at hello@diamondcritics.com
+                        Something went wrong. Please email directly at farzana@diamondcritics.com
                       </p>
                     )}
 

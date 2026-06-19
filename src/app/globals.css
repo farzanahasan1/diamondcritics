@@ -443,6 +443,20 @@ body {
   }
 }
 
+/* ─── Footer social icons ───────────────────────────────── */
+.footer-social {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid #333;
+  color: #666;
+  text-decoration: none;
+  transition: color 0.2s, border-color 0.2s;
+}
+.footer-social:hover { color: var(--gold); border-color: var(--gold); }
+
 /* ─── Contact grid ──────────────────────────────────────── */
 @media (max-width: 900px) {
   .contact-grid { grid-template-columns: 1fr !important; }
