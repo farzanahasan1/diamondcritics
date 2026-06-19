@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getAllPosts } from "@/lib/content";
+import { getAllPosts, getPostsByCategory } from "@/lib/content";
 
 const catLabel: Record<string, string> = {
   "diamond-buying-guides": "Buying Guide",
@@ -9,279 +9,296 @@ const catLabel: Record<string, string> = {
 };
 
 export default function HomePage() {
-  const posts = getAllPosts();
-  const hero = posts[0];
-  const sidebar = posts.slice(1, 5);
-  const grid = posts.slice(5, 13);
+  const all = getAllPosts();
+  const featured = all[0];
+  const grid1 = all.slice(1, 4);
+  const grid2 = all.slice(4, 7);
+  const guides = all.slice(7, 15);
 
   return (
-    <div style={{ background: "#e8e5df", minHeight: "100vh" }}>
+    <div style={{ background: "#fff", fontFamily: "var(--body)" }}>
 
-      {/* ── Announcement bar ─────────────────────────────────── */}
-      <div style={{ borderBottom: "1px solid #ccc", background: "#e0ddd7" }}>
-        <div className="max-w-screen-2xl mx-auto px-8 py-2 flex items-center justify-between">
-          <span className="text-xs tracking-widest uppercase hidden sm:block"
-            style={{ fontFamily: "var(--body)", color: "#888", letterSpacing: "0.14em" }}>
-            Expert Diamond Analysis · GIA-Backed · No Sponsored Content
+      {/* ── Hero ─────────────────────────────────────────────── */}
+      <section style={{ borderBottom: "1px solid #ebebeb", padding: "3.5rem 0 3rem" }}>
+        <div className="max-w-screen-xl mx-auto px-6 sm:px-8"
+          style={{ display: "grid", gridTemplateColumns: "1fr auto", gap: "3rem", alignItems: "center" }}>
+
+          {/* Left */}
+          <div style={{ maxWidth: "600px" }}>
+            <p style={{ fontSize: "0.72rem", letterSpacing: "0.14em", textTransform: "uppercase", color: "#888", marginBottom: "1rem" }}>
+              Expert Guides · GIA-Backed · Free Analysis
+            </p>
+            <h1 style={{ fontFamily: "var(--heading)", fontWeight: 300, lineHeight: 1.05, marginBottom: "0.25rem", color: "#111" }}>
+              <span style={{ display: "block", fontSize: "clamp(2.2rem, 4.5vw, 3.8rem)", letterSpacing: "-0.02em" }}>
+                Buy Diamonds Smarter.
+              </span>
+              <span style={{ display: "block", fontSize: "clamp(2.2rem, 4.5vw, 3.8rem)", letterSpacing: "-0.02em", fontStyle: "italic", color: "var(--gold)" }}>
+                Save Thousands.
+              </span>
+            </h1>
+            <p style={{ fontSize: "0.95rem", lineHeight: 1.75, color: "#555", margin: "1.25rem 0 2rem", maxWidth: "480px" }}>
+              Expert guides on diamonds and the best deals from trusted retailers. By Farzana Hasan, GIA Expert.
+            </p>
+            <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
+              <Link href="/diamond-4cs"
+                style={{ display: "inline-flex", alignItems: "center", gap: "6px", background: "#111", color: "#fff", fontFamily: "var(--body)", fontSize: "0.8rem", fontWeight: 600, padding: "11px 22px", textDecoration: "none" }}>
+                Diamond Buying Guide →
+              </Link>
+              <Link href="/lab-grown-vs-natural-diamond-price"
+                style={{ display: "inline-flex", alignItems: "center", gap: "6px", border: "1px solid #ddd", color: "#333", fontFamily: "var(--body)", fontSize: "0.8rem", fontWeight: 500, padding: "11px 22px", textDecoration: "none", background: "#fff" }}>
+                Lab vs Natural Diamond
+              </Link>
+            </div>
+          </div>
+
+          {/* Right: featured in + Blue Nile box */}
+          <div style={{ minWidth: "260px" }} className="hidden lg:block">
+            <p style={{ fontSize: "0.68rem", letterSpacing: "0.14em", textTransform: "uppercase", color: "#bbb", marginBottom: "0.75rem" }}>
+              As Seen In
+            </p>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "10px", marginBottom: "1.5rem" }}>
+              {["Forbes", "Business Insider", "Yahoo Finance", "MSN"].map((pub) => (
+                <span key={pub}
+                  style={{ fontSize: "0.75rem", fontFamily: "var(--heading)", fontStyle: "italic", color: "#999", padding: "4px 10px", border: "1px solid #eee" }}>
+                  {pub}
+                </span>
+              ))}
+            </div>
+            <a href="https://www.bluenile.com/diamond-search?a_aid=69d7c31a91b8d&a_cid=55e51e63&chan=homepage-hero"
+              target="_blank" rel="noopener noreferrer"
+              style={{ display: "block", background: "#111", padding: "1rem 1.25rem", textDecoration: "none" }}>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                <div>
+                  <p style={{ fontFamily: "var(--body)", fontSize: "0.65rem", letterSpacing: "0.12em", textTransform: "uppercase", color: "#888", marginBottom: "4px" }}>
+                    Recommended Retailer
+                  </p>
+                  <p style={{ fontFamily: "var(--heading)", fontSize: "1.1rem", fontWeight: 300, color: "#fff" }}>
+                    Blue Nile — Vault Sale
+                  </p>
+                  <p style={{ fontFamily: "var(--body)", fontSize: "0.78rem", color: "var(--gold)", marginTop: "2px" }}>
+                    Up to 40% off select diamonds
+                  </p>
+                </div>
+                <span style={{ color: "#fff", fontSize: "1.2rem" }}>→</span>
+              </div>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Filter nav ───────────────────────────────────────── */}
+      <div style={{ borderBottom: "1px solid #ebebeb", background: "#fafafa" }}>
+        <div className="max-w-screen-xl mx-auto px-6 sm:px-8"
+          style={{ display: "flex", alignItems: "center", gap: "0", height: "46px", overflowX: "auto" }}>
+          <span style={{ fontSize: "0.68rem", letterSpacing: "0.14em", textTransform: "uppercase", color: "#aaa", marginRight: "16px", whiteSpace: "nowrap" }}>
+            Explore
           </span>
-          <a href="https://www.bluenile.com/diamond-search?a_aid=69d7c31a91b8d&a_cid=55e51e63&chan=blog-informational"
-            target="_blank" rel="noopener noreferrer"
-            className="text-xs tracking-widest uppercase hover:text-black transition-colors ml-auto sm:ml-0"
-            style={{ fontFamily: "var(--body)", color: "#888", letterSpacing: "0.14em" }}>
-            Shop Blue Nile — Up to 40% Less →
-          </a>
+          {[
+            { label: "Guides", href: "/category/diamond-buying-guides" },
+            { label: "Clarity", href: "/diamond-clarity-chart" },
+            { label: "Color", href: "/diamond-color-scale" },
+            { label: "Shapes", href: "/diamond-shapes-guide" },
+            { label: "Reviews", href: "/category/diamond-retailer-reviews" },
+            { label: "Prices", href: "/diamond-prices" },
+            { label: "Lab vs Natural", href: "/lab-grown-vs-natural-diamond-price" },
+            { label: "4Cs Guide", href: "/diamond-4cs" },
+          ].map((item) => (
+            <Link key={item.href} href={item.href}
+              style={{ fontSize: "0.78rem", color: "#555", padding: "0 14px", whiteSpace: "nowrap", textDecoration: "none", height: "100%", display: "flex", alignItems: "center", borderRight: "1px solid #ebebeb" }}
+              className="hover:text-black transition-colors">
+              {item.label}
+            </Link>
+          ))}
         </div>
       </div>
 
-      {/* ══════════════════════════════════════════════════════
-          HERO — Architecture Magazine 3-column layout
-          [left-margin] [main: headline + image+text] [sidebar]
-      ══════════════════════════════════════════════════════ */}
-      {hero && (
-        <div style={{ borderBottom: "1px solid #ccc" }}>
-          <div className="max-w-screen-2xl mx-auto px-8 py-16"
-            style={{ display: "grid", gridTemplateColumns: "64px 1fr 300px", gap: "0 40px", alignItems: "start" }}>
-
-            {/* Col 1: number */}
-            <div className="pt-2 hidden lg:block">
-              <span className="text-sm font-light"
-                style={{ fontFamily: "var(--body)", color: "#aaa" }}>01</span>
-            </div>
-
-            {/* Col 2: main content */}
+      {/* ── Trusted Retailer ─────────────────────────────────── */}
+      <section style={{ borderBottom: "1px solid #ebebeb", padding: "2.5rem 0" }}>
+        <div className="max-w-screen-xl mx-auto px-6 sm:px-8">
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1.5rem" }}>
             <div>
-              {/* Category overline */}
-              <div className="flex items-center gap-3 mb-4">
-                <span style={{ display: "block", width: "32px", height: "1px", background: "#999" }} />
-                <p className="text-xs tracking-widest uppercase"
-                  style={{ fontFamily: "var(--body)", color: "#888", letterSpacing: "0.16em" }}>
-                  {catLabel[hero.category] ?? hero.category}
-                </p>
-              </div>
-
-              {/* BIG editorial headline */}
-              <h1 style={{
-                fontFamily: "var(--heading)",
-                fontSize: "clamp(3.5rem, 7vw, 7rem)",
-                fontWeight: 300,
-                lineHeight: 0.95,
-                letterSpacing: "-0.03em",
-                color: "#111",
-                marginBottom: "2.5rem",
-              }}>
-                {hero.title.split(":")[0].split("(")[0].trim()}
-              </h1>
-
-              {/* Image left + text right */}
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "2.5rem", alignItems: "start" }}>
-                <div>
-                  {hero.featuredImage ? (
-                    <img src={hero.featuredImage} alt={hero.title}
-                      style={{ width: "100%", aspectRatio: "4/5", objectFit: "cover", display: "block" }}
-                      fetchPriority="high" decoding="async" />
-                  ) : (
-                    <div style={{ width: "100%", aspectRatio: "4/5", background: "#ccc" }} />
-                  )}
+              <p style={{ fontSize: "0.68rem", letterSpacing: "0.14em", textTransform: "uppercase", color: "#aaa", marginBottom: "4px" }}>
+                Trusted Retailer
+              </p>
+              <h2 style={{ fontFamily: "var(--heading)", fontSize: "1.5rem", fontWeight: 300, color: "#111" }}>
+                Where to Buy Diamonds
+              </h2>
+            </div>
+            <Link href="/blue-nile-review"
+              style={{ fontSize: "0.78rem", color: "#888", textDecoration: "none" }}
+              className="hidden sm:block">
+              All Reviews →
+            </Link>
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: "12px" }}>
+            {[
+              { name: "Blue Nile", badge: "Best Overall", badgeColor: "#111", desc: "200,000+ GIA-certified diamonds online. Up to 40% less.", href: "/blue-nile-review", affiliate: "https://www.bluenile.com/diamond-search?a_aid=69d7c31a91b8d&a_cid=55e51e63&chan=trusted-retailers" },
+            ].map((r) => (
+              <div key={r.name} style={{ border: "1px solid #ebebeb", padding: "1.25rem", background: "#fafafa" }}>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "0.5rem" }}>
+                  <span style={{ fontFamily: "var(--heading)", fontSize: "1.3rem", fontWeight: 300, color: "#111" }}>{r.name}</span>
+                  <span style={{ fontSize: "0.6rem", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", color: "#fff", background: r.badgeColor, padding: "3px 8px" }}>
+                    {r.badge}
+                  </span>
                 </div>
-                <div style={{ paddingTop: "0.5rem" }}>
-                  <h2 style={{
-                    fontFamily: "var(--heading)",
-                    fontSize: "clamp(1.3rem, 2vw, 1.75rem)",
-                    fontWeight: 300,
-                    lineHeight: 1.2,
-                    color: "#111",
-                    marginBottom: "1.25rem",
-                  }}>
-                    {hero.title}
-                  </h2>
-                  {hero.excerpt && (
-                    <p style={{
-                      fontFamily: "var(--body)",
-                      fontSize: "0.9rem",
-                      lineHeight: 1.8,
-                      color: "#555",
-                      marginBottom: "2rem",
-                    }}>
-                      {hero.excerpt}
-                    </p>
-                  )}
-                  <Link href={`/${hero.slug}`}
-                    style={{
-                      display: "inline-block",
-                      background: "#111",
-                      color: "#fff",
-                      fontFamily: "var(--body)",
-                      fontSize: "0.7rem",
-                      fontWeight: 600,
-                      letterSpacing: "0.2em",
-                      textTransform: "uppercase",
-                      padding: "14px 32px",
-                      textDecoration: "none",
-                    }}>
-                    Read the Full Audit
+                <p style={{ fontSize: "0.82rem", color: "#666", lineHeight: 1.6, marginBottom: "0.75rem" }}>{r.desc}</p>
+                <div style={{ display: "flex", gap: "8px" }}>
+                  <a href={r.affiliate} target="_blank" rel="noopener noreferrer"
+                    style={{ fontSize: "0.72rem", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", color: "#fff", background: "#111", padding: "7px 14px", textDecoration: "none" }}>
+                    Shop →
+                  </a>
+                  <Link href={r.href}
+                    style={{ fontSize: "0.72rem", fontWeight: 500, color: "#555", border: "1px solid #ddd", padding: "7px 14px", textDecoration: "none" }}>
+                    Full Review
                   </Link>
-                  <p style={{
-                    fontFamily: "var(--heading)",
-                    fontStyle: "italic",
-                    fontSize: "0.95rem",
-                    color: "#999",
-                    marginTop: "1.25rem",
-                  }}>
-                    — An independent audit by Farzana
-                  </p>
                 </div>
               </div>
-            </div>
-
-            {/* Col 3: sidebar */}
-            <div style={{ borderLeft: "1px solid #ccc", paddingLeft: "2rem" }} className="hidden lg:block">
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1.25rem" }}>
-                <p className="text-xs tracking-widest uppercase font-semibold"
-                  style={{ fontFamily: "var(--body)", color: "#111", letterSpacing: "0.2em" }}>
-                  Next Articles
-                </p>
-                <Link href="/category/diamond-buying-guides"
-                  style={{ fontFamily: "var(--body)", color: "#999", fontSize: "0.8rem", textDecoration: "none" }}>→</Link>
-              </div>
-              <div>
-                {sidebar.map((p) => (
-                  <Link key={p.slug} href={`/${p.slug}`}
-                    style={{ display: "flex", gap: "12px", padding: "14px 0", borderBottom: "1px solid #d5d2cc", textDecoration: "none" }}
-                    className="group">
-                    <div style={{ flexShrink: 0, width: "56px", height: "56px", overflow: "hidden", background: "#ccc" }}>
-                      {p.featuredImage && (
-                        <img src={p.featuredImage} alt={p.title}
-                          style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                          loading="lazy" decoding="async" />
-                      )}
-                    </div>
-                    <div style={{ minWidth: 0 }}>
-                      <p style={{
-                        fontFamily: "var(--body)",
-                        fontSize: "0.65rem",
-                        letterSpacing: "0.14em",
-                        textTransform: "uppercase",
-                        color: "#999",
-                        marginBottom: "4px",
-                      }}>
-                        {catLabel[p.category] ?? p.category}
-                      </p>
-                      <p style={{
-                        fontFamily: "var(--heading)",
-                        fontSize: "0.85rem",
-                        fontWeight: 300,
-                        lineHeight: 1.3,
-                        color: "#111",
-                        display: "-webkit-box",
-                        WebkitLineClamp: 2,
-                        WebkitBoxOrient: "vertical",
-                        overflow: "hidden",
-                      }}>
-                        {p.title}
-                      </p>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-
-              {/* Blue Nile affiliate in sidebar */}
-              <div style={{ marginTop: "2rem", padding: "1.25rem", background: "#111" }}>
-                <p style={{ fontFamily: "var(--body)", fontSize: "0.65rem", letterSpacing: "0.14em", textTransform: "uppercase", color: "#888", marginBottom: "8px" }}>
-                  Verified Retailer
-                </p>
-                <p style={{ fontFamily: "var(--heading)", fontSize: "1.1rem", fontWeight: 300, color: "#fff", marginBottom: "12px" }}>
-                  Blue Nile — 40% Less Than Mall Prices
-                </p>
-                <a href="https://www.bluenile.com/diamond-search?a_aid=69d7c31a91b8d&a_cid=55e51e63&chan=homepage-sidebar"
-                  target="_blank" rel="noopener noreferrer"
-                  style={{
-                    display: "block",
-                    textAlign: "center",
-                    background: "var(--gold)",
-                    color: "#111",
-                    fontFamily: "var(--body)",
-                    fontSize: "0.65rem",
-                    fontWeight: 700,
-                    letterSpacing: "0.16em",
-                    textTransform: "uppercase",
-                    padding: "10px",
-                    textDecoration: "none",
-                  }}>
-                  Search Diamonds →
-                </a>
-              </div>
-            </div>
-
+            ))}
           </div>
         </div>
-      )}
+      </section>
 
-      {/* ── Mobile: latest posts (3-col, no sidebar) ─────────── */}
-      <div className="lg:hidden" style={{ borderBottom: "1px solid #ccc" }}>
-        <div className="max-w-screen-xl mx-auto px-6 py-12">
-          <div className="grid sm:grid-cols-2 gap-8">
-            {sidebar.slice(0, 4).map((p) => (
-              <Link key={p.slug} href={`/${p.slug}`} className="group block" style={{ textDecoration: "none" }}>
-                <div style={{ aspectRatio: "3/2", overflow: "hidden", background: "#ccc", marginBottom: "12px" }}>
+      {/* ── Latest Guides — featured + filter tabs ───────────── */}
+      <section style={{ borderBottom: "1px solid #ebebeb", padding: "2.5rem 0" }}>
+        <div className="max-w-screen-xl mx-auto px-6 sm:px-8">
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1.25rem" }}>
+            <div>
+              <p style={{ fontSize: "0.68rem", letterSpacing: "0.14em", textTransform: "uppercase", color: "#aaa", marginBottom: "4px" }}>
+                Expert Content
+              </p>
+              <h2 style={{ fontFamily: "var(--heading)", fontSize: "1.5rem", fontWeight: 300, color: "#111" }}>
+                Latest Guides
+              </h2>
+            </div>
+          </div>
+
+          {/* Filter tabs */}
+          <div style={{ display: "flex", gap: "6px", flexWrap: "wrap", marginBottom: "1.75rem" }}>
+            {["All", "Buying Guide", "Clarity", "Color", "Shapes", "Retailer Review", "Market & Price"].map((tab, i) => (
+              <span key={tab}
+                style={{
+                  fontSize: "0.75rem",
+                  padding: "5px 14px",
+                  border: `1px solid ${i === 0 ? "#111" : "#ddd"}`,
+                  background: i === 0 ? "#111" : "#fff",
+                  color: i === 0 ? "#fff" : "#555",
+                  cursor: "pointer",
+                  userSelect: "none" as const,
+                }}>
+                {tab}
+              </span>
+            ))}
+          </div>
+
+          {/* Featured post — large */}
+          {featured && (
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0", border: "1px solid #ebebeb", marginBottom: "1.5rem" }}
+              className="block sm:grid">
+              <div style={{ position: "relative", overflow: "hidden", aspectRatio: "3/2" }}>
+                {featured.featuredImage ? (
+                  <img src={featured.featuredImage} alt={featured.title}
+                    style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                    fetchPriority="high" decoding="async" />
+                ) : (
+                  <div style={{ width: "100%", height: "100%", background: "#f0f0f0" }} />
+                )}
+              </div>
+              <div style={{ padding: "2.5rem", display: "flex", flexDirection: "column", justifyContent: "center" }}>
+                <p style={{ fontSize: "0.68rem", letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--gold)", marginBottom: "0.75rem" }}>
+                  {catLabel[featured.category] ?? featured.category} Guide
+                </p>
+                <h3 style={{ fontFamily: "var(--heading)", fontSize: "clamp(1.4rem, 2.5vw, 2rem)", fontWeight: 300, color: "#111", lineHeight: 1.2, marginBottom: "1rem" }}>
+                  {featured.title}
+                </h3>
+                {featured.excerpt && (
+                  <p style={{ fontSize: "0.88rem", color: "#666", lineHeight: 1.75, marginBottom: "1.5rem" }}>
+                    {featured.excerpt}
+                  </p>
+                )}
+                <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
+                  {featured.publishedAt && (
+                    <span style={{ fontSize: "0.75rem", color: "#bbb" }}>
+                      {new Date(featured.publishedAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
+                    </span>
+                  )}
+                  <Link href={`/${featured.slug}`}
+                    style={{ fontSize: "0.8rem", fontWeight: 600, color: "#111", textDecoration: "none" }}>
+                    Read guide →
+                  </Link>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* 3-col grid row 1 */}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1.5rem" }}>
+            {grid1.map((p) => (
+              <Link key={p.slug} href={`/${p.slug}`} style={{ textDecoration: "none", display: "block" }} className="group">
+                <div style={{ position: "relative", overflow: "hidden", aspectRatio: "3/2", background: "#f0f0f0", marginBottom: "0.75rem" }}>
                   {p.featuredImage && (
                     <img src={p.featuredImage} alt={p.title}
-                      style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                      style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
                       loading="lazy" decoding="async" />
                   )}
                 </div>
-                <p style={{ fontFamily: "var(--body)", fontSize: "0.65rem", letterSpacing: "0.14em", textTransform: "uppercase", color: "#888", marginBottom: "6px" }}>
+                <p style={{ fontSize: "0.68rem", letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--gold)", marginBottom: "6px" }}>
                   {catLabel[p.category] ?? p.category}
                 </p>
-                <p style={{ fontFamily: "var(--heading)", fontSize: "1.1rem", fontWeight: 300, color: "#111", lineHeight: 1.3 }}>
+                <h3 style={{ fontFamily: "var(--heading)", fontSize: "1.05rem", fontWeight: 300, color: "#111", lineHeight: 1.3, marginBottom: "8px" }}>
                   {p.title}
+                </h3>
+                {p.excerpt && (
+                  <p style={{ fontSize: "0.82rem", color: "#777", lineHeight: 1.65, marginBottom: "10px",
+                    display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" as const, overflow: "hidden" }}>
+                    {p.excerpt}
+                  </p>
+                )}
+                <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                  {p.publishedAt && (
+                    <span style={{ fontSize: "0.72rem", color: "#bbb" }}>
+                      {new Date(p.publishedAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
+                    </span>
+                  )}
+                  <span style={{ fontSize: "0.78rem", fontWeight: 600, color: "#555" }}>Read →</span>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── More Guides ──────────────────────────────────────── */}
+      <section style={{ borderBottom: "1px solid #ebebeb", padding: "2.5rem 0" }}>
+        <div className="max-w-screen-xl mx-auto px-6 sm:px-8">
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1.5rem" }}>
+            {grid2.map((p) => (
+              <Link key={p.slug} href={`/${p.slug}`} style={{ textDecoration: "none", display: "block" }}>
+                <div style={{ position: "relative", overflow: "hidden", aspectRatio: "3/2", background: "#f0f0f0", marginBottom: "0.75rem" }}>
+                  {p.featuredImage && (
+                    <img src={p.featuredImage} alt={p.title}
+                      style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                      loading="lazy" decoding="async" />
+                  )}
+                </div>
+                <p style={{ fontSize: "0.68rem", letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--gold)", marginBottom: "6px" }}>
+                  {catLabel[p.category] ?? p.category}
                 </p>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* ── Dark: Expert Audits ───────────────────────────────── */}
-      <section style={{ background: "#111", padding: "5rem 2rem" }}>
-        <div className="max-w-screen-xl mx-auto">
-          <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", marginBottom: "3rem" }}>
-            <div>
-              <p style={{ fontFamily: "var(--body)", fontSize: "0.7rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "#666", marginBottom: "0.75rem" }}>
-                Technical Audits
-              </p>
-              <h2 style={{ fontFamily: "var(--heading)", fontSize: "clamp(2rem, 4vw, 3.5rem)", fontWeight: 300, color: "#fff" }}>
-                Expert Diamond{" "}
-                <em style={{ fontStyle: "italic", color: "var(--gold)" }}>Audits</em>
-              </h2>
-            </div>
-            <Link href="/category/diamond-buying-guides"
-              style={{ fontFamily: "var(--body)", fontSize: "0.7rem", letterSpacing: "0.16em", textTransform: "uppercase", color: "#666", borderBottom: "1px solid #666", paddingBottom: "2px", textDecoration: "none" }}
-              className="hidden sm:block">
-              All Guides →
-            </Link>
-          </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1px", background: "#333" }}>
-            {[
-              { label: "Mastering the 4Cs", sub: "Carat · Cut · Color · Clarity", href: "/diamond-4cs", img: "/images/infographic-for-diamond-4c-clarity.avif" },
-              { label: "Diamond Prices & Trends", sub: "2026 market data, crash analysis", href: "/diamond-prices", img: "/images/diamond-prices-2026-march-market-crash-report.avif" },
-              { label: "Clarity Grade Audits", sub: "FL through SI — what to buy", href: "/diamond-clarity-chart", img: "/images/diamond-clarity-chart-beware-clouds-not-shown-milky.avif" },
-            ].map((card) => (
-              <Link key={card.href} href={card.href}
-                style={{ position: "relative", display: "block", overflow: "hidden", aspectRatio: "4/3", background: "#1a1a1a", textDecoration: "none" }}
-                className="group">
-                <img src={card.img} alt={card.label}
-                  style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", opacity: 0.3 }}
-                  loading="lazy" decoding="async" />
-                <div style={{ position: "relative", height: "100%", display: "flex", flexDirection: "column", justifyContent: "flex-end", padding: "2rem" }}>
-                  <p style={{ fontFamily: "var(--body)", fontSize: "0.65rem", letterSpacing: "0.16em", textTransform: "uppercase", color: "var(--gold)", marginBottom: "8px" }}>
-                    {card.sub}
+                <h3 style={{ fontFamily: "var(--heading)", fontSize: "1.05rem", fontWeight: 300, color: "#111", lineHeight: 1.3, marginBottom: "8px" }}>
+                  {p.title}
+                </h3>
+                {p.excerpt && (
+                  <p style={{ fontSize: "0.82rem", color: "#777", lineHeight: 1.65, marginBottom: "10px",
+                    display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" as const, overflow: "hidden" }}>
+                    {p.excerpt}
                   </p>
-                  <h3 style={{ fontFamily: "var(--heading)", fontSize: "1.5rem", fontWeight: 300, color: "#fff", lineHeight: 1.2 }}>
-                    {card.label}
-                  </h3>
-                  <p style={{ fontFamily: "var(--heading)", fontStyle: "italic", fontSize: "0.85rem", color: "rgba(255,255,255,0.35)", marginTop: "0.75rem" }}>
-                    Read the audit →
-                  </p>
+                )}
+                <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                  {p.publishedAt && (
+                    <span style={{ fontSize: "0.72rem", color: "#bbb" }}>
+                      {new Date(p.publishedAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
+                    </span>
+                  )}
+                  <span style={{ fontSize: "0.78rem", fontWeight: 600, color: "#555" }}>Read →</span>
                 </div>
               </Link>
             ))}
@@ -289,119 +306,42 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── Where to Buy ─────────────────────────────────────── */}
-      <section style={{ background: "#e8e5df", borderTop: "1px solid #ccc", borderBottom: "1px solid #ccc", padding: "5rem 2rem" }}>
-        <div className="max-w-screen-xl mx-auto">
-          <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "8px" }}>
-            <span style={{ display: "block", width: "32px", height: "1px", background: "#999" }} />
-            <p style={{ fontFamily: "var(--body)", fontSize: "0.7rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "#999" }}>
-              Verified Retailer
-            </p>
-          </div>
-          <h2 style={{ fontFamily: "var(--heading)", fontSize: "clamp(2.5rem, 5vw, 4rem)", fontWeight: 300, lineHeight: 1.0, marginBottom: "8px", color: "#111" }}>
-            Where to Buy{" "}
-            <em style={{ fontStyle: "italic", color: "var(--gold)" }}>in 2026</em>
-          </h2>
-          <p style={{ fontFamily: "var(--heading)", fontStyle: "italic", color: "#888", fontSize: "0.95rem", marginBottom: "3rem" }}>
-            Based on price, selection &amp; verified customer experience
-          </p>
-          <div style={{ borderTop: "1px solid #ccc", borderBottom: "1px solid #ccc" }}>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "1rem", padding: "10px 0" }}>
-              {["Retailer", "Verdict", "Best For", ""].map((h) => (
-                <span key={h} style={{ fontFamily: "var(--body)", fontSize: "0.65rem", letterSpacing: "0.14em", textTransform: "uppercase", color: "#999" }}>{h}</span>
-              ))}
-            </div>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "1rem", padding: "28px 0", alignItems: "center", borderTop: "1px solid #ddd" }}>
-              <span style={{ fontFamily: "var(--heading)", fontSize: "2rem", fontWeight: 300, color: "#111" }}>Blue Nile</span>
+      {/* ── All Guides grid ──────────────────────────────────── */}
+      {guides.length > 0 && (
+        <section style={{ borderBottom: "1px solid #ebebeb", padding: "2.5rem 0" }}>
+          <div className="max-w-screen-xl mx-auto px-6 sm:px-8">
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1.5rem" }}>
               <div>
-                <span style={{ fontFamily: "var(--body)", fontSize: "0.75rem", fontWeight: 600, color: "#166534" }}>4.6 / 5</span>
-                <p style={{ fontFamily: "var(--heading)", fontStyle: "italic", fontSize: "0.85rem", color: "#999", marginTop: "2px" }}>Trusted Original</p>
-              </div>
-              <span style={{ fontFamily: "var(--body)", fontSize: "0.9rem", color: "#666" }}>Inventory Depth</span>
-              <a href="https://www.bluenile.com/diamond-search?a_aid=69d7c31a91b8d&a_cid=55e51e63&chan=blue_nile_reviews"
-                target="_blank" rel="noopener noreferrer"
-                style={{
-                  display: "inline-block",
-                  background: "#111",
-                  color: "#fff",
-                  fontFamily: "var(--body)",
-                  fontSize: "0.65rem",
-                  fontWeight: 600,
-                  letterSpacing: "0.18em",
-                  textTransform: "uppercase",
-                  padding: "10px 20px",
-                  textDecoration: "none",
-                  width: "fit-content",
-                }}>
-                Full Audit
-              </a>
-            </div>
-          </div>
-          <div style={{ marginTop: "2rem" }}>
-            <Link href="/blue-nile-review"
-              style={{ fontFamily: "var(--body)", fontSize: "0.7rem", letterSpacing: "0.16em", textTransform: "uppercase", borderBottom: "1px solid #111", paddingBottom: "2px", textDecoration: "none", color: "#111" }}>
-              View All Retailer Reviews →
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Knowledge Hub ────────────────────────────────────── */}
-      {grid.length > 0 && (
-        <section style={{ background: "#e8e5df", padding: "5rem 2rem" }}>
-          <div className="max-w-screen-xl mx-auto">
-            <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", marginBottom: "3rem" }}>
-              <div>
-                <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "8px" }}>
-                  <span style={{ display: "block", width: "32px", height: "1px", background: "#999" }} />
-                  <p style={{ fontFamily: "var(--body)", fontSize: "0.7rem", letterSpacing: "0.18em", textTransform: "uppercase", color: "#999" }}>
-                    Learn &amp; Compare
-                  </p>
-                </div>
-                <h2 style={{ fontFamily: "var(--heading)", fontSize: "clamp(2rem, 4vw, 3.5rem)", fontWeight: 300, lineHeight: 1.0, color: "#111" }}>
-                  Knowledge{" "}
-                  <em style={{ fontStyle: "italic", color: "var(--gold)" }}>Hub</em>
-                </h2>
+                <p style={{ fontSize: "0.68rem", letterSpacing: "0.14em", textTransform: "uppercase", color: "#aaa", marginBottom: "4px" }}>Diamond Guides</p>
+                <h2 style={{ fontFamily: "var(--heading)", fontSize: "1.5rem", fontWeight: 300, color: "#111" }}>Browse All Guides</h2>
               </div>
               <Link href="/category/diamond-buying-guides"
-                style={{ fontFamily: "var(--body)", fontSize: "0.7rem", letterSpacing: "0.16em", textTransform: "uppercase", color: "#999", borderBottom: "1px solid #999", paddingBottom: "2px", textDecoration: "none" }}
-                className="hidden sm:block">
+                style={{ fontSize: "0.78rem", color: "#888", textDecoration: "none" }} className="hidden sm:block">
                 All Guides →
               </Link>
             </div>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "2rem" }} className="grid-cols-2-sm">
-              {grid.map((p) => (
-                <Link key={p.slug} href={`/${p.slug}`} className="group block" style={{ textDecoration: "none" }}>
-                  <div style={{ aspectRatio: "3/2", overflow: "hidden", background: "#ccc", marginBottom: "1rem" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "1.25rem" }}>
+              {guides.map((p) => (
+                <Link key={p.slug} href={`/${p.slug}`} style={{ textDecoration: "none", display: "block" }}>
+                  <div style={{ position: "relative", overflow: "hidden", aspectRatio: "3/2", background: "#f0f0f0", marginBottom: "0.6rem" }}>
                     {p.featuredImage && (
                       <img src={p.featuredImage} alt={p.title}
-                        style={{ width: "100%", height: "100%", objectFit: "cover", transition: "transform 0.7s" }}
+                        style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
                         loading="lazy" decoding="async" />
                     )}
                   </div>
-                  <p style={{ fontFamily: "var(--body)", fontSize: "0.65rem", letterSpacing: "0.14em", textTransform: "uppercase", color: "#999", marginBottom: "8px" }}>
+                  <p style={{ fontSize: "0.65rem", letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--gold)", marginBottom: "5px" }}>
                     {catLabel[p.category] ?? p.category}
                   </p>
-                  <p style={{ fontFamily: "var(--heading)", fontSize: "1.1rem", fontWeight: 300, color: "#111", lineHeight: 1.3 }}>
+                  <p style={{ fontFamily: "var(--heading)", fontSize: "0.95rem", fontWeight: 300, color: "#111", lineHeight: 1.3 }}>
                     {p.title}
                   </p>
                 </Link>
               ))}
             </div>
-            <div style={{ textAlign: "center", marginTop: "3.5rem" }}>
+            <div style={{ textAlign: "center", marginTop: "2.5rem" }}>
               <Link href="/category/diamond-buying-guides"
-                style={{
-                  display: "inline-block",
-                  border: "1px solid #111",
-                  color: "#111",
-                  fontFamily: "var(--body)",
-                  fontSize: "0.7rem",
-                  fontWeight: 600,
-                  letterSpacing: "0.18em",
-                  textTransform: "uppercase",
-                  padding: "14px 40px",
-                  textDecoration: "none",
-                }}>
+                style={{ display: "inline-block", border: "1px solid #111", color: "#111", fontFamily: "var(--body)", fontSize: "0.75rem", fontWeight: 600, letterSpacing: "0.14em", textTransform: "uppercase", padding: "12px 36px", textDecoration: "none" }}>
                 View All Buying Guides
               </Link>
             </div>
@@ -409,38 +349,45 @@ export default function HomePage() {
         </section>
       )}
 
-      {/* ── Bottom CTA ───────────────────────────────────────── */}
-      <div style={{ background: "#dedad3", borderTop: "1px solid #ccc", padding: "3.5rem 2rem" }}>
-        <div className="max-w-screen-xl mx-auto"
-          style={{ display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: "2rem" }}>
-          <div>
-            <h3 style={{ fontFamily: "var(--heading)", fontSize: "clamp(1.5rem, 3vw, 2.2rem)", fontWeight: 300, marginBottom: "4px", color: "#111" }}>
-              Ready to find your{" "}
-              <em style={{ fontStyle: "italic", color: "var(--gold)" }}>perfect diamond?</em>
-            </h3>
-            <p style={{ fontFamily: "var(--heading)", fontStyle: "italic", color: "#888", fontSize: "0.95rem" }}>
-              We recommend Blue Nile — 40% less than mall jewellers, GIA-certified.
+      {/* ── Dark CTA banner ──────────────────────────────────── */}
+      <section style={{ background: "#111", padding: "0" }}>
+        <div className="max-w-screen-xl mx-auto px-6 sm:px-8"
+          style={{ display: "grid", gridTemplateColumns: "1fr 1fr", alignItems: "stretch", minHeight: "220px" }}>
+          <div style={{ padding: "3rem 0", display: "flex", flexDirection: "column", justifyContent: "center" }}>
+            <p style={{ fontFamily: "var(--body)", fontSize: "0.68rem", letterSpacing: "0.14em", textTransform: "uppercase", color: "#666", marginBottom: "0.5rem" }}>
+              Interactive Tool
             </p>
+            <h2 style={{ fontFamily: "var(--heading)", fontSize: "clamp(1.4rem, 2.5vw, 2rem)", fontWeight: 300, color: "#fff", lineHeight: 1.2, marginBottom: "0.75rem" }}>
+              Natural or Lab-Grown Diamond?{" "}
+              <em style={{ fontStyle: "italic", color: "var(--gold)" }}>Can you tell?</em>
+            </h2>
+            <p style={{ fontSize: "0.85rem", color: "#888", lineHeight: 1.7, marginBottom: "1.5rem", maxWidth: "400px" }}>
+              Same color. Same clarity. One costs $8,140 — the other $1,870. Read our full price breakdown and discover which is right for you.
+            </p>
+            <Link href="/lab-grown-vs-natural-diamond-price"
+              style={{ display: "inline-block", background: "var(--gold)", color: "#111", fontFamily: "var(--body)", fontSize: "0.75rem", fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", padding: "11px 24px", textDecoration: "none", width: "fit-content" }}>
+              Read the Full Breakdown →
+            </Link>
           </div>
-          <a href="https://www.bluenile.com/diamond-search?a_aid=69d7c31a91b8d&a_cid=55e51e63&chan=homepage-cta"
-            target="_blank" rel="noopener noreferrer"
-            style={{
-              flexShrink: 0,
-              display: "inline-block",
-              background: "#111",
-              color: "#fff",
-              fontFamily: "var(--body)",
-              fontSize: "0.7rem",
-              fontWeight: 600,
-              letterSpacing: "0.18em",
-              textTransform: "uppercase",
-              padding: "14px 32px",
-              textDecoration: "none",
-            }}>
-            Shop Blue Nile →
-          </a>
+          <div style={{ position: "relative", overflow: "hidden" }} className="hidden sm:block">
+            <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", gap: "24px", padding: "2rem" }}>
+              <div style={{ textAlign: "center" }}>
+                <div style={{ fontFamily: "var(--heading)", fontSize: "4rem", color: "rgba(255,255,255,0.08)", fontWeight: 300, lineHeight: 1 }}>
+                  EXCLUSIVE
+                </div>
+                <div style={{ fontFamily: "var(--heading)", fontSize: "5rem", color: "rgba(255,255,255,0.06)", fontWeight: 300, lineHeight: 1 }}>
+                  SAVINGS
+                </div>
+                <a href="https://www.bluenile.com/diamond-search?a_aid=69d7c31a91b8d&a_cid=55e51e63&chan=dark-banner"
+                  target="_blank" rel="noopener noreferrer"
+                  style={{ display: "inline-block", fontFamily: "var(--body)", fontSize: "0.72rem", letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--gold)", marginTop: "1rem" }}>
+                  Blue Nile — Up to 40% Off →
+                </a>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
+      </section>
 
     </div>
   );
