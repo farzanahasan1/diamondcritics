@@ -3,7 +3,7 @@ import { useState, type FormEvent } from "react";
 import Link from "next/link";
 
 // ── Setup: go to formspree.io → New Form → copy the ID here ──────────────
-const FORMSPREE_ID = "YOUR_FORMSPREE_ID";
+const FORMSPREE_ID = "mbdendwp";
 // ─────────────────────────────────────────────────────────────────────────
 
 const wrap: React.CSSProperties = {
