@@ -1,6 +1,12 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { getAllPostSlugs, getAllPageSlugs, getPostBySlug, getPageBySlug } from "@/lib/content";
+import {
+  getAllPostSlugs,
+  getAllPageSlugs,
+  getPostBySlug,
+  getPageBySlug,
+  getRelatedPosts,
+} from "@/lib/content";
 import PostContent from "@/components/PostContent";
 
 interface Props {
@@ -8,9 +14,10 @@ interface Props {
 }
 
 export async function generateStaticParams() {
-  const postSlugs = getAllPostSlugs().map((slug) => ({ slug }));
-  const pageSlugs = getAllPageSlugs().map((slug) => ({ slug }));
-  return [...postSlugs, ...pageSlugs];
+  return [
+    ...getAllPostSlugs().map((slug) => ({ slug })),
+    ...getAllPageSlugs().map((slug) => ({ slug })),
+  ];
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -21,6 +28,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: post.seoTitle || post.title,
     description: post.seoDescription,
     alternates: { canonical: `https://diamondcritics.com/${slug}` },
+    openGraph: {
+      title: post.seoTitle || post.title,
+      description: post.seoDescription,
+      url: `https://diamondcritics.com/${slug}`,
+      type: "article",
+    },
   };
 }
 
@@ -28,7 +41,10 @@ export default async function SlugPage({ params }: Props) {
   const { slug } = await params;
 
   const post = getPostBySlug(slug);
-  if (post) return <PostContent type="post" data={post} />;
+  if (post) {
+    const related = getRelatedPosts(slug, post.category, 3);
+    return <PostContent type="post" data={post} related={related} />;
+  }
 
   const page = getPageBySlug(slug);
   if (page) return <PostContent type="page" data={page} />;
