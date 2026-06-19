@@ -1,9 +1,28 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=DM+Sans:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&display=swap');
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
+@font-face {
+  font-family: 'IvyPresto Headline';
+  src: url('/fonts/ivy-presto-headline-light.woff2') format('woff2'),
+       url('/fonts/ivy-presto-headline-light.woff') format('woff');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'IvyPresto Display';
+  src: url('/fonts/ivy-presto-display-light.woff2') format('woff2'),
+       url('/fonts/ivy-presto-display-light.woff') format('woff');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
-  --heading: 'Cormorant Garamond', Georgia, serif;
+  --heading: 'IvyPresto Headline', 'IvyPresto Display', Georgia, serif;
+  --display: 'IvyPresto Display', 'IvyPresto Headline', Georgia, serif;
   --body: 'DM Sans', system-ui, sans-serif;
   --cream: #faf9f7;
   --ink: #141414;

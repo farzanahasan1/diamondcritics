@@ -53,6 +53,23 @@ export function getAllPageSlugs(): string[] {
   return readDir(pagesDir).map((f) => f.replace(/\.(mdoc|mdx|md)$/, ""));
 }
 
+const publicImagesDir = path.join(process.cwd(), "public/images");
+
+function toAvif(src: string): string {
+  if (!src) return src;
+  const avifPath = src.replace(/\.(jpe?g|png|webp)$/i, ".avif");
+  const filename = path.basename(avifPath);
+  if (fs.existsSync(path.join(publicImagesDir, filename))) return avifPath;
+  return src;
+}
+
+function rewriteContentImages(html: string): string {
+  return html.replace(
+    /(<img[^>]+src=")([^"]+)"/gi,
+    (_match, prefix, src) => `${prefix}${toAvif(src)}"`
+  );
+}
+
 function readFile(
   dir: string,
   slug: string
@@ -63,7 +80,7 @@ function readFile(
     if (!fs.existsSync(filePath)) continue;
     const raw = fs.readFileSync(filePath, "utf-8");
     const { data, content } = matter(raw);
-    const contentHtml = marked(content) as string;
+    const contentHtml = rewriteContentImages(marked(content) as string);
     return { data, contentHtml };
   }
   return null;
@@ -81,7 +98,7 @@ export function getPostBySlug(slug: string): Post | null {
     category: data.category ?? "diamond-buying-guides",
     seoTitle: data.seoTitle ?? data.title ?? slug,
     seoDescription: data.seoDescription ?? data.excerpt ?? "",
-    featuredImage: data.featuredImage ?? "",
+    featuredImage: toAvif(data.featuredImage ?? ""),
     contentHtml,
   };
 }

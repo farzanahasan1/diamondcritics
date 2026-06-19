@@ -71,31 +71,27 @@ export default function Header() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link href="/" className="flex-shrink-0 flex items-baseline gap-1.5">
-            <span
-              style={{
-                fontFamily: "var(--heading)",
-                fontStyle: "italic",
-                fontSize: "1.6rem",
-                fontWeight: 300,
-                lineHeight: 1,
-                color: "var(--gold)",
-                letterSpacing: "-0.01em",
-              }}
-            >
-              D◆
-            </span>
-            <span
-              style={{
-                fontFamily: "var(--heading)",
-                fontSize: "1.1rem",
-                fontWeight: 300,
-                letterSpacing: "0.05em",
-                color: "var(--ink)",
-              }}
-            >
-              Diamond <em className="italic not-italic" style={{ fontStyle: "italic" }}>Critics</em>
-            </span>
+          <Link href="/" className="flex-shrink-0">
+            <picture className="hidden sm:block">
+              <source srcSet="/images/diamond-critics-main-logo-small.avif" type="image/avif" />
+              <img
+                src="/images/diamond-critics-main-logo-small.png"
+                alt="Diamond Critics"
+                className="h-10 w-auto"
+                fetchPriority="high"
+                decoding="async"
+              />
+            </picture>
+            <picture className="sm:hidden">
+              <source srcSet="/images/diamond-critics-icon-logo-small.avif" type="image/avif" />
+              <img
+                src="/images/diamond-critics-icon-logo-small.png"
+                alt="Diamond Critics"
+                className="h-10 w-auto"
+                fetchPriority="high"
+                decoding="async"
+              />
+            </picture>
           </Link>
 
           {/* Desktop Nav */}

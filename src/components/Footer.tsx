@@ -7,23 +7,22 @@ export default function Footer() {
         <div className="grid sm:grid-cols-3 gap-12 mb-16">
           {/* Brand */}
           <div>
-            <div className="flex items-baseline gap-2 mb-6">
-              <span
-                style={{
-                  fontFamily: "var(--heading)",
-                  fontStyle: "italic",
-                  fontSize: "2rem",
-                  fontWeight: 300,
-                  color: "var(--gold)",
-                  lineHeight: 1,
-                }}
-              >
-                D◆
-              </span>
+            <div className="mb-6">
+              <picture>
+                <source srcSet="/images/diamond-critics-icon-logo-small.avif" type="image/avif" />
+                <img
+                  src="/images/diamond-critics-icon-logo-small.png"
+                  alt="Diamond Critics"
+                  className="h-16 w-auto"
+                  style={{ filter: "brightness(0) invert(1)" }}
+                  loading="lazy"
+                  decoding="async"
+                />
+              </picture>
             </div>
             <p
               className="text-lg font-normal mb-3"
-              style={{ fontFamily: "var(--heading)", fontWeight: 300 }}
+              style={{ fontFamily: "var(--heading)", fontWeight: 300, color: "#fff" }}
             >
               Diamond <em className="italic" style={{ color: "var(--gold)" }}>Critics</em>
             </p>

@@ -103,6 +103,8 @@ export default function HomePage() {
                   alt={hero.title}
                   className="w-full aspect-[4/3] object-cover"
                   style={{ filter: "contrast(1.02)" }}
+                  fetchPriority="high"
+                  decoding="async"
                 />
               ) : (
                 <div className="w-full aspect-[4/3] bg-gray-100 flex items-center justify-center">
@@ -140,6 +142,8 @@ export default function HomePage() {
                       src={p.featuredImage}
                       alt={p.title}
                       className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-700"
+                      loading="lazy"
+                      decoding="async"
                     />
                   ) : (
                     <div className="w-full h-full" style={{ background: "var(--cream)" }} />
@@ -260,6 +264,7 @@ export default function HomePage() {
                     src={card.img}
                     alt={card.label}
                     className="absolute inset-0 w-full h-full object-cover opacity-30 group-hover:opacity-45 transition-opacity duration-500"
+                    loading="lazy" decoding="async"
                   />
                 )}
                 <div className="relative h-full flex flex-col justify-end p-8">
@@ -417,6 +422,7 @@ export default function HomePage() {
                       src={p.featuredImage}
                       alt={p.title}
                       className="w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-700"
+                      loading="lazy" decoding="async"
                     />
                   ) : (
                     <div className="w-full h-full" style={{ background: "var(--cream)" }} />
