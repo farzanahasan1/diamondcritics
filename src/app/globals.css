@@ -443,6 +443,11 @@ body {
   }
 }
 
+/* ─── Contact grid ──────────────────────────────────────── */
+@media (max-width: 900px) {
+  .contact-grid { grid-template-columns: 1fr !important; }
+}
+
 /* ─── Category grid ─────────────────────────────────────── */
 @media (max-width: 900px) {
   .cat-grid { grid-template-columns: repeat(2, 1fr) !important; }
