@@ -195,13 +195,28 @@ export default function PostContent({ type, data, related }: Props) {
                   </p>
                 </div>
               </div>
-              {post.publishedAt && (
-                <p style={{ fontFamily: "var(--body)", fontSize: "0.72rem", color: "rgba(255,255,255,0.4)" }}>
-                  {new Date(post.publishedAt).toLocaleDateString("en-US", {
-                    year: "numeric", month: "long", day: "numeric"
-                  })}
-                </p>
-              )}
+              <div style={{ textAlign: "right" }}>
+                {post.updatedAt ? (
+                  <>
+                    <p style={{ fontFamily: "var(--body)", fontSize: "0.72rem", color: "rgba(255,255,255,0.55)", marginBottom: "2px" }}>
+                      Updated{" "}
+                      {new Date(post.updatedAt).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}
+                    </p>
+                    {post.publishedAt && (
+                      <p style={{ fontFamily: "var(--body)", fontSize: "0.65rem", color: "rgba(255,255,255,0.3)" }}>
+                        Published{" "}
+                        {new Date(post.publishedAt).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}
+                      </p>
+                    )}
+                  </>
+                ) : (
+                  post.publishedAt && (
+                    <p style={{ fontFamily: "var(--body)", fontSize: "0.72rem", color: "rgba(255,255,255,0.4)" }}>
+                      {new Date(post.publishedAt).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}
+                    </p>
+                  )
+                )}
+              </div>
             </div>
           )}
 

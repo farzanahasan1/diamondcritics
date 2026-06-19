@@ -24,6 +24,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const post = getPostBySlug(slug) ?? getPageBySlug(slug);
   if (!post) return {};
+  const isPost = "publishedAt" in post;
   return {
     title: post.seoTitle || post.title,
     description: post.seoDescription,
@@ -33,6 +34,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description: post.seoDescription,
       url: `https://diamondcritics.com/${slug}`,
       type: "article",
+      ...(isPost && {
+        publishedTime: (post as import("@/lib/content").PostMeta).publishedAt,
+        modifiedTime: (post as import("@/lib/content").PostMeta).updatedAt ||
+                      (post as import("@/lib/content").PostMeta).publishedAt,
+      }),
       images: ("featuredImage" in post && post.featuredImage)
         ? [{ url: `https://diamondcritics.com${post.featuredImage}`, width: 1200, height: 630 }]
         : undefined,
@@ -84,14 +90,45 @@ export default async function SlugPage({ params }: Props) {
   const post = getPostBySlug(slug);
   if (post) {
     const related = getRelatedPosts(slug, post.category, 3);
-    const schema = reviewSchemas[slug];
+    const reviewSchema = reviewSchemas[slug];
+    const articleSchema = {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": post.title,
+      "description": post.excerpt,
+      "datePublished": post.publishedAt,
+      "dateModified": post.updatedAt || post.publishedAt,
+      "author": {
+        "@type": "Person",
+        "name": "Farzana Hasan",
+        "jobTitle": "GIA-Certified Diamond Expert",
+        "url": "https://diamondcritics.com/about-farzana",
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Diamond Critics",
+        "url": "https://diamondcritics.com",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://diamondcritics.com/images/dc-logo.png",
+        },
+      },
+      ...(post.featuredImage && {
+        "image": {
+          "@type": "ImageObject",
+          "url": `https://diamondcritics.com${post.featuredImage}`,
+          "width": 1500,
+          "height": 1000,
+        },
+      }),
+      "url": `https://diamondcritics.com/${slug}`,
+      "mainEntityOfPage": `https://diamondcritics.com/${slug}`,
+    };
     return (
       <>
-        {schema && (
-          <script
-            type="application/ld+json"
-            dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
-          />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
+        {reviewSchema && (
+          <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(reviewSchema) }} />
         )}
         <PostContent type="post" data={post} related={related} />
       </>

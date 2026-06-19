@@ -17,6 +17,7 @@ export interface PostMeta {
   title: string;
   excerpt: string;
   publishedAt: string;
+  updatedAt: string;
   category: string;
   seoTitle: string;
   seoDescription: string;
@@ -107,6 +108,7 @@ export function getPostBySlug(slug: string): Post | null {
     title: decodeEntities(data.title ?? slug),
     excerpt: decodeEntities(data.excerpt ?? ""),
     publishedAt: data.publishedAt ?? "",
+    updatedAt: data.updatedAt ?? "",
     category: data.category ?? "diamond-buying-guides",
     seoTitle: decodeEntities(data.seoTitle ?? data.title ?? slug),
     seoDescription: decodeEntities(data.seoDescription ?? data.excerpt ?? ""),
