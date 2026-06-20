@@ -33,7 +33,7 @@ export default function TocWidget({ items }: { items: TocItem[] }) {
       }}>
         In This Article
       </p>
-      <nav style={{ maxHeight: "300px", overflowY: "auto" }}>
+      <nav style={{ maxHeight: "200px", overflowY: "auto" }}>
         {items.map((item) => {
           const isActive = active === item.id;
           return (
