@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { Post, Page, PostMeta } from "@/lib/content";
 import DiamondQuiz from "@/components/DiamondQuiz";
+import BluenileDealsCTA from "@/components/BluenileDealsCTA";
 import ReadingProgress from "@/components/ReadingProgress";
 import TocWidget, { type TocItem } from "@/components/TocWidget";
 
@@ -259,11 +260,18 @@ export default function PostContent({ type, data, related }: Props) {
                 if (type === "post" && splitAt > 0) {
                   const intro = contentHtml.slice(0, splitAt);
                   const body = contentHtml.slice(splitAt);
+                  // Inject deal CTA at the nearest H2 after the body midpoint
+                  const mid = Math.floor(body.length / 2);
+                  const ctaSplit = body.indexOf("<h2", mid);
+                  const body1 = ctaSplit > 0 ? body.slice(0, ctaSplit) : body;
+                  const body2 = ctaSplit > 0 ? body.slice(ctaSplit) : "";
                   return (
                     <>
                       <div className="prose-article" dangerouslySetInnerHTML={{ __html: intro }} />
                       <DiamondQuiz />
-                      <div className="prose-article" dangerouslySetInnerHTML={{ __html: body }} />
+                      <div className="prose-article" dangerouslySetInnerHTML={{ __html: body1 }} />
+                      <BluenileDealsCTA />
+                      <div className="prose-article" dangerouslySetInnerHTML={{ __html: body2 }} />
                     </>
                   );
                 }
