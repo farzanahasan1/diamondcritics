@@ -252,10 +252,13 @@ export default function PostContent({ type, data, related }: Props) {
             {/* Main article */}
             <article>
               {(() => {
-                const h2Index = contentHtml.indexOf("<h2");
-                if (type === "post" && h2Index > 0) {
-                  const intro = contentHtml.slice(0, h2Index);
-                  const body = contentHtml.slice(h2Index);
+                const first = contentHtml.indexOf("<h2");
+                // If there's intro text before first H2, split there.
+                // If post starts with H2 (e.g. TL;DR), split before the second H2 instead.
+                const splitAt = first > 0 ? first : contentHtml.indexOf("<h2", first + 4);
+                if (type === "post" && splitAt > 0) {
+                  const intro = contentHtml.slice(0, splitAt);
+                  const body = contentHtml.slice(splitAt);
                   return (
                     <>
                       <div className="prose-article" dangerouslySetInnerHTML={{ __html: intro }} />
