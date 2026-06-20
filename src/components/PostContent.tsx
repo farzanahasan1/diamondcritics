@@ -33,7 +33,7 @@ function injectPinterestButtons(html: string, slug: string, title: string): stri
   const pageUrl = `https://diamondcritics.com/${slug}`;
   return html.replace(/<img([^>]*?)>/gi, (_, attrs) => {
     const srcMatch = /src="([^"]+)"/.exec(attrs);
-    if (!srcMatch) return `<img${attrs}>`;
+    if (!srcMatch || /class="/.test(attrs)) return `<img${attrs}>`;
     const src = srcMatch[1];
     const mediaUrl = src.startsWith("http") ? src : `https://diamondcritics.com${src}`;
     const pinUrl = `https://pinterest.com/pin/create/button/?url=${encodeURIComponent(pageUrl)}&media=${encodeURIComponent(mediaUrl)}&description=${encodeURIComponent(title)}`;
