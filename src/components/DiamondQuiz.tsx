@@ -14,8 +14,6 @@ interface QuizDiamond {
 interface DiamondQuizProps {
   diamonds?: QuizDiamond[];
   specs?: string;
-  naturalPrice?: string;
-  labPrice?: string;
 }
 
 const DEFAULT_DIAMONDS: QuizDiamond[] = [
@@ -39,10 +37,7 @@ const DEFAULT_DIAMONDS: QuizDiamond[] = [
   },
 ];
 
-export default function DiamondQuiz({
-  diamonds = DEFAULT_DIAMONDS,
-  specs = "GIA Certified · 1.51ct · D Color · VVS1 · Ideal Cut",
-}: DiamondQuizProps) {
+export default function DiamondQuiz({ diamonds = DEFAULT_DIAMONDS, specs = "GIA Certified · 1.51ct · D Color · VVS1 · Ideal Cut" }: DiamondQuizProps) {
   const [picked, setPicked] = useState<string | null>(null);
   const revealed = picked !== null;
   const pickedDiamond = diamonds.find((d) => d.id === picked);
@@ -105,8 +100,8 @@ export default function DiamondQuiz({
                     fontFamily: "var(--body)", fontSize: "0.82rem", fontWeight: 700,
                     padding: "10px 28px", cursor: "pointer", transition: "all 0.2s",
                   }}
-                  onMouseEnter={(e) => { (e.target as HTMLButtonElement).style.background = "orange"; (e.target as HTMLButtonElement).style.color = "#fff"; }}
-                  onMouseLeave={(e) => { (e.target as HTMLButtonElement).style.background = "#fff"; (e.target as HTMLButtonElement).style.color = "#111"; }}
+                  onMouseEnter={(e) => { e.currentTarget.style.background = "orange"; e.currentTarget.style.color = "#fff"; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.background = "#fff"; e.currentTarget.style.color = "#111"; }}
                 >
                   Select
                 </button>

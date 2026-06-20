@@ -22,26 +22,25 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const post = getPostBySlug(slug) ?? getPageBySlug(slug);
-  if (!post) return {};
-  const isPost = "publishedAt" in post;
+  const post = getPostBySlug(slug);
+  const data = post ?? getPageBySlug(slug);
+  if (!data) return {};
   return {
-    title: post.seoTitle || post.title,
-    description: post.seoDescription,
+    title: data.seoTitle || data.title,
+    description: data.seoDescription,
     alternates: { canonical: `https://diamondcritics.com/${slug}` },
     openGraph: {
-      title: post.seoTitle || post.title,
-      description: post.seoDescription,
+      title: data.seoTitle || data.title,
+      description: data.seoDescription,
       url: `https://diamondcritics.com/${slug}`,
       type: "article",
-      ...(isPost && "publishedAt" in post && {
-        publishedTime: (post as { publishedAt: string }).publishedAt,
-        modifiedTime: ("updatedAt" in post ? (post as { updatedAt: string }).updatedAt : "") ||
-                      (post as { publishedAt: string }).publishedAt,
+      ...(post && {
+        publishedTime: post.publishedAt,
+        modifiedTime: post.updatedAt || post.publishedAt,
+        images: post.featuredImage
+          ? [{ url: `https://diamondcritics.com${post.featuredImage}`, width: 1200, height: 630 }]
+          : undefined,
       }),
-      images: ("featuredImage" in post && post.featuredImage)
-        ? [{ url: `https://diamondcritics.com${post.featuredImage}`, width: 1200, height: 630 }]
-        : undefined,
     },
   };
 }

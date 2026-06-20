@@ -134,7 +134,7 @@ function readFile(
       if (typeof data[key] === "string") data[key] = applyShortcodes(data[key]);
     }
     const contentHtml = addBluenileAffiliate(
-      rewriteContentImages(marked(processed) as string),
+      rewriteContentImages(marked.parse(processed) as string),
       data.category
     );
     return { data, contentHtml };
