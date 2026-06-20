@@ -6,6 +6,7 @@ const catLabel: Record<string, string> = {
   "diamond-retailer-reviews": "Retailer Review",
   "gemstone-guides": "Gemstone",
   "market-value-price-trends": "Market & Price",
+  "round-cut-diamond": "Round Diamond",
 };
 
 const wrap: React.CSSProperties = {

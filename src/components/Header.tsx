@@ -216,15 +216,17 @@ const nav: NavItem[] = [
           ],
         },
         {
-          heading: "Statement Cuts",
+          heading: "Round Diamond Deep Dive",
           links: [
-            { label: "Emerald Cut", href: "/emerald-cut-diamond" },
-            { label: "Radiant Cut", href: "/radiant-cut-diamond" },
-            { label: "Pear Cut", href: "/pear-cut-diamond" },
+            { label: "1ct Price Audit", href: "/1-carat-round-diamond-price" },
+            { label: "Round vs Oval", href: "/round-diamond-vs-oval-diamond" },
+            { label: "Hearts & Arrows", href: "/hearts-and-arrows-diamond" },
+            { label: "Ring Settings Guide", href: "/round-diamond-engagement-ring-settings" },
+            { label: "Lab Grown Round", href: "/lab-grown-round-diamond" },
           ],
         },
       ],
-      viewAll: { label: "All Shapes", href: "/diamond-shapes-guide" },
+      viewAll: { label: "All Round Cut Guides", href: "/category/round-cut-diamond" },
     },
   },
   {

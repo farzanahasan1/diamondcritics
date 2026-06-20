@@ -35,6 +35,7 @@ export default config({
             { label: "Diamond Retailer Reviews", value: "diamond-retailer-reviews" },
             { label: "Gemstone Guides", value: "gemstone-guides" },
             { label: "Market Value & Price Trends", value: "market-value-price-trends" },
+            { label: "Round Cut Diamond", value: "round-cut-diamond" },
           ],
           defaultValue: "diamond-buying-guides",
         }),
