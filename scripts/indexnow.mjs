@@ -1,17 +1,17 @@
-// Submits all site URLs to Bing IndexNow after every production build.
+// Submits all site URLs to Bing after every production build via Webmaster API.
 // Runs automatically via the "postbuild" npm script.
 import { readdirSync, existsSync } from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 
-const KEY  = "b89c5aec023543896a6873dc1041da27";
+const BING_API_KEY = "fa17f601ccff4ea1a88c549b35bdd5c3";
 const HOST = "diamondcritics.com";
 const BASE = `https://${HOST}`;
 
 // Only run on Vercel production builds — skip previews and local
 const env = process.env.VERCEL_ENV;
 if (env && env !== "production") {
-  console.log(`IndexNow: skipping (VERCEL_ENV=${env})`);
+  console.log(`Bing submit: skipping (VERCEL_ENV=${env})`);
   process.exit(0);
 }
 
@@ -41,26 +41,22 @@ const urlList = [
   ...pageSlugs.map((s) => `${BASE}/${s}`),
 ];
 
-const payload = {
-  host: HOST,
-  key: KEY,
-  keyLocation: `${BASE}/${KEY}.txt`,
-  urlList,
-};
-
 try {
-  const res = await fetch("https://api.indexnow.org/IndexNow", {
-    method: "POST",
-    headers: { "Content-Type": "application/json; charset=utf-8" },
-    body: JSON.stringify(payload),
-  });
-  // 200 = processed, 202 = queued — both are success
-  if (res.status === 200 || res.status === 202) {
-    console.log(`✓ IndexNow: ${urlList.length} URLs queued for Bing (${res.status})`);
+  const res = await fetch(
+    `https://ssl.bing.com/webmaster/api.svc/json/SubmitUrlbatch?apikey=${BING_API_KEY}`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json; charset=utf-8" },
+      body: JSON.stringify({ siteUrl: BASE, urlList }),
+    }
+  );
+  if (res.ok) {
+    console.log(`✓ Bing: ${urlList.length} URLs submitted (${res.status})`);
   } else {
-    console.warn(`⚠ IndexNow: unexpected status ${res.status}`);
+    const body = await res.text();
+    console.warn(`⚠ Bing submit failed: ${res.status} — ${body}`);
   }
 } catch (err) {
-  // Never fail the build over IndexNow
-  console.warn("⚠ IndexNow submission failed (non-fatal):", err.message);
+  // Never fail the build over URL submission
+  console.warn("⚠ Bing submit failed (non-fatal):", err.message);
 }
