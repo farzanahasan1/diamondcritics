@@ -125,7 +125,7 @@ function readFile(
     // Auto-set updatedAt for posts using shortcodes (signals freshness to Google each rebuild)
     if (SHORTCODE_RE.test(content)) {
       SHORTCODE_RE.lastIndex = 0; // reset after .test()
-      if (!data.updatedAt) data.updatedAt = _now.toISOString().slice(0, 10);
+      if (!data.updatedAt || /\{\{/.test(data.updatedAt)) data.updatedAt = _now.toISOString().slice(0, 10);
     }
     // Apply shortcodes, then ensure blank line before headings
     const processed = applyShortcodes(content).replace(/([^\n])\n(#{1,6} )/g, "$1\n\n$2");
