@@ -97,6 +97,11 @@ function rewriteContentImages(html: string): string {
   );
 }
 
+// Opens every link in a new tab — required for all post links (affiliate + internal).
+function addTargetBlank(html: string): string {
+  return html.replace(/<a /gi, '<a target="_blank" rel="noopener noreferrer" ');
+}
+
 // Automatically appends affiliate ID to every Blue Nile link in a post.
 // Works whether the link was pasted from Blue Nile's site or typed manually.
 // Uses chan=blue_nile_reviews for review posts, chan=blog-informational for everything else.
@@ -133,9 +138,11 @@ function readFile(
     for (const key of ["title", "excerpt", "seoTitle", "seoDescription"]) {
       if (typeof data[key] === "string") data[key] = applyShortcodes(data[key]);
     }
-    const contentHtml = addBluenileAffiliate(
-      rewriteContentImages(marked.parse(processed) as string),
-      data.category
+    const contentHtml = addTargetBlank(
+      addBluenileAffiliate(
+        rewriteContentImages(marked.parse(processed) as string),
+        data.category
+      )
     );
     return { data, contentHtml };
   }
