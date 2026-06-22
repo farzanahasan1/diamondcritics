@@ -202,10 +202,10 @@ export default function AboutFarzana() {
                   objectFit: "cover",
                   objectPosition: "top center",
                   display: "block",
-                  filter: "grayscale(10%)",
+                  filter: "grayscale(20%) brightness(0.92)",
                 }}
               />
-              <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to right, #0d0d0d 0%, transparent 30%)" }} />
+              <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to right, #0d0d0d 0%, #0d0d0d 5%, rgba(13,13,13,0.6) 30%, rgba(13,13,13,0.15) 55%, transparent 75%)" }} />
             </div>
           </div>
         </section>
