@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { getAllPosts } from "@/lib/content";
 
 export const metadata: Metadata = {
   title: "About Farzana Hasan — GIA-Certified Diamond Expert",
@@ -88,9 +89,9 @@ const schema = {
   },
 };
 
-const stats = [
+const getStats = (postCount: number) => [
   { value: "10+", label: "Years Experience" },
-  { value: "76+", label: "Buying Guides" },
+  { value: `${postCount}+`, label: "Buying Guides" },
   { value: "GIA", label: "Certified Expert" },
   { value: "$2B+", label: "Diamonds Analyzed" },
 ];
@@ -124,6 +125,8 @@ const publications = [
 ];
 
 export default function AboutFarzana() {
+  const postCount = getAllPosts().length;
+  const stats = getStats(postCount);
   return (
     <>
       <script
@@ -322,7 +325,7 @@ export default function AboutFarzana() {
 
         {/* ── Credential strip ── */}
         <div style={{ background: "#0d0d0d", padding: "3rem 2rem" }}>
-          <div style={{ maxWidth: "1100px", margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "2rem", flexWrap: "wrap" }}>
+          <div className="about-credential-strip" style={{ maxWidth: "1100px", margin: "0 auto", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "2rem", flexWrap: "wrap" }}>
             <div>
               <p style={{ fontSize: "0.65rem", fontWeight: 700, letterSpacing: "0.24em", textTransform: "uppercase", color: "#444", marginBottom: "0.5rem" }}>
                 Certification
@@ -372,7 +375,7 @@ export default function AboutFarzana() {
             Start Here
           </p>
           <h2 style={{ fontFamily: "var(--heading)", fontWeight: 300, fontStyle: "italic", fontSize: "clamp(2rem, 4vw, 2.75rem)", color: "#111", marginBottom: "1.5rem" }}>
-            76 guides. Zero compromise.
+            {postCount}+ guides. Zero compromise.
           </h2>
           <p style={{ fontSize: "1rem", color: "#555", lineHeight: 1.8, maxWidth: "560px", margin: "0 auto 2.5rem" }}>
             Every round diamond guide, price analysis, and shape comparison — written with GIA-certified precision so you never overpay.
@@ -397,16 +400,19 @@ export default function AboutFarzana() {
       <style>{`
         @media (max-width: 768px) {
           .about-hero-grid { grid-template-columns: 1fr !important; }
-          .about-hero-image-wrap { min-height: 380px !important; }
+          .about-hero-grid > div:first-child { padding-right: 0 !important; }
+          .about-hero-image-wrap { min-height: 380px !important; order: -1; }
           .about-stats-grid { grid-template-columns: repeat(2, 1fr) !important; }
-          .about-stat-item:nth-child(2) { border-right: none !important; }
+          .about-stat-item:nth-child(even) { border-right: none !important; }
           .about-origin-grid { grid-template-columns: 1fr !important; gap: 2rem !important; }
           .about-method-grid { grid-template-columns: 1fr !important; }
           .about-method-grid > div { border-right: none !important; }
+          .about-credential-strip { flex-direction: column !important; align-items: flex-start !important; gap: 1.5rem !important; }
           .about-divider { display: none !important; }
         }
         @media (max-width: 480px) {
           .about-stats-grid { grid-template-columns: 1fr 1fr !important; }
+          .about-hero-image-wrap { min-height: 300px !important; }
         }
         .about-ticker-track {
           display: flex;
