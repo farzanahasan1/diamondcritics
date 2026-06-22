@@ -19,5 +19,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${BASE}/diamond-resale-value-calculator`, lastModified: new Date(), changeFrequency: "monthly", priority: 0.6 },
   ];
 
-  return [...staticPages, ...posts];
+  const categoryPages: MetadataRoute.Sitemap = [
+    "round-cut-diamond",
+    "diamond-buying-guides",
+    "diamond-retailer-reviews",
+    "gemstone-guides",
+    "market-value-price-trends",
+  ].map((slug) => ({
+    url: `${BASE}/category/${slug}`,
+    lastModified: new Date(),
+    changeFrequency: "weekly" as const,
+    priority: 0.7,
+  }));
+
+  return [...staticPages, ...categoryPages, ...posts];
 }

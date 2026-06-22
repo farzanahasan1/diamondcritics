@@ -50,6 +50,7 @@ const categoryLabelsSchema: Record<string, string> = {
   "diamond-retailer-reviews": "Retailer Reviews",
   "gemstone-guides": "Gemstone Guides",
   "market-value-price-trends": "Market & Price Trends",
+  "round-cut-diamond": "Round Cut Diamond",
 };
 
 function extractFAQSchema(html: string): object | null {
@@ -145,7 +146,7 @@ export default async function SlugPage({ params }: Props) {
       "@context": "https://schema.org",
       "@type": "Article",
       "headline": post.title,
-      "description": post.excerpt,
+      "description": post.seoDescription || post.excerpt,
       "datePublished": post.publishedAt,
       "dateModified": post.updatedAt || post.publishedAt,
       "author": {

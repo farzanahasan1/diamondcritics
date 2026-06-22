@@ -37,10 +37,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const label = categoryLabels[slug];
   if (!label) return {};
+  const description = categoryDescriptions[slug] ?? `Expert guides on ${label.toLowerCase()} by Farzana Hasan, GIA Expert.`;
   return {
     title: `${label} — Diamond Critics`,
-    description: categoryDescriptions[slug] ?? `Expert guides on ${label.toLowerCase()} by Farzana Hasan, GIA Expert.`,
+    description,
     alternates: { canonical: `https://diamondcritics.com/category/${slug}` },
+    openGraph: {
+      title: `${label} — Diamond Critics`,
+      description,
+      url: `https://diamondcritics.com/category/${slug}`,
+      type: "website",
+      siteName: "Diamond Critics",
+    },
   };
 }
 
