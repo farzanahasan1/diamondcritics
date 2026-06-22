@@ -127,15 +127,18 @@ function readFile(
     if (!fs.existsSync(filePath)) continue;
     const raw = fs.readFileSync(filePath, "utf-8");
     const { data, content } = matter(raw);
-    // Auto-set updatedAt for posts using shortcodes (signals freshness to Google each rebuild)
+    // Always resolve updatedAt — fix {{date}} placeholder or missing value regardless of body content
+    if (!data.updatedAt || /\{\{/.test(String(data.updatedAt))) {
+      data.updatedAt = _now.toISOString().slice(0, 10);
+    }
+    // Reset regex state after any prior .test() calls
     if (SHORTCODE_RE.test(content)) {
-      SHORTCODE_RE.lastIndex = 0; // reset after .test()
-      if (!data.updatedAt || /\{\{/.test(data.updatedAt)) data.updatedAt = _now.toISOString().slice(0, 10);
+      SHORTCODE_RE.lastIndex = 0;
     }
     // Apply shortcodes, then ensure blank line before headings
     const processed = applyShortcodes(content).replace(/([^\n])\n(#{1,6} )/g, "$1\n\n$2");
     // Apply shortcodes to frontmatter text fields too
-    for (const key of ["title", "excerpt", "seoTitle", "seoDescription"]) {
+    for (const key of ["title", "description", "excerpt", "seoTitle", "seoDescription"]) {
       if (typeof data[key] === "string") data[key] = applyShortcodes(data[key]);
     }
     const contentHtml = addTargetBlank(
@@ -161,7 +164,7 @@ export function getPostBySlug(slug: string): Post | null {
     updatedAt: data.updatedAt ?? "",
     category: data.category ?? "diamond-buying-guides",
     seoTitle: decodeEntities(data.seoTitle ?? data.title ?? slug),
-    seoDescription: decodeEntities(data.seoDescription ?? data.excerpt ?? ""),
+    seoDescription: decodeEntities(data.seoDescription ?? data.description ?? data.excerpt ?? ""),
     featuredImage: toAvif(data.featuredImage ?? ""),
     contentHtml,
   };
