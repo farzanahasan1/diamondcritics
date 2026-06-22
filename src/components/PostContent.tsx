@@ -4,6 +4,7 @@ import DiamondQuiz from "@/components/DiamondQuiz";
 import BluenileDealsCTA from "@/components/BluenileDealsCTA";
 import ReadingProgress from "@/components/ReadingProgress";
 import TocWidget, { type TocItem } from "@/components/TocWidget";
+import JamesAllenBanner from "@/components/JamesAllenBanner";
 
 const categoryLabels: Record<string, string> = {
   "diamond-buying-guides": "Diamond Buying Guides",
@@ -244,6 +245,13 @@ export default function PostContent({ type, data, related }: Props) {
 
         </div>
       </div>
+
+      {/* ── James Allen Sale Banner ─────────────────────── */}
+      {type === "post" && (
+        <div style={{ background: "#000" }}>
+          <JamesAllenBanner />
+        </div>
+      )}
 
       {/* ── Article body + sidebar ───────────────────────── */}
       <div style={{ background: "#fff", padding: "4rem 0 5rem" }}>

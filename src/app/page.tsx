@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getAllPosts } from "@/lib/content";
+import JamesAllenBanner from "@/components/JamesAllenBanner";
 
 const catLabel: Record<string, string> = {
   "diamond-buying-guides": "Buying Guide",
@@ -108,6 +109,11 @@ export default function HomePage() {
             </Link>
           ))}
         </div>
+      </div>
+
+      {/* ── James Allen Sale Banner ──────────────────────────── */}
+      <div style={{ background: "#000" }}>
+        <JamesAllenBanner />
       </div>
 
       {/* ── Trusted Retailer ─────────────────────────────────── */}
