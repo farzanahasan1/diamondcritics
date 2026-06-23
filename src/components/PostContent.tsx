@@ -261,10 +261,10 @@ export default function PostContent({ type, data, related }: Props) {
             {/* Main article */}
             <article>
               {(() => {
-                const first = contentHtml.indexOf("<h2");
-                // If there's intro text before first H2, split there.
-                // If post starts with H2 (e.g. TL;DR), split before the second H2 instead.
-                const splitAt = first > 0 ? first : contentHtml.indexOf("<h2", first + 4);
+                const firstH2 = contentHtml.indexOf("<h2");
+                // Split at the second H2 so DiamondQuiz appears after the TL;DR section
+                const secondH2 = firstH2 >= 0 ? contentHtml.indexOf("<h2", firstH2 + 4) : -1;
+                const splitAt = secondH2 > 0 ? secondH2 : firstH2;
                 if (type === "post" && splitAt > 0) {
                   const intro = contentHtml.slice(0, splitAt);
                   const body = contentHtml.slice(splitAt);
