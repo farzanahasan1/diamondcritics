@@ -38,7 +38,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         publishedTime: post.publishedAt,
         modifiedTime: post.updatedAt || post.publishedAt,
         images: post.featuredImage
-          ? [{ url: `https://diamondcritics.com${post.featuredImage}`, width: 1200, height: 630 }]
+          ? [{ url: `https://diamondcritics.com${post.featuredImage}`, width: 1500, height: 1000 }]
           : undefined,
       }),
     },
@@ -161,7 +161,9 @@ export default async function SlugPage({ params }: Props) {
         "url": "https://diamondcritics.com",
         "logo": {
           "@type": "ImageObject",
-          "url": "https://diamondcritics.com/images/dc-logo.png",
+          "url": "https://diamondcritics.com/apple-icon.jpg",
+          "width": 180,
+          "height": 180,
         },
       },
       ...(post.featuredImage && {

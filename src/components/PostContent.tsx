@@ -11,6 +11,7 @@ const categoryLabels: Record<string, string> = {
   "diamond-retailer-reviews": "Retailer Reviews",
   "gemstone-guides": "Gemstone Guides",
   "market-value-price-trends": "Market & Price Trends",
+  "round-cut-diamond": "Round Cut Diamond",
 };
 
 const catShort: Record<string, string> = {
@@ -18,6 +19,7 @@ const catShort: Record<string, string> = {
   "diamond-retailer-reviews": "Review",
   "gemstone-guides": "Gemstone",
   "market-value-price-trends": "Market",
+  "round-cut-diamond": "Round Diamond",
 };
 
 interface Props {

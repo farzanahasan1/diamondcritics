@@ -5,6 +5,7 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: "*",
       allow: "/",
+      disallow: ["/keystatic/", "/api/"],
     },
     sitemap: "https://diamondcritics.com/sitemap.xml",
   };
