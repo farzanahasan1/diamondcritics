@@ -77,7 +77,7 @@ const jobs = [
 for (const job of jobs) {
   try {
     await sharp(job.input)
-      .resize(1500, 1000, { fit: "cover", position: "centre" })
+      .resize(1500, 1000, { fit: "contain", background: { r: 255, g: 255, b: 255, alpha: 1 } })
       .avif({ quality: 82 })
       .toFile(job.output);
 
