@@ -524,6 +524,13 @@ body {
   .cat-grid { grid-template-columns: 1fr !important; }
 }
 
+/* ─── Blog index page ───────────────────────────────────── */
+.blog-post-row:hover .blog-post-title { color: var(--gold); }
+.blog-post-title { transition: color 0.18s; }
+@media (max-width: 700px) {
+  .blog-list-grid { grid-template-columns: 1fr !important; }
+}
+
 /* ─── About page ticker ──────────────────────────────────── */
 @keyframes ticker-loop {
   0% { transform: translateX(0); }

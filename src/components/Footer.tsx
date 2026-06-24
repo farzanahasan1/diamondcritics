@@ -24,6 +24,7 @@ const socials = [
 ];
 
 const explore = [
+  { label: "All Guides", href: "/blog" },
   { label: "Retailer Reviews", href: "/category/diamond-retailer-reviews" },
   { label: "Diamond Guides", href: "/category/diamond-buying-guides" },
   { label: "Lab vs Natural", href: "/lab-grown-vs-natural-diamond-price" },
