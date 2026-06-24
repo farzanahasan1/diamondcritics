@@ -19,6 +19,7 @@ export interface PostMeta {
   publishedAt: string;
   updatedAt: string;
   category: string;
+  subcategory: string;
   seoTitle: string;
   seoDescription: string;
   featuredImage: string;
@@ -163,6 +164,7 @@ export function getPostBySlug(slug: string): Post | null {
     publishedAt: data.publishedAt ?? "",
     updatedAt: data.updatedAt ?? "",
     category: data.category ?? "diamond-buying-guides",
+    subcategory: data.subcategory ?? "",
     seoTitle: decodeEntities(data.seoTitle ?? data.title ?? slug),
     seoDescription: decodeEntities(data.seoDescription ?? data.description ?? data.excerpt ?? ""),
     featuredImage: toAvif(data.featuredImage ?? ""),
@@ -192,6 +194,10 @@ export function getAllPosts(): PostMeta[] {
 
 export function getPostsByCategory(category: string): PostMeta[] {
   return getAllPosts().filter((p) => p.category === category);
+}
+
+export function getPostsBySubcategory(subcategory: string): PostMeta[] {
+  return getAllPosts().filter((p) => p.subcategory === subcategory);
 }
 
 export function getRelatedPosts(currentSlug: string, category: string, count = 3): PostMeta[] {

@@ -23,6 +23,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "round-cut-diamond",
     "diamond-buying-guides",
     "diamond-retailer-reviews",
+    "blue-nile",
     "gemstone-guides",
     "market-value-price-trends",
   ].map((slug) => ({

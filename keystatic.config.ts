@@ -39,6 +39,14 @@ export default config({
           ],
           defaultValue: "diamond-buying-guides",
         }),
+        subcategory: fields.select({
+          label: "Subcategory (optional)",
+          options: [
+            { label: "None", value: "" },
+            { label: "Blue Nile", value: "blue-nile" },
+          ],
+          defaultValue: "",
+        }),
         seoTitle: fields.text({ label: "SEO Title (60 chars max)" }),
         seoDescription: fields.text({
           label: "Meta Description (160 chars max)",
