@@ -1,9 +1,10 @@
 import type { MetadataRoute } from "next";
 import { getAllPosts } from "@/lib/content";
+import { createClient } from "@supabase/supabase-js";
 
 const BASE = "https://diamondcritics.com";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const posts = getAllPosts().map((p) => ({
     url: `${BASE}/${p.slug}`,
     lastModified: p.updatedAt ?? p.publishedAt ?? new Date().toISOString(),
@@ -33,5 +34,61 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.7,
   }));
 
-  return [...staticPages, ...categoryPages, ...posts];
+  // ── Community pages ──────────────────────────────────────────────────────
+  const communityStatic: MetadataRoute.Sitemap = [
+    { url: `${BASE}/community`, lastModified: new Date(), changeFrequency: "hourly", priority: 0.9 },
+  ];
+
+  let communitySubPages: MetadataRoute.Sitemap = [];
+  let communityPosts: MetadataRoute.Sitemap = [];
+
+  try {
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    );
+
+    // Subcommunities (r/[slug])
+    const { data: communities } = await supabase
+      .from("communities")
+      .select("slug, updated_at")
+      .order("member_count", { ascending: false });
+
+    if (communities) {
+      communitySubPages = communities.map((c) => ({
+        url: `${BASE}/community/r/${c.slug}`,
+        lastModified: c.updated_at ?? new Date(),
+        changeFrequency: "daily" as const,
+        priority: 0.7,
+      }));
+    }
+
+    // Public posts (not deleted)
+    const { data: dbPosts } = await supabase
+      .from("posts")
+      .select("id, updated_at, created_at")
+      .eq("is_deleted", false)
+      .order("created_at", { ascending: false })
+      .limit(1000);
+
+    if (dbPosts) {
+      communityPosts = dbPosts.map((p) => ({
+        url: `${BASE}/community/post/${p.id}`,
+        lastModified: p.updated_at ?? p.created_at ?? new Date(),
+        changeFrequency: "weekly" as const,
+        priority: 0.5,
+      }));
+    }
+  } catch {
+    // Supabase unavailable at build time — community URLs omitted gracefully
+  }
+
+  return [
+    ...staticPages,
+    ...categoryPages,
+    ...posts,
+    ...communityStatic,
+    ...communitySubPages,
+    ...communityPosts,
+  ];
 }
