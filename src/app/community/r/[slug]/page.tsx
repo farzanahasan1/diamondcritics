@@ -79,41 +79,53 @@ export default async function CommunityPage({
   const { data: allCommunities } = await supabase.from('communities').select('*').order('member_count', { ascending: false })
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-[1fr_316px] gap-6">
+    <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-5">
       <div>
         {/* Community header */}
-        <div className="bg-white border border-[#EDEFF1] rounded overflow-hidden mb-3">
-          <div className="h-16 bg-gradient-to-r from-[#C6973E] to-[#8B6914]" />
-          <div className="px-4 pb-3 flex items-center gap-3">
-            <div className="-mt-5 w-14 h-14 rounded-full bg-white border-4 border-white flex items-center justify-center text-3xl shadow">
-              💎
+        <div className="rounded-xl overflow-hidden mb-3" style={{ background: '#fff', border: '1px solid #E2DDD7' }}>
+          <div className="h-16 relative" style={{ background: 'linear-gradient(135deg, #18110A 0%, #3d2a0e 55%, #18110A 100%)' }}>
+            <div className="absolute inset-0 flex items-end px-4 pb-0">
+              <div className="-mb-5 w-14 h-14 rounded-full flex items-center justify-center shrink-0" style={{ background: 'linear-gradient(135deg, #C6973E, #e8bf6a)', outline: '3px solid #fff' }}>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.5" strokeLinejoin="round">
+                  <path d="M6 3L2 9l10 12L22 9l-4-6H6z"/><path d="M2 9h20M6 3l3 6m6-6l-3 6"/>
+                </svg>
+              </div>
             </div>
-            <div className="pt-2">
-              <h1 className="font-bold text-xl text-gray-900">r/{slug}</h1>
-              <p className="text-sm text-gray-500">{community.description}</p>
+          </div>
+          <div className="px-4 pt-7 pb-4 flex items-end gap-3">
+            <div className="flex-1">
+              <h1 className="font-bold text-lg" style={{ color: '#18110A', fontFamily: 'var(--font-ivy), Georgia, serif' }}>r/{slug}</h1>
+              <p className="text-sm" style={{ color: '#7a6f66' }}>{community.description}</p>
             </div>
             {user && (
               <Link
                 href={`/community/r/${slug}/submit`}
-                className="ml-auto text-sm px-4 py-2 bg-[#C6973E] text-white rounded-full font-semibold hover:bg-[#b08535] transition-colors"
+                className="flex items-center gap-1.5 shrink-0 text-sm px-4 py-2 rounded-lg font-semibold"
+                style={{ background: '#C6973E', color: '#fff' }}
               >
-                + Create Post
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                Post
               </Link>
             )}
           </div>
         </div>
 
         {/* Sort tabs */}
-        <div className="flex items-center gap-1 mb-3 bg-white border border-[#EDEFF1] rounded p-2">
+        <div className="flex items-center gap-1 mb-3 rounded-lg px-3 py-2" style={{ background: '#fff', border: '1px solid #E2DDD7' }}>
           {(['hot', 'new', 'top'] as const).map(s => (
             <Link
               key={s}
               href={`/community/r/${slug}?sort=${s}`}
-              className={`px-3 py-1.5 rounded text-sm font-medium capitalize transition-colors ${
-                sortMode === s ? 'bg-[#E8E8E8] text-gray-900' : 'text-gray-500 hover:bg-gray-100'
-              }`}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-colors"
+              style={sortMode === s
+                ? { background: '#F0EDE8', color: '#18110A' }
+                : { color: '#7a6f66' }
+              }
             >
-              {s === 'hot' ? '🔥 Hot' : s === 'new' ? '✨ New' : '📈 Top'}
+              {s === 'hot' && <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 2c0 6-6 8-6 14a6 6 0 0012 0c0-6-6-8-6-14z"/></svg>}
+              {s === 'new' && <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>}
+              {s === 'top' && <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>}
+              <span className="capitalize">{s}</span>
             </Link>
           ))}
         </div>
@@ -121,15 +133,20 @@ export default async function CommunityPage({
         {/* Posts */}
         <div className="space-y-2">
           {posts.length === 0 ? (
-            <div className="bg-white border border-[#EDEFF1] rounded p-10 text-center">
-              <p className="text-3xl mb-2">💎</p>
-              <p className="font-semibold text-gray-700 mb-2">No posts in r/{slug} yet</p>
+            <div className="rounded-xl p-10 text-center" style={{ background: '#fff', border: '1px solid #E2DDD7' }}>
+              <div className="w-12 h-12 rounded-full mx-auto mb-4 flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #C6973E22, #C6973E44)' }}>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C6973E" strokeWidth="1.5" strokeLinejoin="round">
+                  <path d="M6 3L2 9l10 12L22 9l-4-6H6z"/><path d="M2 9h20M6 3l3 6m6-6l-3 6"/>
+                </svg>
+              </div>
+              <p className="font-semibold mb-1" style={{ color: '#18110A', fontFamily: 'var(--font-ivy), Georgia, serif', fontSize: '1.05rem' }}>No posts in r/{slug} yet</p>
+              <p className="text-sm mb-4" style={{ color: '#9a8f87' }}>Be the first to start the conversation</p>
               {user ? (
-                <Link href={`/community/r/${slug}/submit`} className="inline-block px-5 py-2 bg-[#C6973E] text-white rounded font-semibold hover:bg-[#b08535]">
+                <Link href={`/community/r/${slug}/submit`} className="inline-block px-5 py-2 rounded-lg text-sm font-semibold" style={{ background: '#C6973E', color: '#fff' }}>
                   Create First Post
                 </Link>
               ) : (
-                <Link href="/community/register" className="inline-block px-5 py-2 bg-[#C6973E] text-white rounded font-semibold">
+                <Link href="/community/register" className="inline-block px-5 py-2 rounded-lg text-sm font-semibold" style={{ background: '#C6973E', color: '#fff' }}>
                   Join to Post
                 </Link>
               )}

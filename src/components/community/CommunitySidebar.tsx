@@ -17,52 +17,84 @@ export default function CommunitySidebar({ communities, user, activeCommunity }:
   const featured = activeCommunity ?? communities[0]
 
   return (
-    <aside className="space-y-4">
+    <aside className="space-y-3">
       {/* Featured community card */}
       {featured && (
-        <div className="bg-white border border-[#EDEFF1] rounded overflow-hidden">
-          <div className="h-12 bg-gradient-to-r from-[#C6973E] to-[#8B6914]" />
-          <div className="p-3">
-            <div className="flex items-center gap-2 mb-1">
-              <span className="text-2xl">💎</span>
-              <Link href={`/community/r/${featured.slug}`} className="font-bold text-gray-900 hover:underline">
-                r/{featured.slug}
-              </Link>
-            </div>
-            <p className="text-sm text-gray-600 mb-3">{featured.description}</p>
-            <div className="flex gap-4 text-xs text-gray-500 mb-3">
-              <div>
-                <div className="font-bold text-gray-900 text-base">{formatCount(featured.member_count)}</div>
-                Members
-              </div>
-              <div>
-                <div className="font-bold text-gray-900 text-base">{formatCount(featured.post_count)}</div>
-                Posts
+        <div className="rounded-xl overflow-hidden" style={{ background: '#fff', border: '1px solid #E2DDD7' }}>
+          {/* Banner */}
+          <div className="h-14 relative" style={{ background: 'linear-gradient(135deg, #18110A 0%, #3d2a0e 50%, #18110A 100%)' }}>
+            <div className="absolute inset-0 flex items-center px-4">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-full flex items-center justify-center shrink-0" style={{ background: 'linear-gradient(135deg, #C6973E, #e8bf6a)' }}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.5" strokeLinejoin="round">
+                    <path d="M6 3L2 9l10 12L22 9l-4-6H6z"/><path d="M2 9h20M6 3l3 6m6-6l-3 6"/>
+                  </svg>
+                </div>
+                <Link href={`/community/r/${featured.slug}`} className="font-semibold text-sm hover:underline" style={{ color: '#f5e6c8' }}>
+                  r/{featured.slug}
+                </Link>
               </div>
             </div>
+          </div>
+
+          {/* Body */}
+          <div className="p-4">
+            <p className="text-sm mb-4 leading-relaxed" style={{ color: '#5a504a' }}>{featured.description}</p>
+
+            {/* Stats */}
+            <div className="grid grid-cols-2 gap-3 mb-4 pb-4" style={{ borderBottom: '1px solid #E2DDD7' }}>
+              <div>
+                <div className="text-lg font-bold" style={{ color: '#18110A', fontFamily: 'var(--font-dm), system-ui, sans-serif' }}>
+                  {formatCount(featured.member_count)}
+                </div>
+                <div className="text-xs" style={{ color: '#9a8f87' }}>Members</div>
+              </div>
+              <div>
+                <div className="text-lg font-bold" style={{ color: '#18110A', fontFamily: 'var(--font-dm), system-ui, sans-serif' }}>
+                  {formatCount(featured.post_count)}
+                </div>
+                <div className="text-xs" style={{ color: '#9a8f87' }}>Posts</div>
+              </div>
+            </div>
+
+            {/* CTA */}
             {user ? (
               <Link
                 href={`/community/r/${featured.slug}/submit`}
-                className="block w-full text-center bg-[#C6973E] text-white text-sm font-semibold py-2 rounded hover:bg-[#b08535] transition-colors"
+                className="flex items-center justify-center gap-2 w-full text-sm font-semibold py-2 rounded-lg transition-colors"
+                style={{ background: '#C6973E', color: '#fff' }}
               >
-                + Create Post
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                Create Post
               </Link>
             ) : (
-              <Link
-                href="/community/register"
-                className="block w-full text-center bg-[#C6973E] text-white text-sm font-semibold py-2 rounded hover:bg-[#b08535] transition-colors"
-              >
-                Join Community
-              </Link>
+              <div className="space-y-2">
+                <Link
+                  href="/community/register"
+                  className="flex items-center justify-center w-full text-sm font-semibold py-2 rounded-lg"
+                  style={{ background: '#C6973E', color: '#fff' }}
+                >
+                  Join Community
+                </Link>
+                <Link
+                  href="/community/login"
+                  className="flex items-center justify-center w-full text-sm font-medium py-2 rounded-lg"
+                  style={{ background: 'transparent', color: '#5a504a', border: '1px solid #E2DDD7' }}
+                >
+                  Log In
+                </Link>
+              </div>
             )}
           </div>
+
+          {/* Rules */}
           {featured.rules && (
-            <div className="border-t border-[#EDEFF1] p-3">
-              <h3 className="text-xs font-bold uppercase text-gray-500 mb-2">Community Rules</h3>
-              <ol className="space-y-1">
+            <div className="px-4 pb-4" style={{ borderTop: '1px solid #E2DDD7', paddingTop: '1rem' }}>
+              <h3 className="text-xs font-bold uppercase tracking-wider mb-3" style={{ color: '#9a8f87' }}>Community Rules</h3>
+              <ol className="space-y-2">
                 {featured.rules.split('\n').filter(Boolean).map((rule, i) => (
-                  <li key={i} className="text-xs text-gray-700 flex gap-1.5">
-                    <span className="font-bold text-[#C6973E] flex-none">{i + 1}.</span>
+                  <li key={i} className="flex gap-2.5 text-xs" style={{ color: '#5a504a' }}>
+                    <span className="font-bold shrink-0 mt-0.5" style={{ color: '#C6973E' }}>{i + 1}.</span>
                     <span>{rule.replace(/^\d+\.\s*/, '')}</span>
                   </li>
                 ))}
@@ -74,17 +106,18 @@ export default function CommunitySidebar({ communities, user, activeCommunity }:
 
       {/* All communities */}
       {communities.length > 1 && (
-        <div className="bg-white border border-[#EDEFF1] rounded p-3">
-          <h3 className="text-xs font-bold uppercase text-gray-500 mb-2">All Communities</h3>
+        <div className="rounded-xl p-4" style={{ background: '#fff', border: '1px solid #E2DDD7' }}>
+          <h3 className="text-xs font-bold uppercase tracking-wider mb-3" style={{ color: '#9a8f87' }}>Communities</h3>
           <ul className="space-y-1">
             {communities.map(c => (
               <li key={c.id}>
                 <Link
                   href={`/community/r/${c.slug}`}
-                  className="flex items-center justify-between text-sm text-gray-700 hover:text-[#C6973E] py-0.5"
+                  className="flex items-center justify-between text-sm py-1 transition-colors"
+                  style={{ color: '#3d2a0e' }}
                 >
-                  <span>r/{c.slug}</span>
-                  <span className="text-xs text-gray-400">{formatCount(c.member_count)}</span>
+                  <span className="font-medium">r/{c.slug}</span>
+                  <span className="text-xs" style={{ color: '#9a8f87' }}>{formatCount(c.member_count)} members</span>
                 </Link>
               </li>
             ))}
@@ -92,15 +125,24 @@ export default function CommunitySidebar({ communities, user, activeCommunity }:
         </div>
       )}
 
-      {/* DiamondCritics promo */}
-      <div className="bg-white border border-[#EDEFF1] rounded p-3 text-xs text-gray-500">
-        <p className="font-semibold text-gray-700 mb-1">✨ Expert resources</p>
-        <ul className="space-y-1">
-          <li><Link href="/category/round-cut-diamond" className="text-[#C6973E] hover:underline">Round Diamond Guide</Link></li>
-          <li><Link href="/category/diamond-buying-guides" className="text-[#C6973E] hover:underline">Diamond Buying Guides</Link></li>
-          <li><Link href="/1-carat-round-diamond-price" className="text-[#C6973E] hover:underline">1ct Diamond Price Guide</Link></li>
+      {/* Expert resources */}
+      <div className="rounded-xl p-4" style={{ background: '#fff', border: '1px solid #E2DDD7' }}>
+        <h3 className="text-xs font-bold uppercase tracking-wider mb-3" style={{ color: '#9a8f87' }}>Expert Resources</h3>
+        <ul className="space-y-2">
+          {[
+            { href: '/category/round-cut-diamond', label: 'Round Diamond Guide' },
+            { href: '/category/diamond-buying-guides', label: 'Diamond Buying Guides' },
+            { href: '/1-carat-round-diamond-price', label: '1ct Diamond Price Guide' },
+          ].map(link => (
+            <li key={link.href}>
+              <Link href={link.href} className="flex items-center gap-2 text-sm transition-colors" style={{ color: '#C6973E' }}>
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L9.09 8.26L2 9.27l5 4.87-1.18 6.88L12 17.77l6.18 3.25L17 14.14 22 9.27l-7.09-1.01L12 2z"/></svg>
+                {link.label}
+              </Link>
+            </li>
+          ))}
         </ul>
-        <p className="mt-2 text-gray-400">Powered by DiamondCritics.com</p>
+        <p className="text-xs mt-3 pt-3" style={{ color: '#c4bdb8', borderTop: '1px solid #E2DDD7' }}>Powered by DiamondCritics.com</p>
       </div>
     </aside>
   )

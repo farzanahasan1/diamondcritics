@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import Image from 'next/image'
 import { createClient } from '@/lib/supabase/server'
 import { signOut } from './actions'
 
@@ -26,49 +27,87 @@ export default async function CommunityLayout({ children }: { children: React.Re
   }
 
   return (
-    <div className="min-h-screen" style={{ background: '#DAE0E6' }}>
-      {/* Community Nav Bar */}
-      <nav className="bg-white border-b border-[#EDEFF1] sticky top-0 z-40 shadow-sm">
-        <div className="max-w-5xl mx-auto px-4 h-12 flex items-center gap-4">
-          <Link href="/community" className="flex items-center gap-2 font-bold text-gray-900 hover:opacity-80">
-            <span className="text-xl">💎</span>
-            <span className="hidden sm:block text-sm font-semibold">Diamond Community</span>
+    <div className="min-h-screen" style={{ background: '#EEEAE4' }}>
+      {/* Community Nav */}
+      <nav style={{ background: '#18110A', borderBottom: '1px solid rgba(255,255,255,0.06)' }} className="sticky top-0 z-40">
+        <div className="max-w-6xl mx-auto px-4 h-[52px] flex items-center gap-3">
+
+          {/* Logo */}
+          <Link href="/community" className="flex items-center gap-2.5 shrink-0 mr-1">
+            <Image
+              src="/images/diamond-critics-main-logo-small.avif"
+              alt="DiamondCritics"
+              width={120}
+              height={32}
+              className="h-7 w-auto"
+              style={{ filter: 'brightness(0) invert(1)', opacity: 0.92 }}
+            />
+            <span
+              className="hidden sm:block text-[11px] font-medium tracking-widest uppercase border-l pl-2.5"
+              style={{ color: '#C6973E', borderColor: 'rgba(198,151,62,0.4)' }}
+            >
+              Community
+            </span>
           </Link>
+
+          {/* Nav links */}
+          <div className="hidden md:flex items-center gap-0.5 ml-1">
+            <Link href="/community" className="text-xs px-3 py-1.5 rounded-md font-medium transition-colors" style={{ color: 'rgba(255,255,255,0.5)' }}
+              onMouseEnter={undefined}>
+              Feed
+            </Link>
+            <Link href="/community/r/diamonds" className="text-xs px-3 py-1.5 rounded-md font-medium transition-colors" style={{ color: 'rgba(255,255,255,0.5)' }}>
+              r/diamonds
+            </Link>
+          </div>
 
           <div className="flex-1" />
 
           {user && profile ? (
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
               {profile.is_admin && (
-                <Link href="/community/admin" className="text-xs px-2 py-1 bg-amber-100 text-amber-800 rounded font-medium hover:bg-amber-200">
-                  ⚙ Admin
+                <Link
+                  href="/community/admin"
+                  className="hidden sm:flex items-center gap-1.5 text-xs px-2.5 py-1 rounded font-medium"
+                  style={{ background: 'rgba(198,151,62,0.12)', color: '#C6973E', border: '1px solid rgba(198,151,62,0.25)' }}
+                >
+                  Admin
                 </Link>
               )}
               <Link
                 href={`/community/u/${profile.username}`}
-                className="flex items-center gap-1.5 text-sm font-medium text-gray-700 hover:text-gray-900"
+                className="flex items-center gap-2 px-2 py-1 rounded-md"
+                style={{ color: 'rgba(255,255,255,0.75)' }}
               >
                 {profile.avatar_url ? (
-                  <img src={profile.avatar_url} alt="" className="w-7 h-7 rounded-full object-cover" />
+                  <img src={profile.avatar_url} alt="" className="w-7 h-7 rounded-full object-cover" style={{ outline: '1.5px solid rgba(255,255,255,0.15)' }} />
                 ) : (
-                  <div className="w-7 h-7 rounded-full bg-[#C6973E] flex items-center justify-center text-white text-xs font-bold">
+                  <div className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold" style={{ background: 'linear-gradient(135deg, #C6973E, #9a7030)', color: 'white' }}>
                     {profile.username[0].toUpperCase()}
                   </div>
                 )}
-                <span className="hidden sm:block">{profile.username}</span>
+                <span className="hidden sm:block text-xs font-medium">{profile.username}</span>
               </Link>
               <form action={signOut}>
-                <button className="text-xs text-gray-500 hover:text-gray-800 px-2 py-1 rounded hover:bg-gray-100">
+                <button className="text-xs px-3 py-1.5 rounded-md font-medium transition-colors" style={{ color: 'rgba(255,255,255,0.35)', border: '1px solid rgba(255,255,255,0.1)' }}>
                   Log out
                 </button>
               </form>
             </div>
           ) : (
             <div className="flex items-center gap-2">
-              <Link href="/community/login" className="text-sm px-4 py-1.5 border border-[#C6973E] text-[#C6973E] rounded-full font-semibold hover:bg-[#C6973E] hover:text-white transition-colors">
+              <Link
+                href="/community/login"
+                className="text-xs px-3.5 py-1.5 rounded-md font-medium"
+                style={{ color: 'rgba(255,255,255,0.6)', border: '1px solid rgba(255,255,255,0.15)' }}
+              >
                 Log In
               </Link>
-              <Link href="/community/register" className="text-sm px-4 py-1.5 bg-[#C6973E] text-white rounded-full font-semibold hover:bg-[#b08535] transition-colors">
+              <Link
+                href="/community/register"
+                className="text-xs px-3.5 py-1.5 rounded-md font-semibold"
+                style={{ background: 'linear-gradient(135deg, #C6973E, #e8bf6a)', color: '#18110A' }}
+              >
                 Sign Up
               </Link>
             </div>
@@ -76,8 +115,8 @@ export default async function CommunityLayout({ children }: { children: React.Re
         </div>
       </nav>
 
-      {/* Page Content */}
-      <div className="max-w-5xl mx-auto px-4 py-4">
+      {/* Content */}
+      <div className="max-w-6xl mx-auto px-4 py-5">
         {children}
       </div>
     </div>

@@ -12,7 +12,15 @@ export async function signInWithEmail(formData: FormData) {
   const password = formData.get('password') as string
 
   const { error } = await supabase.auth.signInWithPassword({ email, password })
-  if (error) return { error: error.message }
+  if (error) {
+    if (error.message.toLowerCase().includes('email not confirmed')) {
+      return { error: 'Please confirm your email first. Check your inbox (and spam folder) for a confirmation link from DiamondCritics.' }
+    }
+    if (error.message.toLowerCase().includes('invalid login credentials')) {
+      return { error: 'Incorrect email or password. Please try again.' }
+    }
+    return { error: error.message }
+  }
 
   revalidatePath('/community', 'layout')
   redirect('/community')
