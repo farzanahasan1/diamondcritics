@@ -118,9 +118,9 @@ export async function createPost(formData: FormData) {
 
   if (profile?.is_banned) return { error: 'Your account has been banned.' }
 
-  const title = (formData.get('title') as string).trim()
-  const body = (formData.get('body') as string).trim()
-  const url = (formData.get('url') as string).trim()
+  const title = ((formData.get('title') ?? '') as string).trim()
+  const body = ((formData.get('body') ?? '') as string).trim()
+  const url = ((formData.get('url') ?? '') as string).trim()
   const communitySlug = formData.get('community') as string
   const type = (formData.get('type') as string) || 'text'
 
@@ -183,12 +183,13 @@ export async function createPost(formData: FormData) {
 
   if (error) return { error: error.message }
 
-  // Auto-upvote own post
+  // Auto-upvote own post and sync score
   await supabase.from('post_votes').insert({
     post_id: post.id,
     user_id: user.id,
     vote: 1,
   })
+  await supabase.from('posts').update({ score: 1 }).eq('id', post.id)
 
   // Fetch OG preview image and store it (silently — requires migration to have run)
   if (type === 'link' && url) {
@@ -496,8 +497,10 @@ export async function reportContent(
     reason,
   })
 
-  // Ignore duplicate report (user already reported this item)
-  if (error && error.code !== '23505') return { error: 'Could not submit report. Try again.' }
+  if (error) {
+    if (error.code === '23505') return { success: true } // already reported by this user
+    return { error: 'Could not submit report. Try again.' }
+  }
 
   // Auto-hide if report threshold reached
   const { count } = await supabase

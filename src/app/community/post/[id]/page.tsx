@@ -167,7 +167,7 @@ export default async function PostDetailPage({ params }: { params: Promise<{ id:
   const flatComments = (flatCommentsData ?? []).map(c => ({ ...c, author: commentAuthorsMap[c.author_id] ?? null }))
 
   // User votes on comments
-  let commentVotes: Record<string, -1 | 1> = {}
+  let commentVotes: Record<string, -1 | 0 | 1> = {}
   if (user && flatComments?.length) {
     const { data: cv } = await supabase
       .from('comment_votes')

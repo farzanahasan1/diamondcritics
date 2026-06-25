@@ -21,12 +21,18 @@ export default function VoteButtons({ id, type, initialScore, initialVote, userI
 
   function handleVote(v: 1 | -1) {
     if (!userId) { router.push('/community/login'); return }
+    const prevVote = userVote
+    const prevScore = score
     const newVote = userVote === v ? 0 : v
     setScore(s => s + (newVote - userVote))
     setUserVote(newVote as -1 | 0 | 1)
     startTransition(async () => {
       const action = type === 'post' ? votePost : voteComment
-      await action(id, v)
+      const result = await action(id, v)
+      if (result?.error) {
+        setScore(prevScore)
+        setUserVote(prevVote)
+      }
     })
   }
 
