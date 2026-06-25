@@ -41,7 +41,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         modifiedTime: post.updatedAt || post.publishedAt,
         images: post.featuredImage
           ? [{ url: `https://diamondcritics.com${post.featuredImage}`, width: 1500, height: 1000 }]
-          : [{ url: "https://diamondcritics.com/images/diamondcritics-og.jpg", width: 1200, height: 630 }],
+          : [{ url: "https://diamondcritics.com/images/diamondcritics-og.png", width: 1200, height: 630 }],
       }),
     },
   };

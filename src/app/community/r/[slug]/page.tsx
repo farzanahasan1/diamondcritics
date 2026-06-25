@@ -35,7 +35,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       description,
       url: `${SITE_URL}/community/r/${slug}`,
       type: 'website',
-      images: [{ url: '/images/diamondcritics-og.jpg', width: 1200, height: 630 }],
+      images: [{ url: '/images/diamondcritics-og.png', width: 1200, height: 630 }],
     },
     twitter: { card: 'summary_large_image' },
   }

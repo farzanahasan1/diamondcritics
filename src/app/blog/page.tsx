@@ -14,7 +14,7 @@ export const metadata: Metadata = {
     url: "https://diamondcritics.com/blog",
     type: "website",
     siteName: "Diamond Critics",
-    images: [{ url: "/images/diamondcritics-og.jpg", width: 1200, height: 630 }],
+    images: [{ url: "/images/diamondcritics-og.png", width: 1200, height: 630 }],
   },
   twitter: { card: "summary_large_image" },
 };

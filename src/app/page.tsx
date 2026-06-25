@@ -12,7 +12,7 @@ export const metadata: Metadata = {
     description: "GIA-backed diamond buying guides covering cut, clarity, color, and carat. Data-driven advice from Farzana Hasan, GIA Expert — so you never overpay for a diamond.",
     url: "https://diamondcritics.com",
     type: "website",
-    images: [{ url: "/images/diamondcritics-og.jpg", width: 1200, height: 630, alt: "Diamond Critics" }],
+    images: [{ url: "/images/diamondcritics-og.png", width: 1200, height: 630, alt: "Diamond Critics" }],
   },
   twitter: { card: "summary_large_image" },
 };

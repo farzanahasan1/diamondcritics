@@ -34,7 +34,7 @@ export const metadata: Metadata = {
   openGraph: {
     siteName: "Diamond Critics",
     type: "website",
-    images: [{ url: "/images/diamondcritics-og.jpg", width: 1200, height: 630, alt: "Diamond Critics — Expert Diamond Buying Advice" }],
+    images: [{ url: "/images/diamondcritics-og.png", width: 1200, height: 630, alt: "Diamond Critics — Expert Diamond Buying Advice" }],
   },
   twitter: { card: "summary_large_image" },
 };
@@ -44,7 +44,7 @@ const orgSchema = {
   "@type": "Organization",
   "name": "Diamond Critics",
   "url": "https://diamondcritics.com",
-  "logo": "https://diamondcritics.com/images/diamondcritics-og.jpg",
+  "logo": "https://diamondcritics.com/images/diamondcritics-og.png",
   "sameAs": [
     "https://x.com/diamondcritics",
     "https://www.pinterest.com/diamondcritics/",
