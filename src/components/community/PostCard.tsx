@@ -98,7 +98,7 @@ export default function PostCard({ post, userId, compact = false }: Props) {
           <p style={{
             fontSize: '13px', color: '#7A6F66', lineHeight: '1.55',
             marginBottom: '10px',
-            display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden',
+            overflow: 'hidden', maxHeight: '2.9em',
           }}>
             {post.body}
           </p>

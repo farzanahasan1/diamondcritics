@@ -99,12 +99,10 @@ export default async function CommunityPage({
             <Link key={tab.key} href={`/community?sort=${tab.key}`} style={{
               display: 'flex', alignItems: 'center', gap: '6px',
               padding: '7px 14px', borderRadius: '8px',
-              fontSize: '13px', fontWeight: 500, textDecoration: 'none',
-              transition: 'all 0.15s',
-              ...(sortMode === tab.key
-                ? { background: '#F0E8D8', color: '#1C1209', fontWeight: 600 }
-                : { color: '#9A8F87' }
-              ),
+              fontSize: '13px', textDecoration: 'none',
+              background: sortMode === tab.key ? '#F0E8D8' : 'transparent',
+              color: sortMode === tab.key ? '#1C1209' : '#9A8F87',
+              fontWeight: sortMode === tab.key ? 600 : 500,
             }}>
               <span>{tab.emoji}</span>
               {tab.label}
