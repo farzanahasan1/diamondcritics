@@ -52,7 +52,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       url: `https://diamondcritics.com/category/${slug}`,
       type: "website",
       siteName: "Diamond Critics",
+      images: [{ url: "/images/diamondcritics-og.jpg", width: 1200, height: 630 }],
     },
+    twitter: { card: "summary_large_image" },
   };
 }
 

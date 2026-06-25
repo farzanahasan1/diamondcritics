@@ -7,7 +7,18 @@ import type { Metadata } from 'next'
 
 export async function generateMetadata({ params }: { params: Promise<{ username: string }> }): Promise<Metadata> {
   const { username } = await params
-  return { title: `u/${username} — Diamond Community` }
+  return {
+    title: `u/${username} — Diamond Community`,
+    description: `View ${username}'s posts and activity in the DiamondCritics diamond community.`,
+    alternates: { canonical: `https://diamondcritics.com/community/u/${username}` },
+    openGraph: {
+      title: `u/${username} — Diamond Community`,
+      description: `View ${username}'s posts and activity in the DiamondCritics diamond community.`,
+      url: `https://diamondcritics.com/community/u/${username}`,
+      type: 'profile',
+    },
+    twitter: { card: 'summary' },
+  }
 }
 
 export default async function UserProfilePage({ params }: { params: Promise<{ username: string }> }) {

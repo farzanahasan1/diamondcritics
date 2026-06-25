@@ -5,7 +5,16 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: "*",
       allow: "/",
-      disallow: ["/keystatic/", "/api/"],
+      disallow: [
+      "/keystatic/",
+      "/api/",
+      "/community/admin",
+      "/community/login",
+      "/community/register",
+      "/community/auth/",
+      "/community/r/*/submit",
+      "/community/u/*/edit",
+    ],
     },
     sitemap: "https://diamondcritics.com/sitemap.xml",
   };

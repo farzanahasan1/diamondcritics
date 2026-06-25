@@ -16,7 +16,9 @@ export const metadata: Metadata = {
     description: 'The most trusted diamond community. Real answers from GIA-certified experts, jewelers and buyers on engagement rings, diamond prices and everything diamonds.',
     url: `${SITE_URL}/community`,
     type: 'website',
+    images: [{ url: '/images/diamondcritics-og.jpg', width: 1200, height: 630 }],
   },
+  twitter: { card: 'summary_large_image' },
 }
 
 const forumSchema = {

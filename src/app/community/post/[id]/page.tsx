@@ -96,6 +96,7 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
       type: 'article',
       publishedTime: post.created_at,
     },
+    twitter: { card: 'summary_large_image' },
   }
 }
 

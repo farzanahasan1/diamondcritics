@@ -31,7 +31,36 @@ export const metadata: Metadata = {
   description:
     "GIA-backed diamond buying guides covering clarity, color, cut, and carat. Data-driven advice from Farzana Hasan, GIA Expert.",
   metadataBase: new URL("https://diamondcritics.com"),
-  openGraph: { siteName: "Diamond Critics", type: "website" },
+  openGraph: {
+    siteName: "Diamond Critics",
+    type: "website",
+    images: [{ url: "/images/diamondcritics-og.jpg", width: 1200, height: 630, alt: "Diamond Critics — Expert Diamond Buying Advice" }],
+  },
+  twitter: { card: "summary_large_image" },
+};
+
+const orgSchema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Diamond Critics",
+  "url": "https://diamondcritics.com",
+  "logo": "https://diamondcritics.com/images/diamondcritics-og.jpg",
+  "sameAs": [
+    "https://x.com/diamondcritics",
+    "https://www.pinterest.com/diamondcritics/",
+  ],
+};
+
+const websiteSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "Diamond Critics",
+  "url": "https://diamondcritics.com",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": { "@type": "EntryPoint", "urlTemplate": "https://diamondcritics.com/?q={search_term_string}" },
+    "query-input": "required name=search_term_string",
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -46,6 +75,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className={`${ivyPresto.variable} ${dmSans.variable}`}>
       <head>
         <link rel="dns-prefetch" href="https://www.bluenile.com" />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(orgSchema) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }} />
       </head>
       <body className="bg-white text-gray-900 antialiased min-h-full flex flex-col">
         <Header />

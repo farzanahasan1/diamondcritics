@@ -1,6 +1,21 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { getAllPosts } from "@/lib/content";
 import JamesAllenBanner from "@/components/JamesAllenBanner";
+
+export const metadata: Metadata = {
+  title: "Diamond Critics — Expert Diamond Buying Advice by Farzana Hasan",
+  description: "GIA-backed diamond buying guides covering cut, clarity, color, and carat. Data-driven advice from Farzana Hasan, GIA Expert — so you never overpay for a diamond.",
+  alternates: { canonical: "https://diamondcritics.com" },
+  openGraph: {
+    title: "Diamond Critics — Expert Diamond Buying Advice by Farzana Hasan",
+    description: "GIA-backed diamond buying guides covering cut, clarity, color, and carat. Data-driven advice from Farzana Hasan, GIA Expert — so you never overpay for a diamond.",
+    url: "https://diamondcritics.com",
+    type: "website",
+    images: [{ url: "/images/diamondcritics-og.jpg", width: 1200, height: 630, alt: "Diamond Critics" }],
+  },
+  twitter: { card: "summary_large_image" },
+};
 
 const catLabel: Record<string, string> = {
   "diamond-buying-guides": "Buying Guide",
