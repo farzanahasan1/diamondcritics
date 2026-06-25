@@ -168,12 +168,6 @@ export async function createPost(formData: FormData) {
 
   if (!community) return { error: 'Community not found.' }
 
-  // Fetch OG preview image for link posts (non-blocking — failure is silent)
-  let linkPreviewImage: string | null = null
-  if (type === 'link' && url) {
-    linkPreviewImage = await fetchOgImage(url)
-  }
-
   const { data: post, error } = await supabase
     .from('posts')
     .insert({
@@ -182,7 +176,6 @@ export async function createPost(formData: FormData) {
       title,
       body: type !== 'link' ? body || null : null,
       url: type === 'link' ? url || null : null,
-      link_preview_image: linkPreviewImage,
       type,
     })
     .select('id')
@@ -196,6 +189,14 @@ export async function createPost(formData: FormData) {
     user_id: user.id,
     vote: 1,
   })
+
+  // Fetch OG preview image and store it (silently — requires migration to have run)
+  if (type === 'link' && url) {
+    const previewImage = await fetchOgImage(url)
+    if (previewImage) {
+      await supabase.from('posts').update({ link_preview_image: previewImage }).eq('id', post.id)
+    }
+  }
 
   revalidatePath('/community')
   revalidatePath(`/community/r/${communitySlug}`)
