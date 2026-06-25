@@ -7,6 +7,44 @@ import CommunitySidebar from '@/components/community/CommunitySidebar'
 import type { Comment, Post } from '@/types/community'
 import type { Metadata } from 'next'
 
+function renderBody(body: string) {
+  const blocks = body.split(/\n\n+/)
+  return blocks.map((block, i) => {
+    const lines = block.split('\n').map(l => l.trim()).filter(Boolean)
+    if (!lines.length) return null
+    const isBulletBlock = lines.some(l => l.startsWith('•') || l.startsWith('-'))
+    if (isBulletBlock) {
+      return (
+        <ul key={i} className="my-3 space-y-1.5">
+          {lines.map((line, j) => {
+            const isBullet = line.startsWith('•') || line.startsWith('-')
+            if (!isBullet) return <li key={j} className="text-sm sm:text-base text-gray-700 leading-relaxed">{line}</li>
+            return (
+              <li key={j} className="flex gap-2 text-sm sm:text-base text-gray-800 leading-relaxed">
+                <span className="text-[#C6973E] font-bold mt-0.5 flex-shrink-0">•</span>
+                <span>{line.replace(/^[•\-]\s*/, '')}</span>
+              </li>
+            )
+          })}
+        </ul>
+      )
+    }
+    const text = lines.join(' ')
+    if (text.startsWith('—') || text.startsWith('–')) {
+      return (
+        <p key={i} className="text-sm text-gray-500 italic mt-4 border-t border-[#EDEFF1] pt-3">
+          {text}
+        </p>
+      )
+    }
+    return (
+      <p key={i} className="text-sm sm:text-base text-gray-800 leading-relaxed mb-0">
+        {text}
+      </p>
+    )
+  })
+}
+
 function timeAgo(dateStr: string) {
   const diff = Date.now() - new Date(dateStr).getTime()
   const mins = Math.floor(diff / 60000)
@@ -253,8 +291,8 @@ export default async function PostDetailPage({ params }: { params: Promise<{ id:
 
               {/* Body */}
               {post.type === 'text' && post.body && (
-                <div className="text-gray-800 text-sm sm:text-base leading-relaxed whitespace-pre-wrap mb-3">
-                  {post.body}
+                <div className="space-y-3 mb-4">
+                  {renderBody(post.body)}
                 </div>
               )}
 
