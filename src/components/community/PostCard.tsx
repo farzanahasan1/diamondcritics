@@ -106,12 +106,32 @@ export default function PostCard({ post, userId, compact = false }: Props) {
         )}
 
         {/* Link */}
-        {post.type === 'link' && post.url && (
-          <a href={post.url} target="_blank" rel="nofollow noopener noreferrer"
-            style={{ fontSize: '12px', color: '#D4A843', textDecoration: 'none', display: 'block', marginBottom: '8px' }}>
-            🔗 {post.url}
-          </a>
-        )}
+        {post.type === 'link' && post.url && (() => {
+          const slug = !post.link_preview_image && post.url.startsWith('https://diamondcritics.com/')
+            ? post.url.replace('https://diamondcritics.com/', '').split('?')[0].replace(/\/$/, '')
+            : null
+          const imgUrl = post.link_preview_image ?? (slug ? `https://diamondcritics.com/images/${slug}.avif` : null)
+          const hostname = (() => { try { return new URL(post.url).hostname.replace(/^www\./, '') } catch { return post.url } })()
+          return (
+            <a href={post.url} target="_blank" rel="nofollow noopener noreferrer"
+              style={{ display: 'block', textDecoration: 'none', marginBottom: '8px', borderRadius: '8px', overflow: 'hidden', border: '1px solid #EDE8E1', background: '#FDF8EF' }}>
+              {imgUrl && (
+                <img
+                  src={imgUrl}
+                  alt={post.title}
+                  style={{ width: '100%', maxHeight: '180px', objectFit: 'cover', display: 'block' }}
+                  onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }}
+                />
+              )}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '7px 10px' }}>
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#C6973E" strokeWidth="2" strokeLinecap="round" style={{ flexShrink: 0 }}>
+                  <path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/>
+                </svg>
+                <span style={{ fontSize: '11px', color: '#C6973E', fontWeight: 600 }}>{hostname}</span>
+              </div>
+            </a>
+          )
+        })()}
 
         {/* Image */}
         {post.type === 'image' && post.image_url && (

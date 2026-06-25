@@ -18,6 +18,15 @@ function timeAgo(dateStr: string) {
   return days < 30 ? `${days}d ago` : new Date(dateStr).toLocaleDateString()
 }
 
+const textareaStyle: React.CSSProperties = {
+  width: '100%', boxSizing: 'border-box',
+  border: '1.5px solid #E8E2DA', borderRadius: '8px',
+  padding: '10px 14px', fontSize: '14px', color: '#1C1209',
+  background: '#FAFAF9', outline: 'none', display: 'block',
+  resize: 'vertical', lineHeight: 1.6, fontFamily: 'inherit',
+  transition: 'border-color 0.15s',
+}
+
 interface ReplyFormProps {
   postId: string
   parentId: string
@@ -37,25 +46,33 @@ function ReplyForm({ postId, parentId, onCancel }: ReplyFormProps) {
   }
 
   return (
-    <form action={handleSubmit} className="mt-2 ml-4">
+    <form action={handleSubmit} style={{ marginTop: '10px', marginLeft: '16px' }}>
       <input type="hidden" name="post_id" value={postId} />
       <input type="hidden" name="parent_id" value={parentId} />
       <textarea
         name="body"
-        placeholder="Write a reply..."
+        placeholder="Write a reply…"
         required
-        className="w-full border border-gray-300 rounded p-2 text-sm resize-none focus:outline-none focus:border-[#C6973E] min-h-[80px]"
+        rows={3}
+        style={textareaStyle}
+        onFocus={e => (e.target.style.borderColor = '#D4A843')}
+        onBlur={e => (e.target.style.borderColor = '#E8E2DA')}
       />
-      {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
-      <div className="flex gap-2 mt-1">
-        <button
-          type="submit"
-          disabled={isPending}
-          className="text-xs bg-[#C6973E] text-white px-3 py-1.5 rounded font-semibold hover:bg-[#b08535] disabled:opacity-50"
-        >
+      {error && <p style={{ fontSize: '12px', color: '#B91C1C', marginTop: '4px' }}>{error}</p>}
+      <div style={{ display: 'flex', gap: '8px', marginTop: '8px' }}>
+        <button type="submit" disabled={isPending} style={{
+          padding: '6px 16px', borderRadius: '6px', border: 'none',
+          background: 'linear-gradient(145deg, #D4A843, #B8881E)',
+          color: '#fff', fontSize: '12px', fontWeight: 600,
+          cursor: isPending ? 'not-allowed' : 'pointer', opacity: isPending ? 0.6 : 1,
+        }}>
           {isPending ? 'Posting…' : 'Reply'}
         </button>
-        <button type="button" onClick={onCancel} className="text-xs text-gray-500 hover:text-gray-800 px-3 py-1.5 rounded">
+        <button type="button" onClick={onCancel} style={{
+          padding: '6px 14px', borderRadius: '6px',
+          border: '1px solid #E2DDD7', background: 'transparent',
+          color: '#7A6F66', fontSize: '12px', cursor: 'pointer',
+        }}>
           Cancel
         </button>
       </div>
@@ -88,30 +105,29 @@ function CommentNode({ comment, postId, userId, isAdmin, depth = 0 }: CommentNod
   }
 
   return (
-    <div className={`${depth > 0 ? 'ml-4 pl-3 border-l-2 border-[#EDEFF1]' : ''}`}>
-      <div className="py-1.5">
+    <div style={{ marginLeft: depth > 0 ? '20px' : 0, paddingLeft: depth > 0 ? '12px' : 0, borderLeft: depth > 0 ? '2px solid #EDE8E1' : 'none' }}>
+      <div style={{ padding: '10px 0' }}>
         {comment.is_deleted ? (
-          <p className="text-xs text-gray-400 italic">[deleted]</p>
+          <p style={{ fontSize: '12px', color: '#B0A89E', fontStyle: 'italic' }}>[deleted]</p>
         ) : (
           <>
             {/* Author + meta */}
-            <div className="flex items-center gap-1.5 flex-wrap mb-1">
-              <Link href={`/community/u/${author?.username}`} className="text-xs font-bold text-gray-800 hover:underline">
+            <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '6px', marginBottom: '6px' }}>
+              <Link href={`/community/u/${author?.username}`} style={{ fontSize: '12px', fontWeight: 700, color: '#3A2208', textDecoration: 'none' }}>
                 u/{author?.username ?? '[deleted]'}
               </Link>
-              <span className="text-xs text-gray-400">{timeAgo(comment.created_at)}</span>
-              <button
-                onClick={() => setCollapsed(c => !c)}
-                className="text-xs text-gray-400 hover:text-gray-600"
-              >
+              <span style={{ fontSize: '11px', color: '#B0A89E' }}>{timeAgo(comment.created_at)}</span>
+              <button onClick={() => setCollapsed(c => !c)} style={{ fontSize: '11px', color: '#B0A89E', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
                 [{collapsed ? '+' : '–'}]
               </button>
             </div>
 
             {!collapsed && (
               <>
-                <p className="text-sm text-gray-800 whitespace-pre-wrap break-words leading-relaxed mb-1.5">{comment.body}</p>
-                <div className="flex items-center gap-3">
+                <p style={{ fontSize: '14px', color: '#2D2318', lineHeight: 1.65, marginBottom: '8px', whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
+                  {comment.body}
+                </p>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                   <VoteButtons
                     id={comment.id}
                     type="comment"
@@ -121,10 +137,7 @@ function CommentNode({ comment, postId, userId, isAdmin, depth = 0 }: CommentNod
                     vertical={false}
                   />
                   {userId && (
-                    <button
-                      onClick={() => setShowReply(r => !r)}
-                      className="text-xs text-gray-500 hover:text-gray-800"
-                    >
+                    <button onClick={() => setShowReply(r => !r)} style={{ fontSize: '12px', color: '#9A8F87', background: 'none', border: 'none', cursor: 'pointer', padding: 0, fontWeight: 500 }}>
                       Reply
                     </button>
                   )}
@@ -132,11 +145,7 @@ function CommentNode({ comment, postId, userId, isAdmin, depth = 0 }: CommentNod
                     <ReportButton targetType="comment" targetId={comment.id} userId={userId} />
                   )}
                   {canDelete && (
-                    <button
-                      onClick={handleDelete}
-                      disabled={isPending}
-                      className="text-xs text-red-400 hover:text-red-600"
-                    >
+                    <button onClick={handleDelete} disabled={isPending} style={{ fontSize: '12px', color: '#EF9999', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
                       Delete
                     </button>
                   )}
@@ -150,16 +159,8 @@ function CommentNode({ comment, postId, userId, isAdmin, depth = 0 }: CommentNod
         )}
       </div>
 
-      {/* Replies */}
       {!collapsed && comment.replies?.map(reply => (
-        <CommentNode
-          key={reply.id}
-          comment={reply}
-          postId={postId}
-          userId={userId}
-          isAdmin={isAdmin}
-          depth={depth + 1}
-        />
+        <CommentNode key={reply.id} comment={reply} postId={postId} userId={userId} isAdmin={isAdmin} depth={depth + 1} />
       ))}
     </div>
   )
@@ -176,9 +177,16 @@ function TopLevelCommentForm({ postId, userId }: TopLevelFormProps) {
 
   if (!userId) {
     return (
-      <div className="bg-white border border-[#EDEFF1] rounded p-4 text-center text-sm text-gray-500">
-        <Link href="/community/login" className="text-[#C6973E] font-semibold hover:underline">Log in</Link> or{' '}
-        <Link href="/community/register" className="text-[#C6973E] font-semibold hover:underline">sign up</Link> to comment
+      <div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 1px 4px rgba(28,18,9,0.07)', padding: '20px', textAlign: 'center' }}>
+        <p style={{ fontSize: '13px', color: '#9A8F87', marginBottom: '12px' }}>Join the conversation</p>
+        <div style={{ display: 'flex', justifyContent: 'center', gap: '8px' }}>
+          <Link href="/community/login" style={{ padding: '8px 20px', borderRadius: '8px', background: 'linear-gradient(145deg, #D4A843, #B8881E)', color: '#fff', fontWeight: 600, fontSize: '13px', textDecoration: 'none' }}>
+            Log In
+          </Link>
+          <Link href="/community/register" style={{ padding: '8px 20px', borderRadius: '8px', border: '1px solid #E2DDD7', color: '#5A504A', fontWeight: 500, fontSize: '13px', textDecoration: 'none' }}>
+            Sign Up
+          </Link>
+        </div>
       </div>
     )
   }
@@ -197,21 +205,26 @@ function TopLevelCommentForm({ postId, userId }: TopLevelFormProps) {
   }
 
   return (
-    <form id="comment-form" action={handleSubmit} className="bg-white border border-[#EDEFF1] rounded p-3">
+    <form id="comment-form" action={handleSubmit} style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 1px 4px rgba(28,18,9,0.07)', padding: '16px' }}>
       <input type="hidden" name="post_id" value={postId} />
       <textarea
         name="body"
         placeholder="What are your thoughts?"
         required
-        className="w-full border border-gray-300 rounded p-2.5 text-sm resize-none focus:outline-none focus:border-[#C6973E] min-h-[100px]"
+        rows={4}
+        style={textareaStyle}
+        onFocus={e => (e.target.style.borderColor = '#D4A843')}
+        onBlur={e => (e.target.style.borderColor = '#E8E2DA')}
       />
-      {error && <p className="text-red-500 text-xs mt-1">{error}</p>}
-      <div className="flex justify-end mt-2">
-        <button
-          type="submit"
-          disabled={isPending}
-          className="text-sm bg-[#C6973E] text-white px-4 py-1.5 rounded font-semibold hover:bg-[#b08535] disabled:opacity-50 transition-colors"
-        >
+      {error && <p style={{ fontSize: '12px', color: '#B91C1C', marginTop: '6px' }}>{error}</p>}
+      <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '10px' }}>
+        <button type="submit" disabled={isPending} style={{
+          padding: '9px 28px', borderRadius: '8px', border: 'none',
+          background: isPending ? '#D4B87A' : 'linear-gradient(145deg, #D4A843, #B8881E)',
+          color: '#fff', fontSize: '13px', fontWeight: 700,
+          cursor: isPending ? 'not-allowed' : 'pointer', opacity: isPending ? 0.7 : 1,
+          transition: 'opacity 0.15s',
+        }}>
           {isPending ? 'Posting…' : 'Comment'}
         </button>
       </div>
@@ -230,24 +243,28 @@ export default function CommentSection({ comments, postId, userId, isAdmin }: Pr
   const topLevel = comments.filter(c => !c.parent_id)
 
   return (
-    <div className="space-y-4">
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
       <TopLevelCommentForm postId={postId} userId={userId} />
 
-      <div className="bg-white border border-[#EDEFF1] rounded divide-y divide-[#EDEFF1]">
+      <div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 1px 4px rgba(28,18,9,0.07)', overflow: 'hidden' }}>
         {topLevel.length === 0 ? (
-          <p className="text-sm text-gray-400 p-4 text-center">No comments yet. Be the first!</p>
-        ) : (
-          topLevel.map(comment => (
-            <div key={comment.id} className="px-4 py-2">
-              <CommentNode
-                comment={comment}
-                postId={postId}
-                userId={userId}
-                isAdmin={isAdmin}
-                depth={0}
-              />
+          <div style={{ padding: '32px 20px', textAlign: 'center' }}>
+            <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: '#F5EDD8', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px' }}>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C6973E" strokeWidth="1.5">
+                <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+              </svg>
             </div>
-          ))
+            <p style={{ fontSize: '14px', fontWeight: 600, color: '#3A2208', marginBottom: '4px' }}>No comments yet</p>
+            <p style={{ fontSize: '12px', color: '#9A8F87' }}>Be the first to share your thoughts</p>
+          </div>
+        ) : (
+          <div style={{ padding: '4px 16px' }}>
+            {topLevel.map((comment, i) => (
+              <div key={comment.id} style={{ borderBottom: i < topLevel.length - 1 ? '1px solid #F0ECE5' : 'none' }}>
+                <CommentNode comment={comment} postId={postId} userId={userId} isAdmin={isAdmin} depth={0} />
+              </div>
+            ))}
+          </div>
         )}
       </div>
     </div>

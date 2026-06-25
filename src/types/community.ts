@@ -32,6 +32,7 @@ export interface Post {
   body: string | null
   url: string | null
   image_url: string | null
+  link_preview_image: string | null
   type: 'text' | 'link' | 'image'
   score: number
   upvotes: number

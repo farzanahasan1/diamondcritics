@@ -5,6 +5,32 @@ import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { containsSpam, isDisposableEmail, AUTO_HIDE_THRESHOLD, type ReportReason } from '@/lib/community/moderation'
 
+// ─── OG Image fetcher ────────────────────────────────────────────────────────
+
+async function fetchOgImage(url: string): Promise<string | null> {
+  try {
+    const res = await fetch(url, {
+      headers: { 'User-Agent': 'Mozilla/5.0 (compatible; DiamondCritics/1.0; +https://diamondcritics.com)' },
+      signal: AbortSignal.timeout(6000),
+    })
+    if (!res.ok) return null
+    const html = await res.text()
+    const ogImageMatch =
+      html.match(/<meta[^>]+property=["']og:image["'][^>]+content=["']([^"']+)["']/i) ??
+      html.match(/<meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:image["']/i)
+    const raw = ogImageMatch?.[1] ?? null
+    if (!raw) return null
+    // Resolve relative URLs
+    try {
+      return new URL(raw, url).href
+    } catch {
+      return raw.startsWith('http') ? raw : null
+    }
+  } catch {
+    return null
+  }
+}
+
 // ─── Auth ────────────────────────────────────────────────────────────────────
 
 export async function signInWithEmail(formData: FormData) {
@@ -142,6 +168,12 @@ export async function createPost(formData: FormData) {
 
   if (!community) return { error: 'Community not found.' }
 
+  // Fetch OG preview image for link posts (non-blocking — failure is silent)
+  let linkPreviewImage: string | null = null
+  if (type === 'link' && url) {
+    linkPreviewImage = await fetchOgImage(url)
+  }
+
   const { data: post, error } = await supabase
     .from('posts')
     .insert({
@@ -150,6 +182,7 @@ export async function createPost(formData: FormData) {
       title,
       body: type !== 'link' ? body || null : null,
       url: type === 'link' ? url || null : null,
+      link_preview_image: linkPreviewImage,
       type,
     })
     .select('id')

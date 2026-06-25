@@ -230,28 +230,44 @@ export default async function PostDetailPage({ params }: { params: Promise<{ id:
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(postSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
-    <div className="grid grid-cols-1 lg:grid-cols-[1fr_316px] gap-6">
-      <div className="min-w-0">
+    <div style={{ display: 'grid', gridTemplateColumns: '1fr 316px', gap: '20px' }}>
+      <div style={{ minWidth: 0 }}>
+
         {/* Breadcrumb */}
-        <nav className="text-xs text-gray-500 mb-3 flex items-center gap-1 flex-wrap">
-          <Link href="/community" className="hover:underline">Community</Link>
-          <span>›</span>
+        <nav style={{ display: 'flex', alignItems: 'center', gap: '5px', flexWrap: 'wrap', fontSize: '12px', color: '#9A8F87', marginBottom: '12px' }}>
+          <Link href="/community" style={{ color: '#9A8F87', textDecoration: 'none' }}>Community</Link>
+          <span style={{ color: '#D4C8BE' }}>›</span>
           {community && (
             <>
-              <Link href={`/community/r/${community.slug}`} className="text-[#C6973E] hover:underline font-medium">
+              <Link href={`/community/r/${community.slug}`} style={{ color: '#C6973E', fontWeight: 600, textDecoration: 'none' }}>
                 r/{community.slug}
               </Link>
-              <span>›</span>
+              <span style={{ color: '#D4C8BE' }}>›</span>
             </>
           )}
-          <span className="truncate max-w-[200px] sm:max-w-none">{post.title}</span>
+          <span style={{ color: '#B0A89E', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '300px' }}>{post.title}</span>
         </nav>
 
         {/* Post card */}
-        <article className="bg-white border border-[#EDEFF1] rounded mb-4">
-          <div className="flex">
+        <article style={{
+          background: '#fff',
+          borderRadius: '12px',
+          boxShadow: '0 1px 4px rgba(28,18,9,0.07), 0 4px 16px rgba(28,18,9,0.05)',
+          overflow: 'hidden',
+          marginBottom: '16px',
+        }}>
+          <div style={{ display: 'flex' }}>
+
             {/* Vote column */}
-            <div className="flex-none w-10 sm:w-12 bg-[#F8F9FA] rounded-l flex flex-col items-center pt-3 px-1">
+            <div style={{
+              width: '52px', flexShrink: 0,
+              background: '#FAF8F5',
+              borderRight: '1px solid #EDE8E1',
+              display: 'flex', flexDirection: 'column',
+              alignItems: 'center',
+              paddingTop: '16px',
+              paddingLeft: '4px', paddingRight: '4px',
+            }}>
               <VoteButtons
                 id={post.id}
                 type="post"
@@ -263,65 +279,98 @@ export default async function PostDetailPage({ params }: { params: Promise<{ id:
             </div>
 
             {/* Post content */}
-            <div className="flex-1 p-3 sm:p-4 min-w-0">
+            <div style={{ flex: 1, padding: '16px 20px', minWidth: 0 }}>
+
               {/* Meta */}
-              <div className="flex items-center gap-1.5 flex-wrap text-xs text-gray-500 mb-2">
+              <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '5px', fontSize: '12px', color: '#9A8F87', marginBottom: '8px' }}>
                 {community && (
                   <>
-                    <Link href={`/community/r/${community.slug}`} className="font-bold text-gray-800 hover:underline">
+                    <Link href={`/community/r/${community.slug}`} style={{ fontWeight: 700, color: '#3A2208', textDecoration: 'none' }}>
                       r/{community.slug}
                     </Link>
-                    <span>•</span>
+                    <span style={{ color: '#D4C8BE' }}>·</span>
                   </>
                 )}
                 <span>
                   Posted by{' '}
-                  <Link href={`/community/u/${author?.username}`} className="hover:underline">
+                  <Link href={`/community/u/${author?.username}`} style={{ color: '#7A6F66', textDecoration: 'none', fontWeight: 500 }}>
                     u/{author?.username ?? '[deleted]'}
                   </Link>
                 </span>
-                <span>•</span>
+                <span style={{ color: '#D4C8BE' }}>·</span>
                 <span>{timeAgo(post.created_at)}</span>
+                {post.is_pinned && <span style={{ color: '#16A34A', fontWeight: 600, fontSize: '11px' }}>📌 Pinned</span>}
               </div>
 
               {/* Title */}
-              <h1 className="text-xl sm:text-2xl font-bold text-gray-900 leading-tight mb-3">
+              <h1 style={{ fontFamily: 'var(--font-ivy, Georgia, serif)', fontSize: '22px', fontWeight: 600, color: '#1C1209', lineHeight: 1.35, marginBottom: '14px' }}>
                 {post.title}
               </h1>
 
               {/* Body */}
               {post.type === 'text' && post.body && (
-                <div className="space-y-3 mb-4">
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '16px' }}>
                   {renderBody(post.body)}
                 </div>
               )}
 
               {/* Link */}
-              {post.type === 'link' && post.url && (
-                <a
-                  href={post.url}
-                  target="_blank"
-                  rel="nofollow noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 text-sm text-blue-600 hover:underline bg-blue-50 px-3 py-2 rounded mb-3"
-                >
-                  🔗 {post.url}
-                </a>
-              )}
+              {post.type === 'link' && post.url && (() => {
+                // Use stored OG image, or derive from diamondcritics slug as fallback
+                const slug = !post.link_preview_image && post.url.startsWith('https://diamondcritics.com/')
+                  ? post.url.replace('https://diamondcritics.com/', '').split('?')[0].replace(/\/$/, '')
+                  : null
+                const imgUrl = post.link_preview_image ?? (slug ? `https://diamondcritics.com/images/${slug}.avif` : null)
+                const hostname = (() => { try { return new URL(post.url).hostname.replace(/^www\./, '') } catch { return post.url } })()
+                return (
+                  <a
+                    href={post.url}
+                    target="_blank"
+                    rel="nofollow noopener noreferrer"
+                    style={{
+                      display: 'block', textDecoration: 'none', marginBottom: '14px',
+                      borderRadius: '10px', overflow: 'hidden',
+                      border: '1px solid #EDE8E1',
+                      background: '#FDF8EF',
+                    }}
+                  >
+                    {imgUrl && (
+                      <img
+                        src={imgUrl}
+                        alt={post.title}
+                        style={{ width: '100%', maxHeight: '360px', objectFit: 'cover', display: 'block' }}
+                        onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }}
+                      />
+                    )}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 14px' }}>
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#C6973E" strokeWidth="2" strokeLinecap="round" style={{ flexShrink: 0 }}>
+                        <path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/>
+                      </svg>
+                      <span style={{ fontSize: '13px', color: '#C6973E', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                        {hostname}
+                      </span>
+                      <span style={{ fontSize: '12px', color: '#B0A89E', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', flex: 1 }}>
+                        — {post.title}
+                      </span>
+                    </div>
+                  </a>
+                )
+              })()}
 
               {/* Image */}
               {post.type === 'image' && post.image_url && (
-                <div className="mb-3">
-                  <img src={post.image_url} alt={post.title} className="max-w-full rounded" />
+                <div style={{ marginBottom: '14px' }}>
+                  <img src={post.image_url} alt={post.title} style={{ maxWidth: '100%', borderRadius: '8px' }} />
                 </div>
               )}
 
               {/* Footer */}
-              <div className="flex items-center gap-3 text-xs text-gray-500 pt-2 border-t border-[#EDEFF1]">
-                <span className="flex items-center gap-1">
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', borderTop: '1px solid #F0ECE5', paddingTop: '10px', marginTop: '4px' }}>
+                <span style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '12px', color: '#9A8F87' }}>
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
                   </svg>
-                  {post.comment_count} comments
+                  {post.comment_count} {post.comment_count === 1 ? 'comment' : 'comments'}
                 </span>
                 {(user?.id === post.author_id || isAdmin) && (
                   <form action={async () => {
@@ -329,7 +378,7 @@ export default async function PostDetailPage({ params }: { params: Promise<{ id:
                     const { deletePost } = await import('@/app/community/actions')
                     await deletePost(id)
                   }}>
-                    <button type="submit" className="text-red-400 hover:text-red-600">
+                    <button type="submit" style={{ fontSize: '12px', color: '#EF9999', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
                       Delete
                     </button>
                   </form>
