@@ -107,27 +107,90 @@ export default async function CommunityPage({
     joinedCommunityIds = (memberships ?? []).map(m => m.community_id)
   }
 
-  let query = supabase
-    .from('posts')
-    .select('*')
-    .eq('is_deleted', false)
+  // ─── Standard fetch (hot / new / top) ───────────────────────────────────────
+  let rawPostsData: any[] = []
+  let feedPrecomputedVotes: Record<string, number> = {}
 
-  if (sortMode === 'feed') {
-    if (joinedCommunityIds.length > 0) {
-      query = query.in('community_id', joinedCommunityIds).order('created_at', { ascending: false })
-    } else {
-      // No joined communities yet — return empty
-      query = query.eq('community_id', 'none').order('created_at', { ascending: false })
-    }
-  } else if (sortMode === 'new') {
-    query = query.order('created_at', { ascending: false })
-  } else if (sortMode === 'top') {
-    query = query.order('score', { ascending: false })
-  } else {
-    query = query.order('created_at', { ascending: false })
+  if (sortMode !== 'feed') {
+    let query = supabase.from('posts').select('*').eq('is_deleted', false)
+    if (sortMode === 'new') query = query.order('created_at', { ascending: false })
+    else if (sortMode === 'top') query = query.order('score', { ascending: false })
+    else query = query.order('created_at', { ascending: false })
+    const { data } = await query.limit(50)
+    rawPostsData = data ?? []
   }
 
-  const { data: rawPostsData } = await query.limit(50)
+  // ─── Feed algorithm ──────────────────────────────────────────────────────────
+  // Signals: hot score × community affinity × freshness boost × seen penalty
+  // Diversity cap: max 4 posts per community so the feed feels varied
+  if (sortMode === 'feed' && user && joinedCommunityIds.length > 0) {
+    const fourteenDaysAgo = new Date(Date.now() - 14 * 24 * 3600000).toISOString()
+
+    // Pull a wide candidate set — 200 posts from the last 14 days
+    const { data: candidates } = await supabase
+      .from('posts').select('*')
+      .in('community_id', joinedCommunityIds)
+      .eq('is_deleted', false)
+      .gte('created_at', fourteenDaysAgo)
+      .order('created_at', { ascending: false })
+      .limit(200)
+
+    if (candidates?.length) {
+      // Fetch user votes on the entire candidate set
+      const { data: voteRows } = await supabase
+        .from('post_votes').select('post_id, vote')
+        .eq('user_id', user.id)
+        .in('post_id', candidates.map(p => p.id))
+
+      feedPrecomputedVotes = Object.fromEntries((voteRows ?? []).map(v => [v.post_id, v.vote]))
+
+      // Community affinity: count upvotes per community within the candidate set
+      // (communities the user engages with most get boosted)
+      const rawAffinity: Record<string, number> = {}
+      for (const post of candidates) {
+        if (feedPrecomputedVotes[post.id] === 1) {
+          rawAffinity[post.community_id] = (rawAffinity[post.community_id] ?? 0) + 1
+        }
+      }
+      const maxAff = Math.max(...Object.values(rawAffinity), 1)
+      const communityAffinity: Record<string, number> = {}
+      for (const id in rawAffinity) communityAffinity[id] = rawAffinity[id] / maxAff
+
+      // Multi-signal score for each candidate post
+      const computeScore = (post: (typeof candidates)[0]): number => {
+        const ageHours = (Date.now() - new Date(post.created_at).getTime()) / 3600000
+
+        // Quality × time decay (log base-2 so score differences feel proportional)
+        const hot = Math.log2(Math.max(post.score, 1)) - ageHours / 36
+
+        // How much does the user engage with this community? (0 → 1.5 bonus)
+        const affinity = (communityAffinity[post.community_id] ?? 0) * 1.5
+
+        // Already voted = de-prioritise (user already saw it)
+        const seen = feedPrecomputedVotes[post.id] !== undefined ? -1.5 : 0
+
+        // Brand-new posts get a small boost so they surface before getting votes
+        const freshBoost = ageHours < 3 ? 0.8 : ageHours < 12 ? 0.3 : 0
+
+        return hot + affinity + seen + freshBoost
+      }
+
+      const scored = candidates
+        .map(p => ({ post: p, score: computeScore(p) }))
+        .sort((a, b) => b.score - a.score)
+
+      // Diversity pass: cap at 4 posts per community so one community can't dominate
+      const commCounts: Record<string, number> = {}
+      for (const { post } of scored) {
+        const n = commCounts[post.community_id] ?? 0
+        if (n < 4) {
+          rawPostsData.push(post)
+          commCounts[post.community_id] = n + 1
+        }
+        if (rawPostsData.length >= 50) break
+      }
+    }
+  }
 
   // Fetch authors and communities separately (avoids FK constraint dependency)
   const authorIds = [...new Set((rawPostsData ?? []).map(p => p.author_id).filter(Boolean))]
@@ -146,7 +209,10 @@ export default async function CommunityPage({
   }
 
   let userVotes: Record<string, -1 | 1> = {}
-  if (user && rawPostsData?.length) {
+  if (sortMode === 'feed') {
+    // Algorithm already fetched votes for the full candidate set — reuse them
+    userVotes = feedPrecomputedVotes as Record<string, -1 | 1>
+  } else if (user && rawPostsData.length) {
     const { data: votes } = await supabase
       .from('post_votes').select('post_id, vote')
       .eq('user_id', user.id)
@@ -161,9 +227,11 @@ export default async function CommunityPage({
   }))
 
   let posts: Post[] = rawPosts.map(p => ({ ...p, user_vote: userVotes[p.id] ?? 0 }))
-  if (sortMode === 'hot' || sortMode === 'feed') {
+  if (sortMode === 'hot') {
     posts = posts.sort((a, b) => hotScore(b.score, b.created_at) - hotScore(a.score, a.created_at))
   }
+  // 'feed' order preserved from algorithm (diversity-sorted scored list)
+  // 'new' and 'top' order preserved from DB query
 
   const { data: communities } = await supabase
     .from('communities').select('*').order('member_count', { ascending: false })
