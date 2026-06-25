@@ -182,22 +182,22 @@ export default async function CommunityPage({
         </div>
 
         {/* Posts */}
-        <div className="space-y-2">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
           {posts.length === 0 ? (
-            <div className="rounded-xl p-10 text-center" style={{ background: '#fff', border: '1px solid #E2DDD7' }}>
-              <div className="w-12 h-12 rounded-full mx-auto mb-4 flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #C6973E22, #C6973E44)' }}>
+            <div style={{ background: '#fff', border: '1px solid #E2DDD7', borderRadius: '12px', padding: '40px 24px', textAlign: 'center' }}>
+              <div style={{ width: '48px', height: '48px', borderRadius: '50%', margin: '0 auto 16px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(135deg, rgba(198,151,62,0.13), rgba(198,151,62,0.27))' }}>
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#C6973E" strokeWidth="1.5" strokeLinejoin="round">
                   <path d="M6 3L2 9l10 12L22 9l-4-6H6z"/><path d="M2 9h20M6 3l3 6m6-6l-3 6"/>
                 </svg>
               </div>
-              <p className="font-semibold mb-1" style={{ color: '#18110A', fontFamily: 'var(--font-ivy), Georgia, serif', fontSize: '1.05rem' }}>No posts in r/{slug} yet</p>
-              <p className="text-sm mb-4" style={{ color: '#9a8f87' }}>Be the first to start the conversation</p>
+              <p style={{ fontWeight: 600, marginBottom: '4px', color: '#18110A', fontFamily: 'var(--font-ivy), Georgia, serif', fontSize: '1.05rem' }}>No posts in r/{slug} yet</p>
+              <p style={{ fontSize: '13px', marginBottom: '16px', color: '#9A8F87' }}>Be the first to start the conversation</p>
               {user ? (
-                <Link href={`/community/r/${slug}/submit`} className="inline-block px-5 py-2 rounded-lg text-sm font-semibold" style={{ background: '#C6973E', color: '#fff' }}>
+                <Link href={`/community/r/${slug}/submit`} style={{ display: 'inline-block', padding: '9px 20px', borderRadius: '8px', fontSize: '13px', fontWeight: 600, background: '#C6973E', color: '#fff', textDecoration: 'none' }}>
                   Create First Post
                 </Link>
               ) : (
-                <Link href="/community/register" className="inline-block px-5 py-2 rounded-lg text-sm font-semibold" style={{ background: '#C6973E', color: '#fff' }}>
+                <Link href="/community/register" style={{ display: 'inline-block', padding: '9px 20px', borderRadius: '8px', fontSize: '13px', fontWeight: 600, background: '#C6973E', color: '#fff', textDecoration: 'none' }}>
                   Join to Post
                 </Link>
               )}
