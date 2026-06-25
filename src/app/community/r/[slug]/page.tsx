@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import PostCard from '@/components/community/PostCard'
 import CommunitySidebar from '@/components/community/CommunitySidebar'
+import JoinButton from '@/components/community/JoinButton'
 import Link from 'next/link'
 import type { Post } from '@/types/community'
 import type { Metadata } from 'next'
@@ -63,6 +64,18 @@ export default async function CommunityPage({
     .single()
 
   if (!community) redirect('/community')
+
+  // Check membership
+  let isMember = false
+  if (user) {
+    const { data: membership } = await supabase
+      .from('community_members')
+      .select('user_id')
+      .eq('community_id', community.id)
+      .eq('user_id', user.id)
+      .maybeSingle()
+    isMember = !!membership
+  }
 
   // Fetch posts (plain select — avoids FK constraint dependency)
   let query = supabase
@@ -151,17 +164,20 @@ export default async function CommunityPage({
               <h1 style={{ fontFamily: 'var(--font-ivy, Georgia, serif)', fontSize: '18px', fontWeight: 600, color: '#1C1209', marginBottom: '3px' }}>r/{slug}</h1>
               <p style={{ fontSize: '13px', color: '#7A6F66' }}>{community.description}</p>
             </div>
-            {user && (
-              <Link href={`/community/r/${slug}/submit`} style={{
-                display: 'flex', alignItems: 'center', gap: '6px', flexShrink: 0,
-                background: 'linear-gradient(145deg, #D4A843, #B8881E)',
-                color: '#fff', fontWeight: 600, fontSize: '13px',
-                padding: '9px 16px', borderRadius: '8px', textDecoration: 'none',
-              }}>
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                Create Post
-              </Link>
-            )}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
+              <JoinButton communityId={community.id} initialIsMember={isMember} userId={user?.id} />
+              {user && (
+                <Link href={`/community/r/${slug}/submit`} style={{
+                  display: 'flex', alignItems: 'center', gap: '6px',
+                  background: 'linear-gradient(145deg, #D4A843, #B8881E)',
+                  color: '#fff', fontWeight: 600, fontSize: '13px',
+                  padding: '9px 16px', borderRadius: '8px', textDecoration: 'none',
+                }}>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                  Create Post
+                </Link>
+              )}
+            </div>
           </div>
         </div>
 

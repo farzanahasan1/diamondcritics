@@ -79,7 +79,7 @@ const faqSchema = {
   ],
 }
 
-type SortMode = 'hot' | 'new' | 'top'
+type SortMode = 'hot' | 'new' | 'top' | 'feed'
 
 function hotScore(score: number, createdAt: string) {
   const ageHours = (Date.now() - new Date(createdAt).getTime()) / 3600000
@@ -92,19 +92,40 @@ export default async function CommunityPage({
   searchParams: Promise<{ sort?: string; registered?: string }>
 }) {
   const { sort, registered } = await searchParams
-  const sortMode: SortMode = sort === 'new' ? 'new' : sort === 'top' ? 'top' : 'hot'
+  const sortMode: SortMode = sort === 'new' ? 'new' : sort === 'top' ? 'top' : sort === 'feed' ? 'feed' : 'hot'
 
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
+
+  // Fetch joined community IDs for "My Feed"
+  let joinedCommunityIds: string[] = []
+  if (user && sortMode === 'feed') {
+    const { data: memberships } = await supabase
+      .from('community_members')
+      .select('community_id')
+      .eq('user_id', user.id)
+    joinedCommunityIds = (memberships ?? []).map(m => m.community_id)
+  }
 
   let query = supabase
     .from('posts')
     .select('*')
     .eq('is_deleted', false)
 
-  if (sortMode === 'new') query = query.order('created_at', { ascending: false })
-  else if (sortMode === 'top') query = query.order('score', { ascending: false })
-  else query = query.order('created_at', { ascending: false })
+  if (sortMode === 'feed') {
+    if (joinedCommunityIds.length > 0) {
+      query = query.in('community_id', joinedCommunityIds).order('created_at', { ascending: false })
+    } else {
+      // No joined communities yet — return empty
+      query = query.eq('community_id', 'none').order('created_at', { ascending: false })
+    }
+  } else if (sortMode === 'new') {
+    query = query.order('created_at', { ascending: false })
+  } else if (sortMode === 'top') {
+    query = query.order('score', { ascending: false })
+  } else {
+    query = query.order('created_at', { ascending: false })
+  }
 
   const { data: rawPostsData } = await query.limit(50)
 
@@ -140,17 +161,18 @@ export default async function CommunityPage({
   }))
 
   let posts: Post[] = rawPosts.map(p => ({ ...p, user_vote: userVotes[p.id] ?? 0 }))
-  if (sortMode === 'hot') {
+  if (sortMode === 'hot' || sortMode === 'feed') {
     posts = posts.sort((a, b) => hotScore(b.score, b.created_at) - hotScore(a.score, a.created_at))
   }
 
   const { data: communities } = await supabase
     .from('communities').select('*').order('member_count', { ascending: false })
 
-  const sortTabs: { key: SortMode; label: string; emoji: string }[] = [
+  const sortTabs: { key: SortMode; label: string; emoji: string; authRequired?: boolean }[] = [
     { key: 'hot', label: 'Hot', emoji: '🔥' },
     { key: 'new', label: 'New', emoji: '✨' },
     { key: 'top', label: 'Top', emoji: '📈' },
+    { key: 'feed', label: 'My Feed', emoji: '🏠', authRequired: true },
   ]
 
   return (
@@ -217,7 +239,7 @@ export default async function CommunityPage({
           gap: '4px',
           marginBottom: '12px',
         }}>
-          {sortTabs.map(tab => (
+          {sortTabs.filter(tab => !tab.authRequired || user).map(tab => (
             <Link key={tab.key} href={`/community?sort=${tab.key}`} style={{
               display: 'flex', alignItems: 'center', gap: '6px',
               padding: '7px 14px', borderRadius: '8px',
@@ -260,25 +282,34 @@ export default async function CommunityPage({
               background: 'linear-gradient(145deg, #F5EDD8, #EDD8AA)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}>
-              <svg width="24" height="24" viewBox="0 0 20 20" fill="none">
-                <path d="M5 2.5L2 7.5l8 10 8-10-3-5H5z" stroke="#B8881E" strokeWidth="1.4" strokeLinejoin="round"/>
-                <path d="M2 7.5h16M5 2.5l2.5 5m5-5L10 7.5" stroke="#B8881E" strokeWidth="1.4" strokeLinejoin="round"/>
-              </svg>
+              {sortMode === 'feed' ? (
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#B8881E" strokeWidth="1.5">
+                  <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+                </svg>
+              ) : (
+                <svg width="24" height="24" viewBox="0 0 20 20" fill="none">
+                  <path d="M5 2.5L2 7.5l8 10 8-10-3-5H5z" stroke="#B8881E" strokeWidth="1.4" strokeLinejoin="round"/>
+                  <path d="M2 7.5h16M5 2.5l2.5 5m5-5L10 7.5" stroke="#B8881E" strokeWidth="1.4" strokeLinejoin="round"/>
+                </svg>
+              )}
             </div>
             <p style={{ fontFamily: 'var(--font-ivy, Georgia, serif)', fontSize: '18px', color: '#1C1209', marginBottom: '8px' }}>
-              No posts yet
+              {sortMode === 'feed' ? 'Your feed is empty' : 'No posts yet'}
             </p>
             <p style={{ fontSize: '13px', color: '#9A8F87', marginBottom: '24px' }}>
-              Be the first to share something in this community
+              {sortMode === 'feed'
+                ? 'Join some communities and their posts will appear here'
+                : 'Be the first to share something in this community'}
             </p>
-            <Link href={user && communities?.[0] ? `/community/r/${communities[0].slug}/submit` : '/community/register'}
+            <Link
+              href={sortMode === 'feed' ? '/community?sort=hot' : (user && communities?.[0] ? `/community/r/${communities[0].slug}/submit` : '/community/register')}
               style={{
                 display: 'inline-block',
                 background: 'linear-gradient(145deg, #D4A843, #B8881E)',
                 color: '#fff', fontWeight: 600, fontSize: '13px',
                 padding: '10px 24px', borderRadius: '8px', textDecoration: 'none',
               }}>
-              {user ? 'Create First Post' : 'Join & Post'}
+              {sortMode === 'feed' ? 'Browse Communities' : (user ? 'Create First Post' : 'Join & Post')}
             </Link>
           </div>
         ) : (
