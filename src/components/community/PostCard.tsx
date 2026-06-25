@@ -28,12 +28,26 @@ export default function PostCard({ post, userId, compact = false }: Props) {
   const authorLabel = author?.username ? `u/${author.username}` : '[deleted]'
 
   return (
-    <article
-      className="flex rounded-xl overflow-hidden transition-all"
-      style={{ background: '#fff', border: '1px solid #E2DDD7' }}
-    >
+    <article style={{
+      background: '#ffffff',
+      borderRadius: '12px',
+      boxShadow: '0 1px 4px rgba(28,18,9,0.07), 0 4px 16px rgba(28,18,9,0.05)',
+      display: 'flex',
+      overflow: 'hidden',
+      transition: 'box-shadow 0.15s',
+    }}>
+
       {/* Vote column */}
-      <div className="flex-none w-10 flex flex-col items-center pt-2.5 px-1" style={{ background: '#FAF8F5', borderRight: '1px solid #E2DDD7' }}>
+      <div style={{
+        width: '44px', flexShrink: 0,
+        background: '#FAF8F5',
+        borderRight: '1px solid #EDE8E1',
+        display: 'flex', flexDirection: 'column',
+        alignItems: 'center',
+        paddingTop: '12px',
+        paddingLeft: '4px',
+        paddingRight: '4px',
+      }}>
         <VoteButtons
           id={post.id}
           type="post"
@@ -45,87 +59,80 @@ export default function PostCard({ post, userId, compact = false }: Props) {
       </div>
 
       {/* Content */}
-      <div className="flex-1 p-3 min-w-0">
+      <div style={{ flex: 1, padding: '12px 16px', minWidth: 0 }}>
+
         {/* Meta */}
-        <div className="flex flex-wrap items-center gap-1 text-xs mb-1.5" style={{ color: '#9a8f87' }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '5px', fontSize: '12px', color: '#9A8F87', marginBottom: '6px' }}>
           {community && (
             <>
-              <Link href={`/community/r/${community.slug}`} className="font-semibold hover:underline" style={{ color: '#18110A' }}>
+              <Link href={`/community/r/${community.slug}`} style={{ fontWeight: 600, color: '#3A2208', textDecoration: 'none' }}>
                 r/{community.slug}
               </Link>
-              <span style={{ color: '#d0c8c0' }}>·</span>
+              <span style={{ color: '#D4C8BE' }}>·</span>
             </>
           )}
           <span>
             Posted by{' '}
-            <Link href={`/community/u/${author?.username}`} className="hover:underline" style={{ color: '#7a6f66' }}>
+            <Link href={`/community/u/${author?.username}`} style={{ color: '#7A6F66', textDecoration: 'none' }}>
               {authorLabel}
             </Link>
           </span>
-          <span style={{ color: '#d0c8c0' }}>·</span>
+          <span style={{ color: '#D4C8BE' }}>·</span>
           <span>{timeAgo(post.created_at)}</span>
-          {post.is_pinned && (
-            <span className="font-medium" style={{ color: '#22a06b' }}>📌 Pinned</span>
-          )}
+          {post.is_pinned && <span style={{ color: '#16A34A', fontWeight: 500 }}>📌 Pinned</span>}
         </div>
 
         {/* Title */}
-        <Link href={`/community/post/${post.id}`}>
-          <h2 className="text-base font-semibold leading-snug mb-1.5 hover:underline" style={{ color: '#18110A', fontFamily: 'var(--font-dm), system-ui, sans-serif', textDecorationColor: '#C6973E' }}>
+        <Link href={`/community/post/${post.id}`} style={{ textDecoration: 'none' }}>
+          <h2 style={{
+            fontSize: '15px', fontWeight: 600, color: '#1C1209',
+            lineHeight: '1.45', marginBottom: '6px',
+            fontFamily: 'var(--font-dm, system-ui, sans-serif)',
+          }}>
             {post.title}
           </h2>
         </Link>
 
         {/* Body preview */}
         {!compact && post.type === 'text' && post.body && (
-          <p className="text-sm line-clamp-2 mb-2" style={{ color: '#7a6f66' }}>{post.body}</p>
+          <p style={{
+            fontSize: '13px', color: '#7A6F66', lineHeight: '1.55',
+            marginBottom: '10px',
+            display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden',
+          }}>
+            {post.body}
+          </p>
         )}
 
         {/* Link */}
         {post.type === 'link' && post.url && (
-          <a
-            href={post.url}
-            target="_blank"
-            rel="nofollow noopener noreferrer"
-            className="text-xs hover:underline block mb-2 truncate"
-            style={{ color: '#C6973E' }}
-          >
+          <a href={post.url} target="_blank" rel="nofollow noopener noreferrer"
+            style={{ fontSize: '12px', color: '#D4A843', textDecoration: 'none', display: 'block', marginBottom: '8px' }}>
             🔗 {post.url}
           </a>
         )}
 
         {/* Image */}
         {post.type === 'image' && post.image_url && (
-          <div className="mb-2">
-            <img src={post.image_url} alt={post.title} className="max-h-96 rounded-lg object-contain" />
+          <div style={{ marginBottom: '10px' }}>
+            <img src={post.image_url} alt={post.title} style={{ maxHeight: '384px', borderRadius: '8px', objectFit: 'contain' }} />
           </div>
         )}
 
         {/* Footer */}
-        <div className="flex items-center gap-2 text-xs" style={{ color: '#9a8f87' }}>
-          <Link
-            href={`/community/post/${post.id}`}
-            className="flex items-center gap-1.5 px-2 py-1 rounded-md transition-colors"
-            style={{ color: '#9a8f87' }}
-          >
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <Link href={`/community/post/${post.id}`} style={{
+            display: 'flex', alignItems: 'center', gap: '5px',
+            fontSize: '12px', color: '#9A8F87', textDecoration: 'none',
+            padding: '4px 8px', borderRadius: '6px',
+          }}>
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
+              <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
             </svg>
             {post.comment_count} {post.comment_count === 1 ? 'comment' : 'comments'}
           </Link>
-          {post.type === 'link' && post.url && (
-            <a
-              href={post.url}
-              target="_blank"
-              rel="nofollow noopener noreferrer"
-              className="flex items-center gap-1.5 px-2 py-1 rounded-md"
-              style={{ color: '#9a8f87' }}
-            >
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-              Visit link
-            </a>
-          )}
         </div>
+
       </div>
     </article>
   )

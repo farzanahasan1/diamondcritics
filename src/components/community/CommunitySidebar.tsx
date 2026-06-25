@@ -8,79 +8,98 @@ interface Props {
   activeCommunity?: Community | null
 }
 
-function formatCount(n: number) {
-  if (n >= 1000) return `${(n / 1000).toFixed(1)}k`
-  return String(n)
+function fmt(n: number) {
+  return n >= 1000 ? `${(n / 1000).toFixed(1)}k` : String(n)
+}
+
+const card: React.CSSProperties = {
+  background: '#ffffff',
+  borderRadius: '12px',
+  boxShadow: '0 1px 4px rgba(28,18,9,0.07), 0 4px 16px rgba(28,18,9,0.05)',
+  overflow: 'hidden',
+  marginBottom: '16px',
 }
 
 export default function CommunitySidebar({ communities, user, activeCommunity }: Props) {
   const featured = activeCommunity ?? communities[0]
 
   return (
-    <aside className="space-y-3">
-      {/* Featured community card */}
+    <aside style={{ width: '100%' }}>
+
       {featured && (
-        <div className="rounded-xl overflow-hidden" style={{ background: '#fff', border: '1px solid #E2DDD7' }}>
+        <div style={card}>
           {/* Banner */}
-          <div className="h-14 relative" style={{ background: 'linear-gradient(135deg, #18110A 0%, #3d2a0e 50%, #18110A 100%)' }}>
-            <div className="absolute inset-0 flex items-center px-4">
-              <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-full flex items-center justify-center shrink-0" style={{ background: 'linear-gradient(135deg, #C6973E, #e8bf6a)' }}>
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.5" strokeLinejoin="round">
-                    <path d="M6 3L2 9l10 12L22 9l-4-6H6z"/><path d="M2 9h20M6 3l3 6m6-6l-3 6"/>
-                  </svg>
-                </div>
-                <Link href={`/community/r/${featured.slug}`} className="font-semibold text-sm hover:underline" style={{ color: '#f5e6c8' }}>
-                  r/{featured.slug}
-                </Link>
-              </div>
+          <div style={{
+            background: 'linear-gradient(135deg, #1C1209 0%, #3A2208 100%)',
+            padding: '16px 20px',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '12px',
+          }}>
+            <div style={{
+              width: '36px', height: '36px', borderRadius: '10px', flexShrink: 0,
+              background: 'linear-gradient(145deg, #D4A843, #B8881E)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}>
+              <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
+                <path d="M5 2.5L2 7.5l8 10 8-10-3-5H5z" stroke="white" strokeWidth="1.4" strokeLinejoin="round"/>
+                <path d="M2 7.5h16M5 2.5l2.5 5m5-5L10 7.5" stroke="white" strokeWidth="1.4" strokeLinejoin="round"/>
+              </svg>
+            </div>
+            <div>
+              <Link href={`/community/r/${featured.slug}`} style={{ color: '#F0D88A', fontWeight: 600, fontSize: '15px', textDecoration: 'none' }}>
+                r/{featured.slug}
+              </Link>
+              <div style={{ color: 'rgba(240,216,138,0.5)', fontSize: '11px', marginTop: '1px' }}>Diamond Community</div>
             </div>
           </div>
 
           {/* Body */}
-          <div className="p-4">
-            <p className="text-sm mb-4 leading-relaxed" style={{ color: '#5a504a' }}>{featured.description}</p>
+          <div style={{ padding: '20px' }}>
+            <p style={{ color: '#5A504A', fontSize: '13px', lineHeight: '1.6', marginBottom: '20px' }}>
+              {featured.description}
+            </p>
 
             {/* Stats */}
-            <div className="grid grid-cols-2 gap-3 mb-4 pb-4" style={{ borderBottom: '1px solid #E2DDD7' }}>
-              <div>
-                <div className="text-lg font-bold" style={{ color: '#18110A', fontFamily: 'var(--font-dm), system-ui, sans-serif' }}>
-                  {formatCount(featured.member_count)}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '20px', paddingBottom: '20px', borderBottom: '1px solid #EDE8E1' }}>
+              {[
+                { label: 'Members', value: fmt(featured.member_count) },
+                { label: 'Posts', value: fmt(featured.post_count) },
+              ].map(s => (
+                <div key={s.label} style={{ background: '#FAF8F5', borderRadius: '8px', padding: '10px 12px' }}>
+                  <div style={{ fontWeight: 700, fontSize: '20px', color: '#1C1209' }}>{s.value}</div>
+                  <div style={{ fontSize: '11px', color: '#9A8F87', marginTop: '2px' }}>{s.label}</div>
                 </div>
-                <div className="text-xs" style={{ color: '#9a8f87' }}>Members</div>
-              </div>
-              <div>
-                <div className="text-lg font-bold" style={{ color: '#18110A', fontFamily: 'var(--font-dm), system-ui, sans-serif' }}>
-                  {formatCount(featured.post_count)}
-                </div>
-                <div className="text-xs" style={{ color: '#9a8f87' }}>Posts</div>
-              </div>
+              ))}
             </div>
 
             {/* CTA */}
             {user ? (
-              <Link
-                href={`/community/r/${featured.slug}/submit`}
-                className="flex items-center justify-center gap-2 w-full text-sm font-semibold py-2 rounded-lg transition-colors"
-                style={{ background: '#C6973E', color: '#fff' }}
-              >
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              <Link href={`/community/r/${featured.slug}/submit`} style={{
+                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
+                background: 'linear-gradient(145deg, #D4A843, #B8881E)',
+                color: '#fff', fontWeight: 600, fontSize: '13px',
+                padding: '10px 16px', borderRadius: '8px', textDecoration: 'none',
+              }}>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
                 Create Post
               </Link>
             ) : (
-              <div className="space-y-2">
-                <Link
-                  href="/community/register"
-                  className="flex items-center justify-center w-full text-sm font-semibold py-2 rounded-lg"
-                  style={{ background: '#C6973E', color: '#fff' }}
-                >
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <Link href="/community/register" style={{
+                  display: 'block', textAlign: 'center',
+                  background: 'linear-gradient(145deg, #D4A843, #B8881E)',
+                  color: '#fff', fontWeight: 600, fontSize: '13px',
+                  padding: '10px 16px', borderRadius: '8px', textDecoration: 'none',
+                }}>
                   Join Community
                 </Link>
-                <Link
-                  href="/community/login"
-                  className="flex items-center justify-center w-full text-sm font-medium py-2 rounded-lg"
-                  style={{ background: 'transparent', color: '#5a504a', border: '1px solid #E2DDD7' }}
-                >
+                <Link href="/community/login" style={{
+                  display: 'block', textAlign: 'center',
+                  color: '#5A504A', fontWeight: 500, fontSize: '13px',
+                  padding: '9px 16px', borderRadius: '8px', textDecoration: 'none',
+                  border: '1.5px solid #EDE8E1',
+                }}>
                   Log In
                 </Link>
               </div>
@@ -89,12 +108,14 @@ export default function CommunitySidebar({ communities, user, activeCommunity }:
 
           {/* Rules */}
           {featured.rules && (
-            <div className="px-4 pb-4" style={{ borderTop: '1px solid #E2DDD7', paddingTop: '1rem' }}>
-              <h3 className="text-xs font-bold uppercase tracking-wider mb-3" style={{ color: '#9a8f87' }}>Community Rules</h3>
-              <ol className="space-y-2">
+            <div style={{ borderTop: '1px solid #EDE8E1', padding: '16px 20px' }}>
+              <div style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '0.08em', color: '#B0A89E', textTransform: 'uppercase', marginBottom: '12px' }}>
+                Community Rules
+              </div>
+              <ol style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '10px' }}>
                 {featured.rules.split('\n').filter(Boolean).map((rule, i) => (
-                  <li key={i} className="flex gap-2.5 text-xs" style={{ color: '#5a504a' }}>
-                    <span className="font-bold shrink-0 mt-0.5" style={{ color: '#C6973E' }}>{i + 1}.</span>
+                  <li key={i} style={{ display: 'flex', gap: '10px', fontSize: '13px', color: '#5A504A', lineHeight: '1.5' }}>
+                    <span style={{ color: '#D4A843', fontWeight: 700, flexShrink: 0, minWidth: '16px' }}>{i + 1}.</span>
                     <span>{rule.replace(/^\d+\.\s*/, '')}</span>
                   </li>
                 ))}
@@ -104,46 +125,33 @@ export default function CommunitySidebar({ communities, user, activeCommunity }:
         </div>
       )}
 
-      {/* All communities */}
-      {communities.length > 1 && (
-        <div className="rounded-xl p-4" style={{ background: '#fff', border: '1px solid #E2DDD7' }}>
-          <h3 className="text-xs font-bold uppercase tracking-wider mb-3" style={{ color: '#9a8f87' }}>Communities</h3>
-          <ul className="space-y-1">
-            {communities.map(c => (
-              <li key={c.id}>
-                <Link
-                  href={`/community/r/${c.slug}`}
-                  className="flex items-center justify-between text-sm py-1 transition-colors"
-                  style={{ color: '#3d2a0e' }}
-                >
-                  <span className="font-medium">r/{c.slug}</span>
-                  <span className="text-xs" style={{ color: '#9a8f87' }}>{formatCount(c.member_count)} members</span>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-
       {/* Expert resources */}
-      <div className="rounded-xl p-4" style={{ background: '#fff', border: '1px solid #E2DDD7' }}>
-        <h3 className="text-xs font-bold uppercase tracking-wider mb-3" style={{ color: '#9a8f87' }}>Expert Resources</h3>
-        <ul className="space-y-2">
-          {[
-            { href: '/category/round-cut-diamond', label: 'Round Diamond Guide' },
-            { href: '/category/diamond-buying-guides', label: 'Diamond Buying Guides' },
-            { href: '/1-carat-round-diamond-price', label: '1ct Diamond Price Guide' },
-          ].map(link => (
-            <li key={link.href}>
-              <Link href={link.href} className="flex items-center gap-2 text-sm transition-colors" style={{ color: '#C6973E' }}>
-                <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L9.09 8.26L2 9.27l5 4.87-1.18 6.88L12 17.77l6.18 3.25L17 14.14 22 9.27l-7.09-1.01L12 2z"/></svg>
+      <div style={card}>
+        <div style={{ padding: '16px 20px' }}>
+          <div style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '0.08em', color: '#B0A89E', textTransform: 'uppercase', marginBottom: '14px' }}>
+            Expert Resources
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            {[
+              { href: '/category/round-cut-diamond', label: 'Round Diamond Guide' },
+              { href: '/category/diamond-buying-guides', label: 'Diamond Buying Guides' },
+              { href: '/1-carat-round-diamond-price', label: '1ct Diamond Price Guide' },
+            ].map(link => (
+              <Link key={link.href} href={link.href} style={{
+                display: 'flex', alignItems: 'center', gap: '8px',
+                color: '#D4A843', fontSize: '13px', textDecoration: 'none', fontWeight: 500,
+              }}>
+                <span style={{ width: '5px', height: '5px', borderRadius: '50%', background: '#D4A843', flexShrink: 0, display: 'inline-block' }} />
                 {link.label}
               </Link>
-            </li>
-          ))}
-        </ul>
-        <p className="text-xs mt-3 pt-3" style={{ color: '#c4bdb8', borderTop: '1px solid #E2DDD7' }}>Powered by DiamondCritics.com</p>
+            ))}
+          </div>
+          <div style={{ marginTop: '16px', paddingTop: '14px', borderTop: '1px solid #EDE8E1', fontSize: '11px', color: '#C4BCB6' }}>
+            Powered by DiamondCritics.com
+          </div>
+        </div>
       </div>
+
     </aside>
   )
 }
