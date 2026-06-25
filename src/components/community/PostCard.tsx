@@ -1,3 +1,5 @@
+'use client'
+
 import Link from 'next/link'
 import VoteButtons from './VoteButtons'
 import ReportButton from './ReportButton'

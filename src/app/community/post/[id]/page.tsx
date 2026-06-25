@@ -4,6 +4,7 @@ import Link from 'next/link'
 import CommentSection from '@/components/community/CommentSection'
 import VoteButtons from '@/components/community/VoteButtons'
 import CommunitySidebar from '@/components/community/CommunitySidebar'
+import LinkPreviewImg from '@/components/community/LinkPreviewImg'
 import type { Comment, Post } from '@/types/community'
 import type { Metadata } from 'next'
 
@@ -334,14 +335,7 @@ export default async function PostDetailPage({ params }: { params: Promise<{ id:
                       background: '#FDF8EF',
                     }}
                   >
-                    {imgUrl && (
-                      <img
-                        src={imgUrl}
-                        alt={post.title}
-                        style={{ width: '100%', maxHeight: '360px', objectFit: 'cover', display: 'block' }}
-                        onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }}
-                      />
-                    )}
+                    {imgUrl && <LinkPreviewImg src={imgUrl} alt={post.title} />}
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 14px' }}>
                       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#C6973E" strokeWidth="2" strokeLinecap="round" style={{ flexShrink: 0 }}>
                         <path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/>
