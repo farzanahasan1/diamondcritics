@@ -26,93 +26,90 @@ export default async function CommunityLayout({ children }: { children: React.Re
   }
 
   return (
-    <div className="min-h-screen" style={{ background: '#F4F0EA' }}>
+    <div style={{ minHeight: '100vh', background: '#F4F0EA' }}>
 
-      {/* ── Community top bar ── */}
-      <div style={{ background: '#1C1209', borderBottom: '1px solid rgba(255,255,255,0.07)' }}>
-        <div className="max-w-5xl mx-auto px-6 h-14 flex items-center gap-6">
+      {/* ── Top bar ── */}
+      <nav style={{ background: '#1C1209', borderBottom: '1px solid rgba(255,255,255,0.07)', position: 'sticky', top: 0, zIndex: 40 }}>
+        <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '0 24px', height: '52px', display: 'flex', alignItems: 'center', gap: '24px' }}>
 
           {/* Brand */}
-          <Link href="/community" className="flex items-center gap-3 shrink-0">
-            <div
-              className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
-              style={{ background: 'linear-gradient(145deg, #D4A843 0%, #B8881E 100%)' }}
-            >
-              <svg width="15" height="15" viewBox="0 0 20 20" fill="none">
+          <Link href="/community" style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none', flexShrink: 0 }}>
+            <div style={{
+              width: '32px', height: '32px', borderRadius: '9px', flexShrink: 0,
+              background: 'linear-gradient(145deg, #D4A843 0%, #B8881E 100%)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}>
+              <svg width="14" height="14" viewBox="0 0 20 20" fill="none">
                 <path d="M5 2.5L2 7.5l8 10 8-10-3-5H5z" stroke="white" strokeWidth="1.4" strokeLinejoin="round"/>
                 <path d="M2 7.5h16M5 2.5l2.5 5m5-5L10 7.5" stroke="white" strokeWidth="1.4" strokeLinejoin="round"/>
               </svg>
             </div>
             <div>
-              <span className="block text-[13px] font-semibold leading-none" style={{ color: '#F0D88A' }}>Diamond Community</span>
-              <span className="block text-[10px] leading-none mt-0.5" style={{ color: 'rgba(255,255,255,0.35)' }}>by DiamondCritics.com</span>
+              <div style={{ color: '#F0D88A', fontWeight: 600, fontSize: '13px', lineHeight: 1 }}>Diamond Community</div>
+              <div style={{ color: 'rgba(255,255,255,0.3)', fontSize: '10px', marginTop: '2px', lineHeight: 1 }}>by DiamondCritics.com</div>
             </div>
           </Link>
 
           {/* Nav links */}
-          <nav className="hidden md:flex items-center gap-1">
-            <Link href="/community"
-              className="text-[13px] px-3 py-1.5 rounded-md font-medium transition-all"
-              style={{ color: 'rgba(255,255,255,0.55)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '2px' }}>
+            <Link href="/community" style={{ color: 'rgba(255,255,255,0.5)', fontSize: '13px', fontWeight: 500, padding: '6px 12px', borderRadius: '7px', textDecoration: 'none' }}>
               Feed
             </Link>
-            <Link href="/community/r/diamonds"
-              className="text-[13px] px-3 py-1.5 rounded-md font-medium transition-all"
-              style={{ color: 'rgba(255,255,255,0.55)' }}>
+            <Link href="/community/r/diamonds" style={{ color: 'rgba(255,255,255,0.5)', fontSize: '13px', fontWeight: 500, padding: '6px 12px', borderRadius: '7px', textDecoration: 'none' }}>
               r/diamonds
             </Link>
-          </nav>
+          </div>
 
-          <div className="flex-1" />
+          <div style={{ flex: 1 }} />
 
           {/* Auth */}
           {user && profile ? (
-            <div className="flex items-center gap-3">
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               {profile.is_admin && (
-                <Link href="/community/admin"
-                  className="hidden sm:block text-[12px] px-2.5 py-1 rounded-md font-medium"
-                  style={{ background: 'rgba(212,168,67,0.15)', color: '#D4A843', border: '1px solid rgba(212,168,67,0.3)' }}>
+                <Link href="/community/admin" style={{
+                  fontSize: '12px', fontWeight: 600, padding: '5px 10px', borderRadius: '6px', textDecoration: 'none',
+                  background: 'rgba(212,168,67,0.15)', color: '#D4A843', border: '1px solid rgba(212,168,67,0.3)',
+                }}>
                   Admin
                 </Link>
               )}
-              <Link href={`/community/u/${profile.username}`} className="flex items-center gap-2">
+              <Link href={`/community/u/${profile.username}`} style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none' }}>
                 {profile.avatar_url ? (
-                  <img src={profile.avatar_url} alt="" className="w-7 h-7 rounded-full object-cover" style={{ outline: '2px solid rgba(212,168,67,0.4)' }} />
+                  <img src={profile.avatar_url} alt="" style={{ width: '28px', height: '28px', borderRadius: '50%', objectFit: 'cover', outline: '2px solid rgba(212,168,67,0.4)' }} />
                 ) : (
-                  <div className="w-7 h-7 rounded-full flex items-center justify-center text-[11px] font-bold text-white shrink-0"
-                    style={{ background: 'linear-gradient(145deg, #D4A843, #B8881E)' }}>
+                  <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: 'linear-gradient(145deg, #D4A843, #B8881E)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '11px', fontWeight: 700 }}>
                     {profile.username[0].toUpperCase()}
                   </div>
                 )}
-                <span className="hidden sm:block text-[13px] font-medium" style={{ color: 'rgba(255,255,255,0.75)' }}>
-                  {profile.username}
-                </span>
+                <span style={{ color: 'rgba(255,255,255,0.75)', fontSize: '13px', fontWeight: 500 }}>{profile.username}</span>
               </Link>
               <form action={signOut}>
-                <button className="text-[12px] font-medium px-3 py-1.5 rounded-md" style={{ color: 'rgba(255,255,255,0.45)', border: '1px solid rgba(255,255,255,0.12)' }}>
+                <button style={{ fontSize: '12px', fontWeight: 500, padding: '6px 12px', borderRadius: '7px', background: 'transparent', border: '1px solid rgba(255,255,255,0.15)', color: 'rgba(255,255,255,0.45)', cursor: 'pointer' }}>
                   Log out
                 </button>
               </form>
             </div>
           ) : (
-            <div className="flex items-center gap-2">
-              <Link href="/community/login"
-                className="text-[13px] font-medium px-4 py-1.5 rounded-md"
-                style={{ color: 'rgba(255,255,255,0.7)', border: '1px solid rgba(255,255,255,0.18)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <Link href="/community/login" style={{
+                fontSize: '13px', fontWeight: 500, padding: '7px 16px', borderRadius: '8px', textDecoration: 'none',
+                color: 'rgba(255,255,255,0.75)', background: 'transparent', border: '1px solid rgba(255,255,255,0.2)',
+              }}>
                 Log In
               </Link>
-              <Link href="/community/register"
-                className="text-[13px] font-semibold px-4 py-1.5 rounded-md"
-                style={{ background: 'linear-gradient(145deg, #D4A843 0%, #B8881E 100%)', color: '#fff' }}>
+              <Link href="/community/register" style={{
+                fontSize: '13px', fontWeight: 600, padding: '7px 16px', borderRadius: '8px', textDecoration: 'none',
+                background: 'linear-gradient(145deg, #D4A843 0%, #B8881E 100%)', color: '#fff',
+              }}>
                 Sign Up
               </Link>
             </div>
           )}
         </div>
-      </div>
+      </nav>
 
       {/* ── Page content ── */}
-      <div className="max-w-5xl mx-auto px-6 py-8">
+      <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '28px 24px' }}>
         {children}
       </div>
 

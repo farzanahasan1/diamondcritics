@@ -129,11 +129,12 @@ export default async function CommunityPage({
             background: '#ffffff',
             borderRadius: '12px',
             boxShadow: '0 1px 4px rgba(28,18,9,0.07), 0 4px 16px rgba(28,18,9,0.05)',
-            padding: '60px 32px',
+            padding: '64px 32px',
+            display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
             textAlign: 'center',
           }}>
             <div style={{
-              width: '52px', height: '52px', borderRadius: '14px', margin: '0 auto 16px',
+              width: '56px', height: '56px', borderRadius: '16px', marginBottom: '20px',
               background: 'linear-gradient(145deg, #F5EDD8, #EDD8AA)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}>
