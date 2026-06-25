@@ -65,14 +65,26 @@ export default async function PostDetailPage({ params }: { params: Promise<{ id:
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
-  // Fetch post
+  // Fetch post (plain select — avoids FK constraint dependency)
   const { data: postRaw } = await supabase
     .from('posts')
-    .select('*, author:profiles(id,username,avatar_url,is_admin), community:communities(*)')
+    .select('*')
     .eq('id', id)
     .single()
 
   if (!postRaw || postRaw.is_deleted) notFound()
+
+  // Fetch author and community separately
+  const [{ data: postAuthor }, { data: postCommunity }] = await Promise.all([
+    postRaw.author_id
+      ? supabase.from('profiles').select('id,username,avatar_url,is_admin').eq('id', postRaw.author_id).single()
+      : Promise.resolve({ data: null }),
+    postRaw.community_id
+      ? supabase.from('communities').select('*').eq('id', postRaw.community_id).single()
+      : Promise.resolve({ data: null }),
+  ])
+
+  const postRawEnriched = { ...postRaw, author: postAuthor, community: postCommunity }
 
   // User vote on post
   let postUserVote: -1 | 0 | 1 = 0
@@ -86,7 +98,7 @@ export default async function PostDetailPage({ params }: { params: Promise<{ id:
     postUserVote = (v?.vote as -1 | 1) ?? 0
   }
 
-  const post: Post = { ...postRaw, user_vote: postUserVote }
+  const post: Post = { ...postRawEnriched, user_vote: postUserVote }
 
   // Fetch profile for admin check
   let isAdmin = false
@@ -99,12 +111,21 @@ export default async function PostDetailPage({ params }: { params: Promise<{ id:
     isAdmin = profile?.is_admin ?? false
   }
 
-  // Fetch all comments
-  const { data: flatComments } = await supabase
+  // Fetch all comments (plain select — avoids FK constraint dependency)
+  const { data: flatCommentsData } = await supabase
     .from('comments')
-    .select('*, author:profiles(id,username,avatar_url)')
+    .select('*')
     .eq('post_id', id)
     .order('created_at', { ascending: true })
+
+  // Fetch comment authors separately
+  const commentAuthorIds = [...new Set((flatCommentsData ?? []).map(c => c.author_id).filter(Boolean))]
+  let commentAuthorsMap: Record<string, any> = {}
+  if (commentAuthorIds.length) {
+    const { data: cAuthors } = await supabase.from('profiles').select('id,username,avatar_url').in('id', commentAuthorIds)
+    if (cAuthors) commentAuthorsMap = Object.fromEntries(cAuthors.map(a => [a.id, a]))
+  }
+  const flatComments = (flatCommentsData ?? []).map(c => ({ ...c, author: commentAuthorsMap[c.author_id] ?? null }))
 
   // User votes on comments
   let commentVotes: Record<string, -1 | 1> = {}

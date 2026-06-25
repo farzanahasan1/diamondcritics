@@ -62,10 +62,10 @@ export default async function CommunityPage({
 
   if (!community) notFound()
 
-  // Fetch posts
+  // Fetch posts (plain select — avoids FK constraint dependency)
   let query = supabase
     .from('posts')
-    .select('*, author:profiles(id,username,avatar_url), community:communities(id,slug,name)')
+    .select('*')
     .eq('community_id', community.id)
     .eq('is_deleted', false)
 
@@ -73,20 +73,34 @@ export default async function CommunityPage({
   else if (sortMode === 'top') query = query.order('score', { ascending: false })
   else query = query.order('created_at', { ascending: false })
 
-  const { data: rawPosts } = await query.limit(50)
+  const { data: rawPostsData } = await query.limit(50)
+
+  // Fetch authors separately
+  const authorIds = [...new Set((rawPostsData ?? []).map(p => p.author_id).filter(Boolean))]
+  let authorsMap: Record<string, any> = {}
+  if (authorIds.length) {
+    const { data: authors } = await supabase.from('profiles').select('id,username,avatar_url').in('id', authorIds)
+    if (authors) authorsMap = Object.fromEntries(authors.map(a => [a.id, a]))
+  }
 
   // User votes
   let userVotes: Record<string, -1 | 1> = {}
-  if (user && rawPosts?.length) {
+  if (user && rawPostsData?.length) {
     const { data: votes } = await supabase
       .from('post_votes')
       .select('post_id, vote')
       .eq('user_id', user.id)
-      .in('post_id', rawPosts.map(p => p.id))
+      .in('post_id', rawPostsData.map(p => p.id))
     if (votes) userVotes = Object.fromEntries(votes.map(v => [v.post_id, v.vote]))
   }
 
-  let posts: Post[] = (rawPosts ?? []).map(p => ({ ...p, user_vote: userVotes[p.id] ?? 0 }))
+  const rawPosts = (rawPostsData ?? []).map(p => ({
+    ...p,
+    author: authorsMap[p.author_id] ?? null,
+    community: { id: community.id, slug: community.slug, name: community.name },
+  }))
+
+  let posts: Post[] = rawPosts.map(p => ({ ...p, user_vote: userVotes[p.id] ?? 0 }))
   if (sortMode === 'hot') {
     posts = posts.sort((a, b) => hotScore(b.score, b.created_at) - hotScore(a.score, a.created_at))
   }
