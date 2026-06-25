@@ -78,19 +78,18 @@ export default function VoteButtons({ id, type, initialScore, initialVote, userI
     )
   }
 
-  // Horizontal (used in comments)
+  // Horizontal — inline footer buttons with labels
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
       <button
         onClick={() => handleVote(1)}
         disabled={isPending}
-        title={`Upvote · ${score}`}
         style={{
           background: upActive ? '#FEF3DA' : 'transparent',
           border: 'none', borderRadius: '6px',
-          padding: '4px 6px', cursor: isPending ? 'default' : 'pointer',
-          color: upActive ? '#C6973E' : '#B0A89E',
-          display: 'flex', alignItems: 'center', gap: '4px',
+          padding: '5px 10px', cursor: isPending ? 'default' : 'pointer',
+          color: upActive ? '#C6973E' : '#9A8F87',
+          display: 'flex', alignItems: 'center', gap: '5px',
           fontSize: '12px', fontWeight: 600,
           transition: 'background 0.15s, color 0.15s',
         }}
@@ -98,24 +97,25 @@ export default function VoteButtons({ id, type, initialScore, initialVote, userI
         <svg width="13" height="13" viewBox="0 0 24 24" fill={upActive ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2.5">
           <path d="M12 4l8 8H4z" />
         </svg>
-        <span>{score > 0 ? `+${score}` : score}</span>
+        Upvote
       </button>
       <button
         onClick={() => handleVote(-1)}
         disabled={isPending}
-        title="Downvote"
         style={{
           background: downActive ? '#EEF0FF' : 'transparent',
           border: 'none', borderRadius: '6px',
-          padding: '4px 6px', cursor: isPending ? 'default' : 'pointer',
-          color: downActive ? '#6576FF' : '#B0A89E',
-          display: 'flex', alignItems: 'center',
+          padding: '5px 10px', cursor: isPending ? 'default' : 'pointer',
+          color: downActive ? '#6576FF' : '#9A8F87',
+          display: 'flex', alignItems: 'center', gap: '5px',
+          fontSize: '12px', fontWeight: 600,
           transition: 'background 0.15s, color 0.15s',
         }}
       >
         <svg width="13" height="13" viewBox="0 0 24 24" fill={downActive ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2.5">
           <path d="M12 20l-8-8h16z" />
         </svg>
+        Downvote
       </button>
     </div>
   )

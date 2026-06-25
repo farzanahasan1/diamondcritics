@@ -35,34 +35,10 @@ export default function PostCard({ post, userId, compact = false }: Props) {
       background: '#ffffff',
       borderRadius: '12px',
       boxShadow: '0 1px 4px rgba(28,18,9,0.07), 0 4px 16px rgba(28,18,9,0.05)',
-      display: 'flex',
       overflow: 'hidden',
       transition: 'box-shadow 0.15s',
     }}>
-
-      {/* Vote column */}
-      <div style={{
-        width: '44px', flexShrink: 0,
-        background: '#FAF8F5',
-        borderRight: '1px solid #EDE8E1',
-        display: 'flex', flexDirection: 'column',
-        alignItems: 'center',
-        paddingTop: '12px',
-        paddingLeft: '4px',
-        paddingRight: '4px',
-      }}>
-        <VoteButtons
-          id={post.id}
-          type="post"
-          initialScore={post.score}
-          initialVote={post.user_vote ?? 0}
-          userId={userId}
-          vertical={true}
-        />
-      </div>
-
-      {/* Content */}
-      <div style={{ flex: 1, padding: '12px 16px', minWidth: 0 }}>
+      <div style={{ padding: '14px 16px 10px' }}>
 
         {/* Meta */}
         <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '5px', fontSize: '12px', color: '#9A8F87', marginBottom: '6px' }}>
@@ -89,7 +65,7 @@ export default function PostCard({ post, userId, compact = false }: Props) {
         <Link href={`/community/post/${post.id}`} style={{ textDecoration: 'none' }}>
           <h2 style={{
             fontSize: '15px', fontWeight: 600, color: '#1C1209',
-            lineHeight: '1.45', marginBottom: '6px',
+            lineHeight: '1.45', marginBottom: '8px',
             fontFamily: 'var(--font-dm, system-ui, sans-serif)',
           }}>
             {post.title}
@@ -116,7 +92,7 @@ export default function PostCard({ post, userId, compact = false }: Props) {
           const hostname = (() => { try { return new URL(post.url).hostname.replace(/^www\./, '') } catch { return post.url } })()
           return (
             <a href={post.url} target="_blank" rel="nofollow noopener noreferrer"
-              style={{ display: 'block', textDecoration: 'none', marginBottom: '8px', borderRadius: '8px', overflow: 'hidden', border: '1px solid #EDE8E1', background: '#FDF8EF' }}>
+              style={{ display: 'block', textDecoration: 'none', marginBottom: '10px', borderRadius: '8px', overflow: 'hidden', border: '1px solid #EDE8E1', background: '#FDF8EF' }}>
               {imgUrl && (
                 <img
                   src={imgUrl}
@@ -142,23 +118,37 @@ export default function PostCard({ post, userId, compact = false }: Props) {
           </div>
         )}
 
-        {/* Footer */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <Link href={`/community/post/${post.id}`} style={{
-            display: 'flex', alignItems: 'center', gap: '5px',
-            fontSize: '12px', color: '#9A8F87', textDecoration: 'none',
-            padding: '4px 8px', borderRadius: '6px',
-          }}>
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
-            </svg>
-            {post.comment_count} {post.comment_count === 1 ? 'comment' : 'comments'}
-          </Link>
-          {userId && userId !== post.author_id && (
-            <ReportButton targetType="post" targetId={post.id} userId={userId} />
-          )}
-        </div>
+      </div>
 
+      {/* Footer: votes + comments */}
+      <div style={{
+        display: 'flex', alignItems: 'center', gap: '4px',
+        padding: '8px 12px',
+        borderTop: '1px solid #F5F0EA',
+        background: '#FAFAF8',
+      }}>
+        <VoteButtons
+          id={post.id}
+          type="post"
+          initialScore={post.score}
+          initialVote={post.user_vote ?? 0}
+          userId={userId}
+          vertical={false}
+        />
+        <div style={{ width: '1px', height: '16px', background: '#EDE8E1', margin: '0 4px' }} />
+        <Link href={`/community/post/${post.id}`} style={{
+          display: 'flex', alignItems: 'center', gap: '5px',
+          fontSize: '12px', color: '#9A8F87', textDecoration: 'none',
+          padding: '4px 8px', borderRadius: '6px',
+        }}>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+          </svg>
+          {post.comment_count} {post.comment_count === 1 ? 'comment' : 'comments'}
+        </Link>
+        {userId && userId !== post.author_id && (
+          <ReportButton targetType="post" targetId={post.id} userId={userId} />
+        )}
       </div>
     </article>
   )

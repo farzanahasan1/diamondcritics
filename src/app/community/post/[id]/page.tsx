@@ -257,30 +257,10 @@ export default async function PostDetailPage({ params }: { params: Promise<{ id:
           overflow: 'hidden',
           marginBottom: '16px',
         }}>
-          <div style={{ display: 'flex' }}>
-
-            {/* Vote column */}
-            <div style={{
-              width: '52px', flexShrink: 0,
-              background: '#FAF8F5',
-              borderRight: '1px solid #EDE8E1',
-              display: 'flex', flexDirection: 'column',
-              alignItems: 'center',
-              paddingTop: '16px',
-              paddingLeft: '4px', paddingRight: '4px',
-            }}>
-              <VoteButtons
-                id={post.id}
-                type="post"
-                initialScore={post.score}
-                initialVote={post.user_vote ?? 0}
-                userId={user?.id}
-                vertical={true}
-              />
-            </div>
+          <div>
 
             {/* Post content */}
-            <div style={{ flex: 1, padding: '16px 20px', minWidth: 0 }}>
+            <div style={{ padding: '16px 20px 12px', minWidth: 0 }}>
 
               {/* Meta */}
               <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '5px', fontSize: '12px', color: '#9A8F87', marginBottom: '8px' }}>
@@ -358,27 +338,42 @@ export default async function PostDetailPage({ params }: { params: Promise<{ id:
                 </div>
               )}
 
-              {/* Footer */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', borderTop: '1px solid #F0ECE5', paddingTop: '10px', marginTop: '4px' }}>
-                <span style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '12px', color: '#9A8F87' }}>
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
-                  </svg>
-                  {post.comment_count} {post.comment_count === 1 ? 'comment' : 'comments'}
-                </span>
-                {(user?.id === post.author_id || isAdmin) && (
-                  <form action={async () => {
-                    'use server'
-                    const { deletePost } = await import('@/app/community/actions')
-                    await deletePost(id)
-                  }}>
-                    <button type="submit" style={{ fontSize: '12px', color: '#EF9999', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
-                      Delete
-                    </button>
-                  </form>
-                )}
-              </div>
             </div>
+          </div>
+
+          {/* Footer: votes + comments */}
+          <div style={{
+            display: 'flex', alignItems: 'center', gap: '4px',
+            padding: '8px 16px',
+            borderTop: '1px solid #F5F0EA',
+            background: '#FAFAF8',
+          }}>
+            <VoteButtons
+              id={post.id}
+              type="post"
+              initialScore={post.score}
+              initialVote={post.user_vote ?? 0}
+              userId={user?.id}
+              vertical={false}
+            />
+            <div style={{ width: '1px', height: '16px', background: '#EDE8E1', margin: '0 4px' }} />
+            <span style={{ display: 'flex', alignItems: 'center', gap: '5px', fontSize: '12px', color: '#9A8F87' }}>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
+              </svg>
+              {post.comment_count} {post.comment_count === 1 ? 'comment' : 'comments'}
+            </span>
+            {(user?.id === post.author_id || isAdmin) && (
+              <form action={async () => {
+                'use server'
+                const { deletePost } = await import('@/app/community/actions')
+                await deletePost(id)
+              }} style={{ marginLeft: 'auto' }}>
+                <button type="submit" style={{ fontSize: '12px', color: '#EF9999', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
+                  Delete
+                </button>
+              </form>
+            )}
           </div>
         </article>
 

@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useTransition, useEffect } from 'react'
-import { createCommunity, banUser, awardBadge, revokeBadge, resolveReport } from '@/app/community/actions'
+import { createCommunity, banUser, awardBadge, revokeBadge, resolveReport, refreshLinkPreviews } from '@/app/community/actions'
 import { createClient } from '@/lib/supabase/client'
 import Link from 'next/link'
 
@@ -128,9 +128,24 @@ export default function AdminPage() {
 
   return (
     <div className="max-w-4xl mx-auto">
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">⚙ Admin Panel</h1>
-        <p className="text-sm text-gray-500 mt-1">Manage your Diamond Community</p>
+      <div className="mb-6 flex items-start justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">⚙ Admin Panel</h1>
+          <p className="text-sm text-gray-500 mt-1">Manage your Diamond Community</p>
+        </div>
+        <button
+          onClick={() => {
+            startTransition(async () => {
+              const result = await refreshLinkPreviews()
+              if ('error' in result) err(result.error as string)
+              else msg(`Updated ${result.updated} of ${result.total} link preview images.`)
+            })
+          }}
+          disabled={isPending}
+          className="shrink-0 px-4 py-2 text-sm font-medium rounded-lg bg-[#1C1209] text-white hover:bg-[#3A2208] disabled:opacity-50 transition-colors"
+        >
+          🖼 Refresh Link Previews
+        </button>
       </div>
 
       {/* Alerts */}

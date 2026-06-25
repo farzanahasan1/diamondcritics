@@ -531,6 +531,39 @@ export async function resolveReport(reportId: string) {
   return { success: true }
 }
 
+// ─── Admin: bulk refresh link preview images ──────────────────────────────────
+
+export async function refreshLinkPreviews() {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { error: 'Not authenticated.' }
+
+  const { data: profile } = await supabase.from('profiles').select('is_admin').eq('id', user.id).single()
+  if (!profile?.is_admin) return { error: 'Admin only.' }
+
+  const { data: posts } = await supabase
+    .from('posts')
+    .select('id, url')
+    .eq('type', 'link')
+    .is('link_preview_image', null)
+    .not('url', 'is', null)
+
+  if (!posts?.length) return { updated: 0 }
+
+  const results = await Promise.allSettled(
+    posts.map(async (post) => {
+      const img = await fetchOgImage(post.url!)
+      if (!img) return null
+      await supabase.from('posts').update({ link_preview_image: img }).eq('id', post.id)
+      return img
+    })
+  )
+
+  const updated = results.filter(r => r.status === 'fulfilled' && r.value).length
+  revalidatePath('/community')
+  return { updated, total: posts.length }
+}
+
 // ─── Profile ──────────────────────────────────────────────────────────────────
 
 export async function updateProfile(formData: FormData) {
