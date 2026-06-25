@@ -408,7 +408,7 @@ export default function Header() {
                 letterSpacing: "0.12em", textTransform: "uppercase",
               }}
             >
-              💎 Community →
+              Community →
             </a>
             <button
               className="header-hamburger"
@@ -602,7 +602,7 @@ export default function Header() {
                 letterSpacing: "0.12em", textTransform: "uppercase",
               }}
             >
-              💎 Community →
+              Community →
             </a>
           </div>
         </div>

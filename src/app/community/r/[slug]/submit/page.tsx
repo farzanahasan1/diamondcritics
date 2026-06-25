@@ -23,35 +23,68 @@ export default function SubmitPage({ params }: { params: Promise<{ slug: string 
   }
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-[1fr_316px] gap-6">
-      <div>
-        <div className="bg-white border border-[#EDEFF1] rounded p-4">
-          <h1 className="text-lg font-semibold text-gray-900 mb-1">Create a Post</h1>
-          <p className="text-sm text-gray-500 mb-4">
-            Posting in{' '}
-            <Link href={`/community/r/${slug}`} className="text-[#C6973E] font-semibold hover:underline">
-              r/{slug}
-            </Link>
-          </p>
+    <div style={{ maxWidth: '860px', margin: '0 auto' }}>
+      {/* Page header */}
+      <div style={{ marginBottom: '20px' }}>
+        <h1 style={{ fontFamily: 'var(--font-ivy, Georgia, serif)', fontSize: '22px', fontWeight: 600, color: '#1C1209', marginBottom: '4px' }}>
+          Create a Post
+        </h1>
+        <p style={{ fontSize: '13px', color: '#9A8F87' }}>
+          Posting in{' '}
+          <Link href={`/community/r/${slug}`} style={{ color: '#C6973E', fontWeight: 600, textDecoration: 'none' }}>
+            r/{slug}
+          </Link>
+        </p>
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 272px', gap: '16px', alignItems: 'start' }}>
+
+        {/* ── Form card ── */}
+        <div style={{ background: '#fff', borderRadius: '12px', border: '1px solid #E2DDD7', overflow: 'hidden' }}>
 
           {/* Type tabs */}
-          <div className="flex border border-[#EDEFF1] rounded overflow-hidden mb-4">
+          <div style={{ display: 'flex', borderBottom: '1px solid #EDEFF1' }}>
             {(['text', 'link'] as const).map(t => (
               <button
                 key={t}
                 onClick={() => setType(t)}
-                className={`flex-1 py-2.5 text-sm font-medium capitalize transition-colors border-b-2 ${
-                  type === t
-                    ? 'border-[#C6973E] text-[#C6973E] bg-amber-50'
-                    : 'border-transparent text-gray-500 hover:bg-gray-50'
-                }`}
+                style={{
+                  flex: 1,
+                  padding: '12px 16px',
+                  fontSize: '13px',
+                  fontWeight: 600,
+                  border: 'none',
+                  borderBottom: type === t ? '2px solid #C6973E' : '2px solid transparent',
+                  color: type === t ? '#C6973E' : '#9A8F87',
+                  background: type === t ? 'rgba(198,151,62,0.05)' : 'transparent',
+                  cursor: 'pointer',
+                  transition: 'all 0.15s',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: '6px',
+                }}
               >
-                {t === 'text' ? '📝 Text' : '🔗 Link'}
+                {t === 'text' ? (
+                  <>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                      <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                    </svg>
+                    Text
+                  </>
+                ) : (
+                  <>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                      <path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/>
+                    </svg>
+                    Link
+                  </>
+                )}
               </button>
             ))}
           </div>
 
-          <form action={handleSubmit} className="space-y-4">
+          <form action={handleSubmit} style={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
             {/* Title */}
             <div>
               <input
@@ -60,66 +93,152 @@ export default function SubmitPage({ params }: { params: Promise<{ slug: string 
                 placeholder="Title"
                 required
                 maxLength={300}
-                className="w-full border border-gray-300 rounded px-3 py-2.5 text-sm focus:outline-none focus:border-[#C6973E] focus:ring-1 focus:ring-[#C6973E]"
+                style={{
+                  width: '100%',
+                  border: '1px solid #E2DDD7',
+                  borderRadius: '8px',
+                  padding: '10px 14px',
+                  fontSize: '15px',
+                  fontWeight: 500,
+                  color: '#1C1209',
+                  outline: 'none',
+                  boxSizing: 'border-box',
+                  fontFamily: 'inherit',
+                  transition: 'border-color 0.15s',
+                }}
+                onFocus={e => (e.target.style.borderColor = '#C6973E')}
+                onBlur={e => (e.target.style.borderColor = '#E2DDD7')}
               />
-              <p className="text-xs text-gray-400 mt-1">300 characters max</p>
+              <p style={{ fontSize: '11px', color: '#B8B0A8', marginTop: '4px' }}>300 characters max</p>
             </div>
 
+            {/* Body / URL */}
             {type === 'text' ? (
               <textarea
                 name="body"
-                placeholder="Text (optional)"
-                rows={8}
-                className="w-full border border-gray-300 rounded px-3 py-2.5 text-sm resize-y focus:outline-none focus:border-[#C6973E] focus:ring-1 focus:ring-[#C6973E]"
+                placeholder="Share your question or thoughts… (optional)"
+                rows={10}
+                style={{
+                  width: '100%',
+                  border: '1px solid #E2DDD7',
+                  borderRadius: '8px',
+                  padding: '10px 14px',
+                  fontSize: '14px',
+                  color: '#1C1209',
+                  resize: 'vertical',
+                  outline: 'none',
+                  boxSizing: 'border-box',
+                  fontFamily: 'inherit',
+                  lineHeight: 1.6,
+                  transition: 'border-color 0.15s',
+                }}
+                onFocus={e => (e.target.style.borderColor = '#C6973E')}
+                onBlur={e => (e.target.style.borderColor = '#E2DDD7')}
               />
             ) : (
-              <input
-                name="url"
-                type="url"
-                placeholder="https://..."
-                required
-                className="w-full border border-gray-300 rounded px-3 py-2.5 text-sm focus:outline-none focus:border-[#C6973E] focus:ring-1 focus:ring-[#C6973E]"
-              />
+              <div>
+                <input
+                  name="url"
+                  type="url"
+                  placeholder="https://…"
+                  required
+                  style={{
+                    width: '100%',
+                    border: '1px solid #E2DDD7',
+                    borderRadius: '8px',
+                    padding: '10px 14px',
+                    fontSize: '14px',
+                    color: '#1C1209',
+                    outline: 'none',
+                    boxSizing: 'border-box',
+                    fontFamily: 'inherit',
+                    transition: 'border-color 0.15s',
+                  }}
+                  onFocus={e => (e.target.style.borderColor = '#C6973E')}
+                  onBlur={e => (e.target.style.borderColor = '#E2DDD7')}
+                />
+                <p style={{ fontSize: '11px', color: '#B8B0A8', marginTop: '4px' }}>Paste a full URL including https://</p>
+              </div>
             )}
 
+            {/* Error */}
             {error && (
-              <div className="text-sm text-red-600 bg-red-50 border border-red-200 rounded px-3 py-2">
+              <div style={{ padding: '10px 14px', background: '#FEF2F2', border: '1px solid #FECACA', borderRadius: '8px', fontSize: '13px', color: '#DC2626' }}>
                 {error}
               </div>
             )}
 
-            <div className="flex gap-3 justify-end pt-2">
+            {/* Actions */}
+            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', paddingTop: '6px', borderTop: '1px solid #F5F0EB' }}>
               <button
                 type="button"
                 onClick={() => router.back()}
-                className="px-5 py-2 text-sm font-semibold text-gray-600 border border-gray-300 rounded-full hover:bg-gray-50"
+                style={{
+                  padding: '9px 20px',
+                  fontSize: '13px',
+                  fontWeight: 600,
+                  color: '#7A6F66',
+                  background: 'transparent',
+                  border: '1px solid #E2DDD7',
+                  borderRadius: '8px',
+                  cursor: 'pointer',
+                }}
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={isPending}
-                className="px-5 py-2 text-sm font-semibold bg-[#C6973E] text-white rounded-full hover:bg-[#b08535] disabled:opacity-50 transition-colors"
+                style={{
+                  padding: '9px 28px',
+                  fontSize: '13px',
+                  fontWeight: 700,
+                  color: '#fff',
+                  background: isPending ? '#D4B87A' : 'linear-gradient(145deg, #D4A843, #B8881E)',
+                  border: 'none',
+                  borderRadius: '8px',
+                  cursor: isPending ? 'not-allowed' : 'pointer',
+                  opacity: isPending ? 0.7 : 1,
+                  transition: 'opacity 0.15s',
+                }}
               >
                 {isPending ? 'Posting…' : 'Post'}
               </button>
             </div>
           </form>
         </div>
-      </div>
 
-      {/* Sidebar tip */}
-      <div className="hidden lg:block">
-        <div className="bg-white border border-[#EDEFF1] rounded p-4">
-          <h3 className="font-semibold text-gray-700 mb-2">Posting tips</h3>
-          <ul className="text-sm text-gray-600 space-y-1.5">
-            <li>• Be specific and descriptive with your title</li>
-            <li>• Include carat weight, cut, color, clarity for diamond questions</li>
-            <li>• Share GIA report numbers for verification questions</li>
-            <li>• No spam or self-promotion</li>
-            <li>• Be respectful to all members</li>
-          </ul>
+        {/* ── Sidebar ── */}
+        <div style={{ background: '#fff', borderRadius: '12px', border: '1px solid #E2DDD7', padding: '18px' }}>
+          <h3 style={{ fontFamily: 'var(--font-ivy, Georgia, serif)', fontSize: '15px', fontWeight: 600, color: '#1C1209', marginBottom: '14px' }}>
+            Posting guidelines
+          </h3>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            {[
+              ['Be specific', 'Include carat weight, shape, and the specific question you have.'],
+              ['Add grades', 'Cut, color, and clarity grades help members give accurate advice.'],
+              ['GIA/IGI reports', 'Share your report number for verification or authenticity questions.'],
+              ['No self-promotion', 'No spam, dealer advertising, or retailer referral links.'],
+              ['Be respectful', 'This community helps real buyers — treat every question with care.'],
+            ].map(([title, desc], i) => (
+              <div key={i} style={{ display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
+                <div style={{
+                  width: '22px', height: '22px', borderRadius: '50%',
+                  background: 'linear-gradient(145deg, #F5EDD8, #EDD8AA)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  flexShrink: 0, marginTop: '1px',
+                }}>
+                  <span style={{ fontSize: '10px', fontWeight: 700, color: '#B8881E' }}>{i + 1}</span>
+                </div>
+                <div>
+                  <p style={{ fontSize: '12px', fontWeight: 600, color: '#2D2318', marginBottom: '2px' }}>{title}</p>
+                  <p style={{ fontSize: '12px', color: '#7A6F66', lineHeight: 1.5 }}>{desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
+
       </div>
     </div>
   )
