@@ -45,10 +45,14 @@ export async function signUpWithEmail(formData: FormData) {
 
   if (existing) return { error: 'Username already taken.' }
 
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://diamondcritics.com'
   const { error } = await supabase.auth.signUp({
     email,
     password,
-    options: { data: { username } },
+    options: {
+      data: { username },
+      emailRedirectTo: `${siteUrl}/community/auth/callback`,
+    },
   })
 
   if (error) return { error: error.message }

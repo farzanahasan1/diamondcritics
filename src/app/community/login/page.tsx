@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { signInWithEmail, signInWithGoogle } from '@/app/community/actions'
 
 const GoogleIcon = () => (
-  <svg width="18" height="18" viewBox="0 0 24 24">
+  <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
     <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
     <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
     <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
@@ -33,124 +33,102 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-[calc(100vh-3.5rem)] flex items-stretch -mt-5 -mx-4">
-      {/* Left panel — brand story */}
-      <div
-        className="hidden lg:flex flex-col justify-between w-[420px] shrink-0 p-10"
-        style={{ background: 'linear-gradient(160deg, #1a1208 0%, #2e1f08 40%, #1a1208 100%)' }}
-      >
-        <Link href="/community">
-          <img
-            src="/images/diamond-critics-main-logo-small.avif"
-            alt="DiamondCritics"
-            className="h-8 w-auto"
-            style={{ filter: 'brightness(0) invert(1) sepia(1) saturate(2) hue-rotate(5deg)', opacity: 0.9 }}
-          />
-        </Link>
+    <div className="flex items-center justify-center py-4" style={{ minHeight: 'calc(100vh - 120px)' }}>
+      <div className="w-full max-w-3xl rounded-2xl overflow-hidden flex" style={{ boxShadow: '0 8px 40px rgba(0,0,0,0.13)', minHeight: '480px' }}>
 
-        <div>
-          <h2
-            className="text-4xl font-light leading-tight mb-4"
-            style={{ fontFamily: 'var(--font-ivy), Georgia, serif', color: '#f5e6c8' }}
-          >
-            Welcome back to the community
-          </h2>
-          <p className="text-sm leading-relaxed mb-8" style={{ color: 'rgba(245,230,200,0.55)' }}>
-            Your trusted space for diamond advice, engagement ring inspiration, and real conversations with jewellery enthusiasts.
-          </p>
+        {/* ── Left panel ── */}
+        <div
+          className="hidden lg:flex flex-col justify-between w-[42%] shrink-0 p-8"
+          style={{ background: 'linear-gradient(160deg, #1C1209 0%, #3A2208 60%, #1C1209 100%)' }}
+        >
+          <div>
+            <div className="w-9 h-9 rounded-xl flex items-center justify-center mb-6" style={{ background: 'linear-gradient(145deg, #D4A843, #B8881E)' }}>
+              <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
+                <path d="M5 2.5L2 7.5l8 10 8-10-3-5H5z" stroke="white" strokeWidth="1.4" strokeLinejoin="round"/>
+                <path d="M2 7.5h16M5 2.5l2.5 5m5-5L10 7.5" stroke="white" strokeWidth="1.4" strokeLinejoin="round"/>
+              </svg>
+            </div>
+            <h2 className="text-2xl font-light leading-snug mb-3" style={{ fontFamily: 'var(--font-ivy, Georgia, serif)', color: '#F0D88A' }}>
+              Welcome back to the community
+            </h2>
+            <p className="text-sm leading-relaxed mb-8" style={{ color: 'rgba(240,216,138,0.5)' }}>
+              Your trusted space for diamond advice, engagement rings, and honest conversations.
+            </p>
+          </div>
 
-          <div className="space-y-4">
+          <div className="space-y-3.5">
             {[
-              { icon: '✦', text: 'Ask GIA-backed diamond questions' },
-              { icon: '✦', text: 'Browse honest engagement ring reviews' },
-              { icon: '✦', text: 'Connect with fellow diamond enthusiasts' },
-            ].map(item => (
-              <div key={item.text} className="flex items-start gap-3">
-                <span className="text-xs mt-0.5" style={{ color: '#C6973E' }}>{item.icon}</span>
-                <span className="text-sm" style={{ color: 'rgba(245,230,200,0.65)' }}>{item.text}</span>
+              'GIA-backed diamond questions',
+              'Honest engagement ring reviews',
+              'Connect with diamond enthusiasts',
+            ].map(text => (
+              <div key={text} className="flex items-start gap-2.5">
+                <span className="text-[10px] mt-1 shrink-0" style={{ color: '#D4A843' }}>◆</span>
+                <span className="text-[13px] leading-relaxed" style={{ color: 'rgba(240,216,138,0.6)' }}>{text}</span>
               </div>
             ))}
+
+            <p className="text-[11px] pt-4 mt-2" style={{ color: 'rgba(255,255,255,0.2)', borderTop: '1px solid rgba(255,255,255,0.07)' }}>
+              Your email is never shown publicly
+            </p>
           </div>
         </div>
 
-        <p className="text-xs" style={{ color: 'rgba(245,230,200,0.3)' }}>
-          © DiamondCritics · Your email is never shown publicly
-        </p>
-      </div>
-
-      {/* Right panel — form */}
-      <div className="flex-1 flex items-center justify-center bg-white px-6 py-10">
-        <div className="w-full max-w-[380px]">
-          {/* Mobile logo */}
-          <div className="lg:hidden text-center mb-8">
-            <img
-              src="/images/diamond-critics-main-logo-small.avif"
-              alt="DiamondCritics"
-              className="h-8 w-auto mx-auto mb-4"
-            />
-          </div>
-
-          <h1 className="text-2xl font-light mb-1" style={{ fontFamily: 'var(--font-ivy), Georgia, serif', color: '#1a1208' }}>
+        {/* ── Right panel ── */}
+        <div className="flex-1 flex flex-col justify-center bg-white px-8 py-8">
+          <h1 className="text-[22px] font-semibold mb-1" style={{ color: '#1C1209', fontFamily: 'var(--font-ivy, Georgia, serif)' }}>
             Welcome back
           </h1>
-          <p className="text-sm mb-7" style={{ color: '#888' }}>Log in to your Diamond Community account</p>
+          <p className="text-[13px] mb-6" style={{ color: '#9A8F87' }}>
+            Log in to your Diamond Community account
+          </p>
 
-          {/* Google OAuth */}
+          {/* Google */}
           <button
             type="button"
             onClick={handleGoogle}
             disabled={googlePending || isPending}
-            className="w-full flex items-center justify-center gap-3 py-2.5 px-4 rounded-lg text-sm font-medium transition-all disabled:opacity-50 mb-4"
-            style={{ border: '1.5px solid #e5e5e3', color: '#1a1208', background: '#fff' }}
-            onMouseEnter={e => (e.currentTarget.style.background = '#faf9f7')}
-            onMouseLeave={e => (e.currentTarget.style.background = '#fff')}
+            className="w-full flex items-center justify-center gap-2.5 py-2.5 rounded-lg text-[13px] font-medium mb-4 transition-all disabled:opacity-50"
+            style={{ border: '1.5px solid #E8E2DA', color: '#1C1209', background: '#FAFAF9' }}
           >
             <GoogleIcon />
             {googlePending ? 'Redirecting…' : 'Continue with Google'}
           </button>
 
-          <div className="relative my-5">
+          <div className="relative mb-5">
             <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t" style={{ borderColor: '#e5e5e3' }} />
+              <div className="w-full border-t" style={{ borderColor: '#EDE8E1' }} />
             </div>
             <div className="relative flex justify-center">
-              <span className="bg-white px-3 text-xs" style={{ color: '#aaa' }}>or continue with email</span>
+              <span className="bg-white px-3 text-[11px]" style={{ color: '#B0A89E' }}>or continue with email</span>
             </div>
           </div>
 
           <form action={handleSubmit} className="space-y-4">
             <div>
-              <label htmlFor="email" className="block text-xs font-medium mb-1.5" style={{ color: '#555' }}>Email</label>
+              <label className="block text-[12px] font-medium mb-1.5" style={{ color: '#5A504A' }}>Email</label>
               <input
-                id="email"
-                name="email"
-                type="email"
-                required
-                autoComplete="email"
-                className="w-full rounded-lg px-3.5 py-2.5 text-sm transition-all outline-none"
-                style={{ border: '1.5px solid #e5e5e3', color: '#1a1208', background: '#faf9f7' }}
-                onFocus={e => (e.currentTarget.style.borderColor = '#C6973E')}
-                onBlur={e => (e.currentTarget.style.borderColor = '#e5e5e3')}
+                name="email" type="email" required autoComplete="email"
+                className="w-full rounded-lg px-3.5 py-2.5 text-[14px] outline-none transition-all"
+                style={{ border: '1.5px solid #E8E2DA', background: '#FAFAF9', color: '#1C1209' }}
+                onFocus={e => { e.currentTarget.style.borderColor = '#D4A843'; e.currentTarget.style.background = '#fff' }}
+                onBlur={e => { e.currentTarget.style.borderColor = '#E8E2DA'; e.currentTarget.style.background = '#FAFAF9' }}
               />
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-xs font-medium mb-1.5" style={{ color: '#555' }}>Password</label>
+              <label className="block text-[12px] font-medium mb-1.5" style={{ color: '#5A504A' }}>Password</label>
               <input
-                id="password"
-                name="password"
-                type="password"
-                required
-                autoComplete="current-password"
-                className="w-full rounded-lg px-3.5 py-2.5 text-sm transition-all outline-none"
-                style={{ border: '1.5px solid #e5e5e3', color: '#1a1208', background: '#faf9f7' }}
-                onFocus={e => (e.currentTarget.style.borderColor = '#C6973E')}
-                onBlur={e => (e.currentTarget.style.borderColor = '#e5e5e3')}
+                name="password" type="password" required autoComplete="current-password"
+                className="w-full rounded-lg px-3.5 py-2.5 text-[14px] outline-none transition-all"
+                style={{ border: '1.5px solid #E8E2DA', background: '#FAFAF9', color: '#1C1209' }}
+                onFocus={e => { e.currentTarget.style.borderColor = '#D4A843'; e.currentTarget.style.background = '#fff' }}
+                onBlur={e => { e.currentTarget.style.borderColor = '#E8E2DA'; e.currentTarget.style.background = '#FAFAF9' }}
               />
             </div>
 
             {error && (
-              <div className="text-sm rounded-lg px-3.5 py-2.5" style={{ color: '#b91c1c', background: '#fef2f2', border: '1px solid #fecaca' }}>
+              <div className="rounded-lg px-3.5 py-2.5 text-[13px]" style={{ background: '#FEF2F2', border: '1px solid #FECACA', color: '#B91C1C' }}>
                 {error}
               </div>
             )}
@@ -158,24 +136,22 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={isPending || googlePending}
-              className="w-full py-2.5 rounded-lg text-sm font-semibold transition-all disabled:opacity-50 mt-1"
-              style={{ background: 'linear-gradient(135deg, #C6973E 0%, #e8bf6a 100%)', color: '#1a1208' }}
+              className="w-full py-2.5 rounded-lg text-[14px] font-semibold transition-all disabled:opacity-50 mt-1"
+              style={{ background: 'linear-gradient(145deg, #D4A843, #B8881E)', color: '#fff' }}
             >
               {isPending ? 'Logging in…' : 'Log In'}
             </button>
           </form>
 
-          <p className="text-center text-sm mt-5" style={{ color: '#888' }}>
+          <p className="text-center text-[13px] mt-5" style={{ color: '#9A8F87' }}>
             New here?{' '}
-            <Link href="/community/register" className="font-semibold hover:underline" style={{ color: '#C6973E' }}>
-              Create account
-            </Link>
+            <Link href="/community/register" className="font-semibold" style={{ color: '#D4A843' }}>Create account</Link>
           </p>
-
-          <p className="text-center text-xs mt-6">
-            <Link href="/community" className="hover:underline" style={{ color: '#bbb' }}>← Back to Community</Link>
+          <p className="text-center text-[12px] mt-3">
+            <Link href="/community" style={{ color: '#C4BCB6' }}>← Back to Community</Link>
           </p>
         </div>
+
       </div>
     </div>
   )
