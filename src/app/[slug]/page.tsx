@@ -8,6 +8,7 @@ import {
   getRelatedPosts,
 } from "@/lib/content";
 import PostContent from "@/components/PostContent";
+import CommunityWelcomePopup from "@/components/CommunityWelcomePopup";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -190,6 +191,7 @@ export default async function SlugPage({ params }: Props) {
         )}
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
         <PostContent type="post" data={post} related={related} />
+        <CommunityWelcomePopup />
       </>
     );
   }
