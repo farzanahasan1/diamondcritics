@@ -16,36 +16,23 @@ export default async function UserProfilePage({ params }: { params: Promise<{ us
   const { data: { user } } = await supabase.auth.getUser()
 
   const { data: profile } = await supabase
-    .from('profiles')
-    .select('*')
-    .eq('username', username)
-    .single()
-
+    .from('profiles').select('*').eq('username', username).single()
   if (!profile) notFound()
 
-  // Fetch user badges
   const { data: userBadges } = await supabase
-    .from('user_badges')
-    .select('*, badge:badges(*)')
-    .eq('user_id', profile.id)
+    .from('user_badges').select('*, badge:badges(*)').eq('user_id', profile.id)
 
-  // Fetch user's recent posts
   const { data: rawPosts } = await supabase
     .from('posts')
     .select('*, author:profiles(id,username,avatar_url), community:communities(id,slug,name)')
-    .eq('author_id', profile.id)
-    .eq('is_deleted', false)
-    .order('created_at', { ascending: false })
-    .limit(20)
+    .eq('author_id', profile.id).eq('is_deleted', false)
+    .order('created_at', { ascending: false }).limit(20)
 
-  // User votes if viewing own profile
   let userVotes: Record<string, -1 | 1> = {}
   if (user && rawPosts?.length) {
     const { data: votes } = await supabase
-      .from('post_votes')
-      .select('post_id, vote')
-      .eq('user_id', user.id)
-      .in('post_id', rawPosts.map(p => p.id))
+      .from('post_votes').select('post_id, vote')
+      .eq('user_id', user.id).in('post_id', rawPosts.map(p => p.id))
     if (votes) userVotes = Object.fromEntries(votes.map(v => [v.post_id, v.vote]))
   }
 
@@ -57,60 +44,60 @@ export default async function UserProfilePage({ params }: { params: Promise<{ us
     year: 'numeric', month: 'long', day: 'numeric',
   })
 
+  const card: React.CSSProperties = {
+    background: '#fff', borderRadius: '12px',
+    boxShadow: '0 1px 4px rgba(28,18,9,0.07), 0 4px 16px rgba(28,18,9,0.05)',
+    overflow: 'hidden',
+  }
+
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-6">
-      {/* Posts */}
+    <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: '20px' }}>
+
+      {/* ── Posts column ── */}
       <div>
-        <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">
+        <div style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#9A8F87', marginBottom: '12px' }}>
           Posts by u/{username}
-        </h2>
-        <div className="space-y-2">
-          {posts.length === 0 ? (
-            <div className="bg-white border border-[#EDEFF1] rounded p-8 text-center text-gray-400">
-              No posts yet.
-            </div>
-          ) : (
-            posts.map(post => <PostCard key={post.id} post={post} userId={user?.id} />)
-          )}
         </div>
+
+        {posts.length === 0 ? (
+          <div style={{ ...card, padding: '48px 24px', textAlign: 'center' }}>
+            <p style={{ fontSize: '14px', color: '#9A8F87' }}>No posts yet.</p>
+          </div>
+        ) : (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            {posts.map(post => <PostCard key={post.id} post={post} userId={user?.id} />)}
+          </div>
+        )}
       </div>
 
-      {/* Profile sidebar */}
-      <aside className="space-y-4">
-        {/* Profile card */}
-        <div className="bg-white border border-[#EDEFF1] rounded overflow-hidden">
-          <div className="h-16 bg-gradient-to-r from-[#C6973E] to-[#8B6914]" />
-          <div className="px-4 pb-4">
-            {/* Avatar */}
-            <div className="-mt-8 mb-3">
+      {/* ── Profile sidebar ── */}
+      <aside>
+        <div style={{ ...card, marginBottom: '12px' }}>
+          {/* Banner */}
+          <div style={{ height: '72px', background: 'linear-gradient(135deg, #1C1209 0%, #3A2208 100%)' }} />
+
+          {/* Avatar */}
+          <div style={{ padding: '0 20px 20px' }}>
+            <div style={{ marginTop: '-28px', marginBottom: '12px' }}>
               {profile.avatar_url ? (
-                <img
-                  src={profile.avatar_url}
-                  alt={username}
-                  className="w-16 h-16 rounded-full border-4 border-white object-cover shadow"
-                />
+                <img src={profile.avatar_url} alt={username} style={{ width: '56px', height: '56px', borderRadius: '50%', objectFit: 'cover', outline: '3px solid #fff', boxShadow: '0 2px 8px rgba(0,0,0,0.15)' }} />
               ) : (
-                <div className="w-16 h-16 rounded-full border-4 border-white bg-[#C6973E] flex items-center justify-center text-white text-2xl font-bold shadow">
+                <div style={{ width: '56px', height: '56px', borderRadius: '50%', background: 'linear-gradient(145deg, #D4A843, #B8881E)', display: 'flex', alignItems: 'center', justifyContent: 'center', outline: '3px solid #fff', boxShadow: '0 2px 8px rgba(0,0,0,0.15)', fontSize: '22px', fontWeight: 700, color: '#fff' }}>
                   {username[0].toUpperCase()}
                 </div>
               )}
             </div>
 
-            <h1 className="font-bold text-lg text-gray-900">u/{username}</h1>
+            <div style={{ fontWeight: 700, fontSize: '16px', color: '#1C1209', marginBottom: '2px' }}>u/{username}</div>
             {profile.display_name && (
-              <p className="text-sm text-gray-500">{profile.display_name}</p>
+              <div style={{ fontSize: '13px', color: '#7A6F66', marginBottom: '4px' }}>{profile.display_name}</div>
             )}
 
             {/* Badges */}
             {userBadges && userBadges.length > 0 && (
-              <div className="flex flex-wrap gap-1.5 mt-2">
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginTop: '10px', marginBottom: '4px' }}>
                 {userBadges.map((ub: { badge: { id: string; icon: string; name: string; color: string }; badge_id: string }) => (
-                  <span
-                    key={ub.badge_id}
-                    title={ub.badge.name}
-                    className="inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full font-medium text-white"
-                    style={{ backgroundColor: ub.badge.color }}
-                  >
+                  <span key={ub.badge_id} title={ub.badge.name} style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', padding: '3px 9px', borderRadius: '20px', fontSize: '11px', fontWeight: 600, color: '#fff', background: ub.badge.color }}>
                     {ub.badge.icon} {ub.badge.name}
                   </span>
                 ))}
@@ -118,46 +105,53 @@ export default async function UserProfilePage({ params }: { params: Promise<{ us
             )}
 
             {profile.bio && (
-              <p className="text-sm text-gray-600 mt-3">{profile.bio}</p>
+              <p style={{ fontSize: '13px', color: '#5A504A', lineHeight: 1.6, marginTop: '10px' }}>{profile.bio}</p>
             )}
 
             {/* Stats */}
-            <div className="grid grid-cols-2 gap-3 mt-4 pt-3 border-t border-[#EDEFF1]">
-              <div className="text-center">
-                <div className="font-bold text-gray-900 text-xl">{totalKarma.toLocaleString()}</div>
-                <div className="text-xs text-gray-500">Karma</div>
-              </div>
-              <div className="text-center">
-                <div className="font-bold text-gray-900 text-xl">{posts.length}</div>
-                <div className="text-xs text-gray-500">Posts</div>
-              </div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginTop: '16px', paddingTop: '16px', borderTop: '1px solid #EDE8E1' }}>
+              {[
+                { value: totalKarma.toLocaleString(), label: 'Karma' },
+                { value: String(posts.length), label: 'Posts' },
+              ].map(s => (
+                <div key={s.label} style={{ background: '#FAF8F5', borderRadius: '8px', padding: '10px 12px', textAlign: 'center' }}>
+                  <div style={{ fontSize: '20px', fontWeight: 700, color: '#1C1209' }}>{s.value}</div>
+                  <div style={{ fontSize: '11px', color: '#9A8F87', marginTop: '2px' }}>{s.label}</div>
+                </div>
+              ))}
             </div>
 
-            <p className="text-xs text-gray-400 mt-3">🎂 Joined {joinDate}</p>
+            <div style={{ fontSize: '12px', color: '#B0A89E', marginTop: '12px' }}>
+              🎂 Joined {joinDate}
+            </div>
 
             {profile.is_banned && (
-              <div className="mt-3 text-xs text-red-600 bg-red-50 border border-red-200 rounded px-2 py-1">
+              <div style={{ marginTop: '12px', padding: '8px 12px', borderRadius: '8px', background: '#FEF2F2', border: '1px solid #FECACA', fontSize: '12px', color: '#B91C1C' }}>
                 ⚠️ This account has been suspended
               </div>
             )}
 
             {isOwnProfile && (
-              <Link
-                href={`/community/u/${username}/edit`}
-                className="block w-full text-center mt-3 text-sm py-1.5 border border-[#C6973E] text-[#C6973E] rounded font-semibold hover:bg-amber-50"
-              >
+              <Link href={`/community/u/${username}/edit`} style={{
+                display: 'block', textAlign: 'center', marginTop: '14px',
+                padding: '9px 16px', borderRadius: '8px', textDecoration: 'none',
+                fontSize: '13px', fontWeight: 600,
+                background: 'linear-gradient(145deg, #D4A843, #B8881E)', color: '#fff',
+              }}>
                 Edit Profile
               </Link>
             )}
           </div>
         </div>
 
-        <div className="bg-white border border-[#EDEFF1] rounded p-3">
-          <p className="text-xs text-gray-500">
-            🔒 <strong>Privacy:</strong> Only your username is public. Your email is never visible to anyone.
+        {/* Privacy note */}
+        <div style={{ ...card, padding: '14px 16px' }}>
+          <p style={{ fontSize: '12px', color: '#9A8F87', lineHeight: 1.55 }}>
+            🔒 <strong style={{ color: '#5A504A' }}>Privacy:</strong> Only your username is public. Your email is never visible to anyone.
           </p>
         </div>
       </aside>
+
     </div>
   )
 }

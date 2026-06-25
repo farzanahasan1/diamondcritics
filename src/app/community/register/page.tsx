@@ -13,6 +13,13 @@ const GoogleIcon = () => (
   </svg>
 )
 
+const inputStyle: React.CSSProperties = {
+  width: '100%', boxSizing: 'border-box',
+  border: '1.5px solid #E8E2DA', borderRadius: '9px',
+  padding: '11px 14px', fontSize: '14px', color: '#1C1209',
+  background: '#FAFAF9', outline: 'none', display: 'block',
+}
+
 export default function RegisterPage() {
   const [error, setError] = useState('')
   const [isPending, startTransition] = useTransition()
@@ -33,140 +40,122 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="flex items-center justify-center py-4" style={{ minHeight: 'calc(100vh - 120px)' }}>
-      <div className="w-full max-w-3xl rounded-2xl overflow-hidden flex" style={{ boxShadow: '0 8px 40px rgba(0,0,0,0.13)', minHeight: '540px' }}>
+    /* Outer: full height, flex center */
+    <div style={{ minHeight: 'calc(100vh - 110px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '24px 0' }}>
+
+      {/* Card */}
+      <div style={{
+        width: '100%', maxWidth: '780px',
+        display: 'flex', borderRadius: '16px', overflow: 'hidden',
+        boxShadow: '0 4px 24px rgba(28,18,9,0.12), 0 1px 4px rgba(28,18,9,0.08)',
+      }}>
 
         {/* ── Left panel ── */}
-        <div
-          className="hidden lg:flex flex-col justify-between w-[42%] shrink-0 p-8"
-          style={{ background: 'linear-gradient(160deg, #1C1209 0%, #3A2208 60%, #1C1209 100%)' }}
-        >
+        <div style={{
+          width: '320px', flexShrink: 0, padding: '40px 32px',
+          background: 'linear-gradient(160deg, #1C1209 0%, #3A2208 55%, #1C1209 100%)',
+          display: 'flex', flexDirection: 'column', justifyContent: 'space-between',
+        }}>
           <div>
-            <div className="w-9 h-9 rounded-xl flex items-center justify-center mb-6" style={{ background: 'linear-gradient(145deg, #D4A843, #B8881E)' }}>
-              <svg width="16" height="16" viewBox="0 0 20 20" fill="none">
+            <div style={{ width: '40px', height: '40px', borderRadius: '11px', background: 'linear-gradient(145deg, #D4A843, #B8881E)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '28px' }}>
+              <svg width="17" height="17" viewBox="0 0 20 20" fill="none">
                 <path d="M5 2.5L2 7.5l8 10 8-10-3-5H5z" stroke="white" strokeWidth="1.4" strokeLinejoin="round"/>
                 <path d="M2 7.5h16M5 2.5l2.5 5m5-5L10 7.5" stroke="white" strokeWidth="1.4" strokeLinejoin="round"/>
               </svg>
             </div>
-            <h2 className="text-2xl font-light leading-snug mb-3" style={{ fontFamily: 'var(--font-ivy, Georgia, serif)', color: '#F0D88A' }}>
+            <h2 style={{ fontFamily: 'var(--font-ivy, Georgia, serif)', fontSize: '22px', fontWeight: 300, color: '#F0D88A', lineHeight: 1.35, marginBottom: '12px' }}>
               The place for diamond lovers
             </h2>
-            <p className="text-sm leading-relaxed mb-8" style={{ color: 'rgba(240,216,138,0.5)' }}>
-              Ask questions, share finds, and get expert opinions — all in one community.
+            <p style={{ fontSize: '13px', color: 'rgba(240,216,138,0.5)', lineHeight: 1.65, marginBottom: '32px' }}>
+              Ask questions, share finds, and get expert opinions from a community that cares about diamonds.
             </p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              {['Real advice from diamond enthusiasts', 'Share your engagement ring stories', 'Compare diamonds before you buy'].map(t => (
+                <div key={t} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
+                  <span style={{ color: '#D4A843', fontSize: '9px', marginTop: '4px', flexShrink: 0 }}>◆</span>
+                  <span style={{ fontSize: '13px', color: 'rgba(240,216,138,0.6)', lineHeight: 1.5 }}>{t}</span>
+                </div>
+              ))}
+            </div>
           </div>
-
-          <div className="space-y-3.5">
-            {[
-              'Real advice from diamond enthusiasts',
-              'Share your engagement ring stories',
-              'Compare diamonds before you buy',
-            ].map(text => (
-              <div key={text} className="flex items-start gap-2.5">
-                <span className="text-[10px] mt-1 shrink-0" style={{ color: '#D4A843' }}>◆</span>
-                <span className="text-[13px] leading-relaxed" style={{ color: 'rgba(240,216,138,0.6)' }}>{text}</span>
-              </div>
-            ))}
-
-            <p className="text-[11px] pt-4 mt-2" style={{ color: 'rgba(255,255,255,0.2)', borderTop: '1px solid rgba(255,255,255,0.07)' }}>
-              Your email is never shown publicly
-            </p>
-          </div>
+          <p style={{ fontSize: '11px', color: 'rgba(255,255,255,0.2)', borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: '16px', marginTop: '32px' }}>
+            Your email is never shown publicly
+          </p>
         </div>
 
         {/* ── Right panel ── */}
-        <div className="flex-1 flex flex-col justify-center bg-white px-8 py-8">
-          <h1 className="text-[22px] font-semibold mb-1" style={{ color: '#1C1209', fontFamily: 'var(--font-ivy, Georgia, serif)' }}>
+        <div style={{ flex: 1, background: '#fff', padding: '40px 36px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+          <h1 style={{ fontFamily: 'var(--font-ivy, Georgia, serif)', fontSize: '24px', fontWeight: 400, color: '#1C1209', marginBottom: '4px' }}>
             Create your account
           </h1>
-          <p className="text-[13px] mb-6" style={{ color: '#9A8F87' }}>
-            Join the Diamond Community today
-          </p>
+          <p style={{ fontSize: '13px', color: '#9A8F87', marginBottom: '24px' }}>Join the Diamond Community today</p>
 
           {/* Google */}
           <button
-            type="button"
-            onClick={handleGoogle}
-            disabled={googlePending || isPending}
-            className="w-full flex items-center justify-center gap-2.5 py-2.5 rounded-lg text-[13px] font-medium mb-4 transition-all disabled:opacity-50"
-            style={{ border: '1.5px solid #E8E2DA', color: '#1C1209', background: '#FAFAF9' }}
+            type="button" onClick={handleGoogle} disabled={googlePending || isPending}
+            style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px', padding: '11px 16px', borderRadius: '9px', border: '1.5px solid #E8E2DA', background: '#FAFAF9', color: '#1C1209', fontSize: '13px', fontWeight: 500, cursor: 'pointer', marginBottom: '20px', opacity: (googlePending || isPending) ? 0.5 : 1 }}
           >
             <GoogleIcon />
             {googlePending ? 'Redirecting…' : 'Continue with Google'}
           </button>
 
-          <div className="relative mb-5">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t" style={{ borderColor: '#EDE8E1' }} />
-            </div>
-            <div className="relative flex justify-center">
-              <span className="bg-white px-3 text-[11px]" style={{ color: '#B0A89E' }}>or sign up with email</span>
-            </div>
+          <div style={{ position: 'relative', marginBottom: '20px' }}>
+            <div style={{ height: '1px', background: '#EDE8E1', width: '100%' }} />
+            <span style={{ position: 'absolute', top: '-9px', left: '50%', transform: 'translateX(-50%)', background: '#fff', padding: '0 12px', fontSize: '11px', color: '#B0A89E' }}>
+              or sign up with email
+            </span>
           </div>
 
-          <form action={handleSubmit} className="space-y-4">
-            <div>
-              <label className="block text-[12px] font-medium mb-1.5" style={{ color: '#5A504A' }}>
+          <form action={handleSubmit}>
+            <div style={{ marginBottom: '16px' }}>
+              <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: '#5A504A', marginBottom: '6px' }}>
                 Username <span style={{ color: '#B0A89E', fontWeight: 400 }}>· public, never your email</span>
               </label>
-              <input
-                name="username" type="text" required minLength={3} maxLength={20}
-                pattern="[a-zA-Z0-9_]+" autoComplete="username" placeholder="e.g. diamond_fan"
-                className="w-full rounded-lg px-3.5 py-2.5 text-[14px] outline-none transition-all"
-                style={{ border: '1.5px solid #E8E2DA', background: '#FAFAF9', color: '#1C1209' }}
-                onFocus={e => { e.currentTarget.style.borderColor = '#D4A843'; e.currentTarget.style.background = '#fff' }}
-                onBlur={e => { e.currentTarget.style.borderColor = '#E8E2DA'; e.currentTarget.style.background = '#FAFAF9' }}
+              <input name="username" type="text" required minLength={3} maxLength={20} pattern="[a-zA-Z0-9_]+" placeholder="e.g. diamond_fan" autoComplete="username" style={inputStyle}
+                onFocus={e => e.currentTarget.style.borderColor = '#D4A843'}
+                onBlur={e => e.currentTarget.style.borderColor = '#E8E2DA'}
               />
-              <p className="text-[11px] mt-1" style={{ color: '#C4BCB6' }}>3–20 chars · letters, numbers, underscores</p>
+              <p style={{ fontSize: '11px', color: '#C4BCB6', marginTop: '4px' }}>3–20 chars · letters, numbers, underscores</p>
             </div>
 
-            <div>
-              <label className="block text-[12px] font-medium mb-1.5" style={{ color: '#5A504A' }}>
+            <div style={{ marginBottom: '16px' }}>
+              <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: '#5A504A', marginBottom: '6px' }}>
                 Email <span style={{ color: '#B0A89E', fontWeight: 400 }}>· private, never shown</span>
               </label>
-              <input
-                name="email" type="email" required autoComplete="email"
-                className="w-full rounded-lg px-3.5 py-2.5 text-[14px] outline-none transition-all"
-                style={{ border: '1.5px solid #E8E2DA', background: '#FAFAF9', color: '#1C1209' }}
-                onFocus={e => { e.currentTarget.style.borderColor = '#D4A843'; e.currentTarget.style.background = '#fff' }}
-                onBlur={e => { e.currentTarget.style.borderColor = '#E8E2DA'; e.currentTarget.style.background = '#FAFAF9' }}
+              <input name="email" type="email" required autoComplete="email" style={inputStyle}
+                onFocus={e => e.currentTarget.style.borderColor = '#D4A843'}
+                onBlur={e => e.currentTarget.style.borderColor = '#E8E2DA'}
               />
             </div>
 
-            <div>
-              <label className="block text-[12px] font-medium mb-1.5" style={{ color: '#5A504A' }}>Password</label>
-              <input
-                name="password" type="password" required minLength={8} autoComplete="new-password"
-                className="w-full rounded-lg px-3.5 py-2.5 text-[14px] outline-none transition-all"
-                style={{ border: '1.5px solid #E8E2DA', background: '#FAFAF9', color: '#1C1209' }}
-                onFocus={e => { e.currentTarget.style.borderColor = '#D4A843'; e.currentTarget.style.background = '#fff' }}
-                onBlur={e => { e.currentTarget.style.borderColor = '#E8E2DA'; e.currentTarget.style.background = '#FAFAF9' }}
+            <div style={{ marginBottom: '20px' }}>
+              <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: '#5A504A', marginBottom: '6px' }}>Password</label>
+              <input name="password" type="password" required minLength={8} autoComplete="new-password" style={inputStyle}
+                onFocus={e => e.currentTarget.style.borderColor = '#D4A843'}
+                onBlur={e => e.currentTarget.style.borderColor = '#E8E2DA'}
               />
-              <p className="text-[11px] mt-1" style={{ color: '#C4BCB6' }}>Minimum 8 characters</p>
+              <p style={{ fontSize: '11px', color: '#C4BCB6', marginTop: '4px' }}>Minimum 8 characters</p>
             </div>
 
             {error && (
-              <div className="rounded-lg px-3.5 py-2.5 text-[13px]" style={{ background: '#FEF2F2', border: '1px solid #FECACA', color: '#B91C1C' }}>
+              <div style={{ marginBottom: '16px', padding: '11px 14px', borderRadius: '9px', background: '#FEF2F2', border: '1px solid #FECACA', color: '#B91C1C', fontSize: '13px' }}>
                 {error}
               </div>
             )}
 
-            <button
-              type="submit"
-              disabled={isPending || googlePending}
-              className="w-full py-2.5 rounded-lg text-[14px] font-semibold transition-all disabled:opacity-50 mt-1"
-              style={{ background: 'linear-gradient(145deg, #D4A843, #B8881E)', color: '#fff' }}
+            <button type="submit" disabled={isPending || googlePending}
+              style={{ width: '100%', padding: '12px', borderRadius: '9px', border: 'none', background: 'linear-gradient(145deg, #D4A843, #B8881E)', color: '#fff', fontSize: '14px', fontWeight: 600, cursor: 'pointer', opacity: (isPending || googlePending) ? 0.6 : 1 }}
             >
               {isPending ? 'Creating account…' : 'Create Account'}
             </button>
           </form>
 
-          <p className="text-center text-[13px] mt-5" style={{ color: '#9A8F87' }}>
+          <p style={{ textAlign: 'center', fontSize: '13px', color: '#9A8F87', marginTop: '20px' }}>
             Already have an account?{' '}
-            <Link href="/community/login" className="font-semibold" style={{ color: '#D4A843' }}>Log in</Link>
+            <Link href="/community/login" style={{ color: '#D4A843', fontWeight: 600, textDecoration: 'none' }}>Log in</Link>
           </p>
-          <p className="text-center text-[12px] mt-3">
-            <Link href="/community" style={{ color: '#C4BCB6' }}>← Back to Community</Link>
+          <p style={{ textAlign: 'center', fontSize: '12px', marginTop: '10px' }}>
+            <Link href="/community" style={{ color: '#C4BCB6', textDecoration: 'none' }}>← Back to Community</Link>
           </p>
         </div>
 
