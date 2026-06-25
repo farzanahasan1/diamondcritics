@@ -5,9 +5,76 @@ import Link from 'next/link'
 import type { Post } from '@/types/community'
 import type { Metadata } from 'next'
 
+const SITE_URL = 'https://diamondcritics.com'
+
 export const metadata: Metadata = {
-  title: 'Diamond Community — Ask, Share & Discover | DiamondCritics',
-  description: 'Join the Diamond Community at DiamondCritics. Ask diamond questions, share engagement ring photos, get GIA-backed advice, and connect with diamond enthusiasts worldwide.',
+  title: 'Diamond Community — Ask Diamond Questions & Get Expert Answers | DiamondCritics',
+  description: 'Join the #1 diamond community. Ask questions about cut, clarity, color, carat and GIA reports. Get real answers from diamond experts, GIA graduates and experienced buyers before you spend thousands.',
+  alternates: { canonical: `${SITE_URL}/community` },
+  openGraph: {
+    title: 'Diamond Community — Ask Questions, Get Expert Diamond Advice',
+    description: 'The most trusted diamond community. Real answers from GIA-certified experts, jewelers and buyers on engagement rings, diamond prices and everything diamonds.',
+    url: `${SITE_URL}/community`,
+    type: 'website',
+  },
+}
+
+const forumSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebForum',
+  name: 'Diamond Community',
+  alternateName: 'DiamondCritics Diamond Forum',
+  description: 'The premier online diamond community where buyers, GIA-certified experts and professional jewelers discuss diamonds, engagement rings, and diamond prices. Get honest, expert advice before you buy.',
+  url: `${SITE_URL}/community`,
+  inLanguage: 'en-US',
+  about: {
+    '@type': 'Thing',
+    name: 'Diamonds',
+    sameAs: 'https://en.wikipedia.org/wiki/Diamond',
+  },
+  publisher: {
+    '@type': 'Organization',
+    name: 'DiamondCritics',
+    url: SITE_URL,
+  },
+  keywords: 'diamond community, diamond forum, diamond advice, GIA diamond, engagement ring help, diamond price, buy diamond',
+}
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [
+    {
+      '@type': 'Question',
+      name: 'What is the best diamond cut to buy?',
+      acceptedAnswer: { '@type': 'Answer', text: 'The round brilliant cut maximises light return and is the most popular choice. For the best value, look for GIA Excellent cut with a table between 54–58% and depth between 59–62.5%. Hearts and Arrows round diamonds represent the top tier.' },
+    },
+    {
+      '@type': 'Question',
+      name: 'How much does a 1 carat diamond cost?',
+      acceptedAnswer: { '@type': 'Answer', text: 'A 1 carat round diamond costs between $3,200 and $12,000 depending on cut, color and clarity. A GIA Excellent G-VS2 round diamond typically costs around $5,500–$6,500 on Blue Nile. Lab-grown 1ct diamonds start around $1,500.' },
+    },
+    {
+      '@type': 'Question',
+      name: 'Is GIA better than IGI for diamond certification?',
+      acceptedAnswer: { '@type': 'Answer', text: 'GIA (Gemological Institute of America) is the gold standard for natural diamonds — grading is stricter and more consistent. IGI is widely accepted for lab-grown diamonds where the price premium for GIA certification is less justified. For natural diamonds, always prefer GIA.' },
+    },
+    {
+      '@type': 'Question',
+      name: 'What diamond color grade should I buy?',
+      acceptedAnswer: { '@type': 'Answer', text: 'G or H color is the sweet spot for round diamonds — they appear colorless to the naked eye but cost 20–30% less than D–F stones. In yellow or rose gold settings, you can go as low as J color since the metal masks any warmth.' },
+    },
+    {
+      '@type': 'Question',
+      name: 'Should I buy a natural or lab-grown diamond?',
+      acceptedAnswer: { '@type': 'Answer', text: 'Lab-grown diamonds are chemically identical to natural diamonds and cost 60–80% less. A lab-grown 2ct D-VVS1 costs around $2,800 vs $25,000+ natural. The tradeoff is resale value — natural diamonds hold value better long-term. For pure sparkle per dollar, lab-grown wins.' },
+    },
+    {
+      '@type': 'Question',
+      name: 'What is the best place to buy diamonds online?',
+      acceptedAnswer: { '@type': 'Answer', text: 'Blue Nile and James Allen are the two largest online diamond retailers with the best selection and competitive prices. Blue Nile offers the widest inventory; James Allen has 360° video on every stone. Both offer GIA-certified diamonds and free returns.' },
+    },
+  ],
 }
 
 type SortMode = 'hot' | 'new' | 'top'
@@ -63,10 +130,41 @@ export default async function CommunityPage({
   ]
 
   return (
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(forumSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
     <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: '20px' }}>
 
       {/* ── Main column ── */}
       <div>
+
+        {/* SEO hero — visible H1 for "diamond community" keyword */}
+        <div style={{
+          background: 'linear-gradient(135deg, #1C1209 0%, #3A2208 100%)',
+          borderRadius: '14px',
+          padding: '24px 28px',
+          marginBottom: '14px',
+          boxShadow: '0 2px 12px rgba(28,18,9,0.18)',
+        }}>
+          <h1 style={{ fontFamily: 'var(--font-ivy, Georgia, serif)', fontSize: '22px', fontWeight: 700, color: '#F0D88A', marginBottom: '8px', lineHeight: 1.3 }}>
+            Diamond Community
+          </h1>
+          <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.6)', lineHeight: 1.6, maxWidth: '520px' }}>
+            The trusted place to ask diamond questions and get real answers. Cut grades, GIA vs IGI, price checks, engagement ring advice — from experts who know diamonds.
+          </p>
+          {!user && (
+            <div style={{ display: 'flex', gap: '8px', marginTop: '14px' }}>
+              <a href="/community/register" style={{
+                fontSize: '13px', fontWeight: 600, padding: '8px 18px', borderRadius: '8px', textDecoration: 'none',
+                background: 'linear-gradient(145deg, #D4A843, #B8881E)', color: '#fff',
+              }}>Join Free</a>
+              <a href="/community/login" style={{
+                fontSize: '13px', fontWeight: 500, padding: '8px 18px', borderRadius: '8px', textDecoration: 'none',
+                border: '1px solid rgba(255,255,255,0.2)', color: 'rgba(255,255,255,0.7)',
+              }}>Log In</a>
+            </div>
+          )}
+        </div>
 
         {/* Email confirmation banner */}
         {registered === '1' && (
@@ -169,5 +267,6 @@ export default async function CommunityPage({
       {/* ── Sidebar ── */}
       <CommunitySidebar communities={communities ?? []} user={user} />
     </div>
+    </>
   )
 }

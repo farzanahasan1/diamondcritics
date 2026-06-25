@@ -3,12 +3,50 @@ import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { signOut } from './actions'
 
+const SITE_URL = 'https://diamondcritics.com'
+
 export const metadata: Metadata = {
   title: {
-    default: 'Diamond Community — DiamondCritics',
-    template: '%s | Diamond Community',
+    default: 'Diamond Community — Ask, Share & Get Expert Advice | DiamondCritics',
+    template: '%s | Diamond Community — DiamondCritics',
   },
-  description: 'The diamond community on DiamondCritics. Discuss diamonds, engagement rings, and everything sparkling.',
+  description: 'The #1 diamond community where buyers, GIA-certified experts and jewelers discuss cut, clarity, color and carat. Real advice before you buy.',
+  keywords: ['diamond community', 'diamond forum', 'diamond advice', 'engagement ring forum', 'GIA diamond help', 'buy diamond advice', 'diamond experts online'],
+  metadataBase: new URL(SITE_URL),
+  openGraph: {
+    type: 'website',
+    siteName: 'DiamondCritics Diamond Community',
+    locale: 'en_US',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    site: '@diamondcritics',
+  },
+  alternates: {
+    canonical: `${SITE_URL}/community`,
+  },
+}
+
+const orgSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'DiamondCritics',
+  url: SITE_URL,
+  logo: `${SITE_URL}/logo.png`,
+  sameAs: ['https://diamondcritics.com'],
+  description: 'DiamondCritics is the expert diamond buying resource with GIA-backed guides, live price data, and an active diamond community.',
+}
+
+const websiteSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'DiamondCritics',
+  url: SITE_URL,
+  potentialAction: {
+    '@type': 'SearchAction',
+    target: { '@type': 'EntryPoint', urlTemplate: `${SITE_URL}/community?q={search_term_string}` },
+    'query-input': 'required name=search_term_string',
+  },
 }
 
 export default async function CommunityLayout({ children }: { children: React.ReactNode }) {
@@ -27,6 +65,8 @@ export default async function CommunityLayout({ children }: { children: React.Re
 
   return (
     <div style={{ minHeight: '100vh', background: '#F4F0EA' }}>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(orgSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }} />
 
       {/* ── Top bar ── */}
       <nav style={{ background: '#1C1209', borderBottom: '1px solid rgba(255,255,255,0.07)', position: 'sticky', top: 0, zIndex: 40 }}>

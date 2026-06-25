@@ -32,12 +32,32 @@ function nestComments(flat: Comment[]): Comment[] {
   return roots
 }
 
+const SITE_URL = 'https://diamondcritics.com'
+
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const { id } = await params
   const supabase = await createClient()
-  const { data: post } = await supabase.from('posts').select('title').eq('id', id).single()
+  const { data: post } = await supabase
+    .from('posts')
+    .select('title, body, url, created_at, author:profiles(username)')
+    .eq('id', id)
+    .single()
   if (!post) return {}
-  return { title: post.title }
+  const description = post.body
+    ? post.body.slice(0, 155).replace(/\s+/g, ' ').trim() + (post.body.length > 155 ? '…' : '')
+    : `Diamond community discussion: ${post.title}. Join DiamondCritics to share your knowledge and get expert answers.`
+  return {
+    title: `${post.title} — Diamond Community`,
+    description,
+    alternates: { canonical: `${SITE_URL}/community/post/${id}` },
+    openGraph: {
+      title: post.title,
+      description,
+      url: `${SITE_URL}/community/post/${id}`,
+      type: 'article',
+      publishedTime: post.created_at,
+    },
+  }
 }
 
 export default async function PostDetailPage({ params }: { params: Promise<{ id: string }> }) {
@@ -111,7 +131,46 @@ export default async function PostDetailPage({ params }: { params: Promise<{ id:
   const author = post.author
   const community = post.community as { slug: string; name: string } | null
 
+  const postSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'DiscussionForumPosting',
+    headline: post.title,
+    url: `${SITE_URL}/community/post/${id}`,
+    datePublished: post.created_at,
+    author: {
+      '@type': 'Person',
+      name: author?.username ? `u/${author.username}` : 'DiamondCritics Member',
+      url: author?.username ? `${SITE_URL}/community/u/${author.username}` : undefined,
+    },
+    publisher: { '@type': 'Organization', name: 'DiamondCritics', url: SITE_URL },
+    ...(post.body && { text: post.body.slice(0, 500) }),
+    ...(post.url && { sharedContent: { '@type': 'WebPage', url: post.url } }),
+    isPartOf: {
+      '@type': 'WebForum',
+      name: 'Diamond Community',
+      url: `${SITE_URL}/community`,
+    },
+    interactionStatistic: {
+      '@type': 'InteractionCounter',
+      interactionType: 'https://schema.org/CommentAction',
+      userInteractionCount: post.comment_count,
+    },
+  }
+
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Community', item: `${SITE_URL}/community` },
+      ...(community ? [{ '@type': 'ListItem', position: 2, name: community.name, item: `${SITE_URL}/community/r/${community.slug}` }] : []),
+      { '@type': 'ListItem', position: community ? 3 : 2, name: post.title, item: `${SITE_URL}/community/post/${id}` },
+    ],
+  }
+
   return (
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(postSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
     <div className="grid grid-cols-1 lg:grid-cols-[1fr_316px] gap-6">
       <div className="min-w-0">
         {/* Breadcrumb */}
@@ -233,5 +292,6 @@ export default async function PostDetailPage({ params }: { params: Promise<{ id:
       {/* Sidebar */}
       <CommunitySidebar communities={communities ?? []} user={user} activeCommunity={activeCommunity} />
     </div>
+    </>
   )
 }

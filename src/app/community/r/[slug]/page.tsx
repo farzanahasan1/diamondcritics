@@ -13,14 +13,29 @@ function hotScore(score: number, createdAt: string) {
   return Math.log(Math.max(score, 1)) - ageHours / 45
 }
 
+const SITE_URL = 'https://diamondcritics.com'
+
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params
   const supabase = await createClient()
-  const { data: community } = await supabase.from('communities').select('name, description').eq('slug', slug).single()
+  const { data: community } = await supabase.from('communities').select('name, description, member_count, post_count').eq('slug', slug).single()
   if (!community) return {}
+  const title = slug === 'diamonds'
+    ? `Diamonds Community — Expert Diamond Advice, Prices & Reviews | DiamondCritics`
+    : `${community.name} — Diamond Community | DiamondCritics`
+  const description = slug === 'diamonds'
+    ? `Join ${community.member_count?.toLocaleString() ?? 'thousands of'} diamond enthusiasts. Discuss GIA-certified diamonds, engagement ring prices, cut grades and buying advice from real experts.`
+    : (community.description ?? `${community.name} discussion in the DiamondCritics diamond community.`)
   return {
-    title: `r/${slug} — Diamond Community`,
-    description: community.description ?? `Diamond community discussion at r/${slug}.`,
+    title,
+    description,
+    alternates: { canonical: `${SITE_URL}/community/r/${slug}` },
+    openGraph: {
+      title,
+      description,
+      url: `${SITE_URL}/community/r/${slug}`,
+      type: 'website',
+    },
   }
 }
 
@@ -78,7 +93,31 @@ export default async function CommunityPage({
 
   const { data: allCommunities } = await supabase.from('communities').select('*').order('member_count', { ascending: false })
 
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Community', item: `${SITE_URL}/community` },
+      { '@type': 'ListItem', position: 2, name: community.name, item: `${SITE_URL}/community/r/${slug}` },
+    ],
+  }
+
+  const forumSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'WebForum',
+    name: slug === 'diamonds' ? 'Diamonds — DiamondCritics Community' : community.name,
+    description: community.description ?? `Discussion forum for ${community.name} on DiamondCritics.`,
+    url: `${SITE_URL}/community/r/${slug}`,
+    inLanguage: 'en-US',
+    about: { '@type': 'Thing', name: community.name },
+    publisher: { '@type': 'Organization', name: 'DiamondCritics', url: SITE_URL },
+    ...(community.member_count && { numberOfEmployees: { '@type': 'QuantitativeValue', value: community.member_count } }),
+  }
+
   return (
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(forumSchema) }} />
     <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: '20px' }}>
       <div>
         {/* Community header */}
@@ -155,5 +194,6 @@ export default async function CommunityPage({
 
       <CommunitySidebar communities={allCommunities ?? []} user={user} activeCommunity={community} />
     </div>
+    </>
   )
 }
