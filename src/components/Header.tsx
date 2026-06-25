@@ -399,17 +399,16 @@ export default function Header() {
           {/* CTA + hamburger */}
           <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
             <a
-              href="https://www.bluenile.com/diamond-search?a_aid=69d7c31a91b8d&a_cid=55e51e63&chan=blog-informational"
-              target="_blank" rel="noopener noreferrer"
+              href="/community"
               className="header-cta"
               style={{
-                background: "#141414", color: "#fff",
+                background: "#C6973E", color: "#fff",
                 fontFamily: "var(--body)", fontSize: "0.72rem", fontWeight: 600,
                 padding: "9px 18px", textDecoration: "none",
                 letterSpacing: "0.12em", textTransform: "uppercase",
               }}
             >
-              Shop Blue Nile →
+              💎 Community →
             </a>
             <button
               className="header-hamburger"
@@ -594,17 +593,16 @@ export default function Header() {
           ))}
           <div style={{ padding: "16px 24px" }}>
             <a
-              href="https://www.bluenile.com/diamond-search?a_aid=69d7c31a91b8d&a_cid=55e51e63&chan=blog-informational"
-              target="_blank" rel="noopener noreferrer"
+              href="/community"
               style={{
                 display: "block", width: "100%", textAlign: "center",
-                background: "#141414", color: "#fff",
+                background: "#C6973E", color: "#fff",
                 fontFamily: "var(--body)", fontSize: "0.72rem", fontWeight: 600,
                 padding: "12px", textDecoration: "none",
                 letterSpacing: "0.12em", textTransform: "uppercase",
               }}
             >
-              Shop Blue Nile →
+              💎 Community →
             </a>
           </div>
         </div>
