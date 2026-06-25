@@ -34,8 +34,7 @@ export default function LoginPage() {
 
   async function handleGoogle() {
     startGoogleTransition(async () => {
-      const result = await signInWithGoogle()
-      if (result?.error) setError(result.error)
+      await signInWithGoogle()
     })
   }
 

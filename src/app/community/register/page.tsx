@@ -34,8 +34,7 @@ export default function RegisterPage() {
 
   async function handleGoogle() {
     startGoogleTransition(async () => {
-      const result = await signInWithGoogle()
-      if (result?.error) setError(result.error)
+      await signInWithGoogle()
     })
   }
 
