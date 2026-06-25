@@ -110,7 +110,7 @@ function CommentNode({ comment, postId, userId, isAdmin, depth = 0 }: CommentNod
 
             {!collapsed && (
               <>
-                <p className="text-sm text-gray-800 whitespace-pre-wrap mb-1.5">{comment.body}</p>
+                <p className="text-sm text-gray-800 whitespace-pre-wrap break-words leading-relaxed mb-1.5">{comment.body}</p>
                 <div className="flex items-center gap-3">
                   <VoteButtons
                     id={comment.id}

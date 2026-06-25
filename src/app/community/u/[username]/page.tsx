@@ -22,21 +22,34 @@ export default async function UserProfilePage({ params }: { params: Promise<{ us
   const { data: userBadges } = await supabase
     .from('user_badges').select('*, badge:badges(*)').eq('user_id', profile.id)
 
-  const { data: rawPosts } = await supabase
+  const { data: rawPostsData } = await supabase
     .from('posts')
-    .select('*, author:profiles(id,username,avatar_url), community:communities(id,slug,name)')
+    .select('*')
     .eq('author_id', profile.id).eq('is_deleted', false)
     .order('created_at', { ascending: false }).limit(20)
 
+  // Fetch communities for these posts separately (avoids FK constraint dependency)
+  const communityIds = [...new Set((rawPostsData ?? []).map(p => p.community_id).filter(Boolean))]
+  let communitiesMap: Record<string, any> = {}
+  if (communityIds.length) {
+    const { data: comms } = await supabase.from('communities').select('id,slug,name').in('id', communityIds)
+    if (comms) communitiesMap = Object.fromEntries(comms.map(c => [c.id, c]))
+  }
+
   let userVotes: Record<string, -1 | 1> = {}
-  if (user && rawPosts?.length) {
+  if (user && rawPostsData?.length) {
     const { data: votes } = await supabase
       .from('post_votes').select('post_id, vote')
-      .eq('user_id', user.id).in('post_id', rawPosts.map(p => p.id))
+      .eq('user_id', user.id).in('post_id', rawPostsData.map(p => p.id))
     if (votes) userVotes = Object.fromEntries(votes.map(v => [v.post_id, v.vote]))
   }
 
-  const posts: Post[] = (rawPosts ?? []).map(p => ({ ...p, user_vote: userVotes[p.id] ?? 0 }))
+  const posts: Post[] = (rawPostsData ?? []).map(p => ({
+    ...p,
+    author: { id: profile.id, username: profile.username, avatar_url: profile.avatar_url },
+    community: communitiesMap[p.community_id] ?? null,
+    user_vote: userVotes[p.id] ?? 0,
+  }))
   const totalKarma = profile.post_karma + profile.comment_karma
   const isOwnProfile = user?.id === profile.id
 
