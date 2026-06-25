@@ -55,9 +55,9 @@ export async function signInWithEmail(formData: FormData) {
 
 export async function signUpWithEmail(formData: FormData) {
   const supabase = await createClient()
-  const email = formData.get('email') as string
-  const password = formData.get('password') as string
-  const username = (formData.get('username') as string).trim().toLowerCase()
+  const email = ((formData.get('email') ?? '') as string).trim()
+  const password = ((formData.get('password') ?? '') as string)
+  const username = ((formData.get('username') ?? '') as string).trim().toLowerCase()
 
   if (!/^[a-z0-9_]{3,20}$/.test(username)) {
     return { error: 'Username must be 3–20 characters: letters, numbers, underscores only.' }
@@ -404,10 +404,10 @@ export async function createCommunity(formData: FormData) {
 
   if (!profile?.is_admin) return { error: 'Admin only.' }
 
-  const name = (formData.get('name') as string).trim()
-  const slug = (formData.get('slug') as string).trim().toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
-  const description = (formData.get('description') as string).trim()
-  const rules = (formData.get('rules') as string).trim()
+  const name = ((formData.get('name') ?? '') as string).trim()
+  const slug = ((formData.get('slug') ?? '') as string).trim().toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
+  const description = ((formData.get('description') ?? '') as string).trim()
+  const rules = ((formData.get('rules') ?? '') as string).trim()
 
   if (!name || !slug) return { error: 'Name and slug required.' }
   if (!/^[a-z0-9][a-z0-9-]{1,48}[a-z0-9]$/.test(slug)) return { error: 'Slug must be 3–50 characters, letters/numbers/hyphens only.' }
@@ -432,6 +432,7 @@ export async function banUser(userId: string, ban: boolean) {
     .single()
 
   if (!profile?.is_admin) return { error: 'Admin only.' }
+  if (userId === user.id) return { error: 'You cannot ban yourself.' }
 
   await supabase.from('profiles').update({ is_banned: ban }).eq('id', userId)
   revalidatePath('/community/admin')

@@ -10,11 +10,14 @@ export async function GET(request: NextRequest) {
 
   const cookieStore = await cookies()
   const savedState = cookieStore.get('gauth_state')?.value
-  cookieStore.delete('gauth_state')
 
+  // Validate BEFORE deleting — so replay attacks can't succeed on a second
+  // request after an initial failure already wiped the cookie
   if (!code || !state || state !== savedState) {
+    cookieStore.delete('gauth_state')
     return NextResponse.redirect(`${siteUrl}/community/login?error=auth_failed`)
   }
+  cookieStore.delete('gauth_state')
 
   // Exchange Google auth code for tokens
   const tokenRes = await fetch('https://oauth2.googleapis.com/token', {
