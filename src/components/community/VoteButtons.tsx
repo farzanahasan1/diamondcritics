@@ -20,16 +20,10 @@ export default function VoteButtons({ id, type, initialScore, initialVote, userI
   const router = useRouter()
 
   function handleVote(v: 1 | -1) {
-    if (!userId) {
-      router.push('/community/login')
-      return
-    }
-
+    if (!userId) { router.push('/community/login'); return }
     const newVote = userVote === v ? 0 : v
-    const scoreDelta = newVote - userVote
-    setScore(s => s + scoreDelta)
+    setScore(s => s + (newVote - userVote))
     setUserVote(newVote as -1 | 0 | 1)
-
     startTransition(async () => {
       const action = type === 'post' ? votePost : voteComment
       await action(id, v)
@@ -41,27 +35,42 @@ export default function VoteButtons({ id, type, initialScore, initialVote, userI
 
   if (vertical) {
     return (
-      <div className="flex flex-col items-center gap-0.5 min-w-[32px]">
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '2px' }}>
         <button
           onClick={() => handleVote(1)}
           disabled={isPending}
-          className={`p-1 rounded transition-colors hover:bg-orange-50 ${upActive ? 'text-[#C6973E]' : 'text-gray-400 hover:text-[#C6973E]'}`}
-          aria-label="Upvote"
+          title="Upvote"
+          style={{
+            background: upActive ? '#FEF3DA' : 'transparent',
+            border: 'none', borderRadius: '6px',
+            padding: '6px 8px', cursor: isPending ? 'default' : 'pointer',
+            color: upActive ? '#C6973E' : '#C4B9AD',
+            transition: 'background 0.15s, color 0.15s',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+          }}
+          onMouseEnter={e => { if (!upActive) (e.currentTarget as HTMLButtonElement).style.color = '#C6973E' }}
+          onMouseLeave={e => { if (!upActive) (e.currentTarget as HTMLButtonElement).style.color = '#C4B9AD' }}
         >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill={upActive ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2.5">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill={upActive ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2.2">
             <path d="M12 4l8 8H4z" />
           </svg>
         </button>
-        <span className={`text-xs font-bold leading-none ${upActive ? 'text-[#C6973E]' : downActive ? 'text-[#6576FF]' : 'text-gray-700'}`}>
-          {score}
-        </span>
         <button
           onClick={() => handleVote(-1)}
           disabled={isPending}
-          className={`p-1 rounded transition-colors hover:bg-indigo-50 ${downActive ? 'text-[#6576FF]' : 'text-gray-400 hover:text-[#6576FF]'}`}
-          aria-label="Downvote"
+          title="Downvote"
+          style={{
+            background: downActive ? '#EEF0FF' : 'transparent',
+            border: 'none', borderRadius: '6px',
+            padding: '6px 8px', cursor: isPending ? 'default' : 'pointer',
+            color: downActive ? '#6576FF' : '#C4B9AD',
+            transition: 'background 0.15s, color 0.15s',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+          }}
+          onMouseEnter={e => { if (!downActive) (e.currentTarget as HTMLButtonElement).style.color = '#6576FF' }}
+          onMouseLeave={e => { if (!downActive) (e.currentTarget as HTMLButtonElement).style.color = '#C4B9AD' }}
         >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill={downActive ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2.5">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill={downActive ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2.2">
             <path d="M12 20l-8-8h16z" />
           </svg>
         </button>
@@ -69,26 +78,42 @@ export default function VoteButtons({ id, type, initialScore, initialVote, userI
     )
   }
 
+  // Horizontal (used in comments)
   return (
-    <div className="flex items-center gap-1">
+    <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
       <button
         onClick={() => handleVote(1)}
         disabled={isPending}
-        className={`p-1 rounded transition-colors ${upActive ? 'text-[#C6973E]' : 'text-gray-400 hover:text-[#C6973E]'}`}
+        title={`Upvote · ${score}`}
+        style={{
+          background: upActive ? '#FEF3DA' : 'transparent',
+          border: 'none', borderRadius: '6px',
+          padding: '4px 6px', cursor: isPending ? 'default' : 'pointer',
+          color: upActive ? '#C6973E' : '#B0A89E',
+          display: 'flex', alignItems: 'center', gap: '4px',
+          fontSize: '12px', fontWeight: 600,
+          transition: 'background 0.15s, color 0.15s',
+        }}
       >
-        <svg width="14" height="14" viewBox="0 0 24 24" fill={upActive ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2.5">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill={upActive ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2.5">
           <path d="M12 4l8 8H4z" />
         </svg>
+        <span>{score > 0 ? `+${score}` : score}</span>
       </button>
-      <span className={`text-xs font-bold ${upActive ? 'text-[#C6973E]' : downActive ? 'text-[#6576FF]' : 'text-gray-700'}`}>
-        {score}
-      </span>
       <button
         onClick={() => handleVote(-1)}
         disabled={isPending}
-        className={`p-1 rounded transition-colors ${downActive ? 'text-[#6576FF]' : 'text-gray-400 hover:text-[#6576FF]'}`}
+        title="Downvote"
+        style={{
+          background: downActive ? '#EEF0FF' : 'transparent',
+          border: 'none', borderRadius: '6px',
+          padding: '4px 6px', cursor: isPending ? 'default' : 'pointer',
+          color: downActive ? '#6576FF' : '#B0A89E',
+          display: 'flex', alignItems: 'center',
+          transition: 'background 0.15s, color 0.15s',
+        }}
       >
-        <svg width="14" height="14" viewBox="0 0 24 24" fill={downActive ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2.5">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill={downActive ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2.5">
           <path d="M12 20l-8-8h16z" />
         </svg>
       </button>
