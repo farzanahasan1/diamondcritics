@@ -3,6 +3,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
+import { containsSpam, isDisposableEmail, AUTO_HIDE_THRESHOLD, type ReportReason } from '@/lib/community/moderation'
 
 // ─── Auth ────────────────────────────────────────────────────────────────────
 
@@ -34,6 +35,10 @@ export async function signUpWithEmail(formData: FormData) {
 
   if (!/^[a-z0-9_]{3,20}$/.test(username)) {
     return { error: 'Username must be 3–20 characters: letters, numbers, underscores only.' }
+  }
+
+  if (isDisposableEmail(email)) {
+    return { error: 'Please use a permanent email address. Disposable/temporary emails are not allowed.' }
   }
 
   // Check username is not taken
@@ -95,6 +100,7 @@ export async function createPost(formData: FormData) {
 
   if (!title || title.length < 5) return { error: 'Title must be at least 5 characters.' }
   if (title.length > 300) return { error: 'Title must be under 300 characters.' }
+  if (containsSpam(title) || containsSpam(body)) return { error: 'Your post was flagged as spam. Please review our community rules.' }
   if (type === 'link') {
     if (!url) return { error: 'A URL is required for link posts.' }
     try {
@@ -115,8 +121,17 @@ export async function createPost(formData: FormData) {
     .eq('author_id', user.id)
     .gte('created_at', oneHourAgo)
 
-  if ((recentPosts ?? 0) >= 5) {
-    return { error: 'You can only create 5 posts per hour. Please wait before posting again.' }
+  if ((recentPosts ?? 0) >= 3) {
+    return { error: 'You can only create 3 posts per hour. Please wait before posting again.' }
+  }
+
+  // Burst prevention: max 1 post per 60 seconds
+  const oneMinAgo = new Date(Date.now() - 60000).toISOString()
+  const { count: burstPosts } = await supabase
+    .from('posts').select('id', { count: 'exact', head: true })
+    .eq('author_id', user.id).gte('created_at', oneMinAgo)
+  if ((burstPosts ?? 0) >= 1) {
+    return { error: 'Please wait a moment before posting again.' }
   }
 
   const { data: community } = await supabase
@@ -267,6 +282,7 @@ export async function createComment(formData: FormData) {
 
   if (!body || body.length < 2) return { error: 'Comment too short.' }
   if (body.length > 10000) return { error: 'Comment too long.' }
+  if (containsSpam(body)) return { error: 'Your comment was flagged as spam. Please review our community rules.' }
 
   // Validate parent_id belongs to the same post (prevent cross-post reply injection)
   if (parentId) {
@@ -288,8 +304,17 @@ export async function createComment(formData: FormData) {
     .eq('author_id', user.id)
     .gte('created_at', oneHourAgo)
 
-  if ((recentComments ?? 0) >= 20) {
+  if ((recentComments ?? 0) >= 15) {
     return { error: 'You are commenting too quickly. Please wait before commenting again.' }
+  }
+
+  // Burst prevention: max 1 comment per 10 seconds
+  const tenSecAgo = new Date(Date.now() - 10000).toISOString()
+  const { count: burstComments } = await supabase
+    .from('comments').select('id', { count: 'exact', head: true })
+    .eq('author_id', user.id).gte('created_at', tenSecAgo)
+  if ((burstComments ?? 0) >= 1) {
+    return { error: 'Please slow down. Wait a few seconds between comments.' }
   }
 
   const { error } = await supabase.from('comments').insert({
@@ -418,6 +443,61 @@ export async function revokeBadge(userId: string, badgeId: string) {
   revalidatePath('/community/admin')
   return { success: true }
 }
+
+// ─── Reports ─────────────────────────────────────────────────────────────────
+
+export async function reportContent(
+  targetType: 'post' | 'comment' | 'user',
+  targetId: string,
+  reason: ReportReason
+) {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { error: 'You must be logged in to report.' }
+
+  const { error } = await supabase.from('reports').insert({
+    reporter_id: user.id,
+    target_type: targetType,
+    target_id: targetId,
+    reason,
+  })
+
+  // Ignore duplicate report (user already reported this item)
+  if (error && error.code !== '23505') return { error: 'Could not submit report. Try again.' }
+
+  // Auto-hide if report threshold reached
+  const { count } = await supabase
+    .from('reports')
+    .select('id', { count: 'exact', head: true })
+    .eq('target_type', targetType)
+    .eq('target_id', targetId)
+
+  if ((count ?? 0) >= AUTO_HIDE_THRESHOLD) {
+    if (targetType === 'post') {
+      await supabase.from('posts').update({ is_deleted: true }).eq('id', targetId)
+    } else if (targetType === 'comment') {
+      await supabase.from('comments').update({ is_deleted: true }).eq('id', targetId)
+    }
+  }
+
+  revalidatePath('/community', 'layout')
+  return { success: true }
+}
+
+export async function resolveReport(reportId: string) {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { error: 'Not authenticated.' }
+
+  const { data: profile } = await supabase.from('profiles').select('is_admin').eq('id', user.id).single()
+  if (!profile?.is_admin) return { error: 'Admin only.' }
+
+  await supabase.from('reports').update({ status: 'resolved' }).eq('id', reportId)
+  revalidatePath('/community/admin')
+  return { success: true }
+}
+
+// ─── Profile ──────────────────────────────────────────────────────────────────
 
 export async function updateProfile(formData: FormData) {
   const supabase = await createClient()

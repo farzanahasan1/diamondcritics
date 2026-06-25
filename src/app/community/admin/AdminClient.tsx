@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useTransition, useEffect } from 'react'
-import { createCommunity, banUser, awardBadge, revokeBadge } from '@/app/community/actions'
+import { createCommunity, banUser, awardBadge, revokeBadge, resolveReport } from '@/app/community/actions'
 import { createClient } from '@/lib/supabase/client'
 import Link from 'next/link'
 
@@ -28,11 +28,22 @@ interface UserBadge {
   badge: Badge
 }
 
+interface Report {
+  id: string
+  target_type: 'post' | 'comment' | 'user'
+  target_id: string
+  reason: string
+  status: string
+  created_at: string
+  reporter: { username: string } | null
+}
+
 export default function AdminPage() {
-  const [tab, setTab] = useState<'communities' | 'users' | 'badges'>('communities')
+  const [tab, setTab] = useState<'communities' | 'users' | 'badges' | 'reports'>('communities')
   const [users, setUsers] = useState<Profile[]>([])
   const [badges, setBadges] = useState<Badge[]>([])
   const [userBadges, setUserBadges] = useState<UserBadge[]>([])
+  const [reports, setReports] = useState<Report[]>([])
   const [search, setSearch] = useState('')
   const [message, setMessage] = useState('')
   const [error, setError] = useState('')
@@ -50,6 +61,15 @@ export default function AdminPage() {
         .then(({ data }) => setBadges(data ?? []))
       supabase.from('user_badges').select('*, badge:badges(*)')
         .then(({ data }) => setUserBadges(data ?? []))
+    }
+    if (tab === 'reports') {
+      supabase
+        .from('reports')
+        .select('*, reporter:profiles!reporter_id(username)')
+        .eq('status', 'pending')
+        .order('created_at', { ascending: false })
+        .limit(100)
+        .then(({ data }) => setReports(data ?? []))
     }
   }, [tab])
 
@@ -91,6 +111,17 @@ export default function AdminPage() {
     })
   }
 
+  async function handleResolveReport(reportId: string) {
+    startTransition(async () => {
+      const result = await resolveReport(reportId)
+      if (result?.error) err(result.error)
+      else {
+        msg('Report resolved.')
+        setReports(prev => prev.filter(r => r.id !== reportId))
+      }
+    })
+  }
+
   const filteredUsers = users.filter(u =>
     u.username.toLowerCase().includes(search.toLowerCase())
   )
@@ -116,7 +147,7 @@ export default function AdminPage() {
 
       {/* Tabs */}
       <div className="flex gap-1 mb-6 bg-white border border-[#EDEFF1] rounded p-1">
-        {(['communities', 'users', 'badges'] as const).map(t => (
+        {(['communities', 'users', 'badges', 'reports'] as const).map(t => (
           <button
             key={t}
             onClick={() => setTab(t)}
@@ -124,7 +155,16 @@ export default function AdminPage() {
               tab === t ? 'bg-[#C6973E] text-white' : 'text-gray-600 hover:bg-gray-100'
             }`}
           >
-            {t === 'communities' ? '🏘 Communities' : t === 'users' ? '👥 Users' : '🏅 Badges'}
+            {t === 'communities' ? '🏘 Communities' : t === 'users' ? '👥 Users' : t === 'badges' ? '🏅 Badges' : (
+              <span className="flex items-center justify-center gap-1">
+                🚩 Reports
+                {reports.length > 0 && (
+                  <span className="bg-red-500 text-white text-xs rounded-full px-1.5 py-0.5 leading-none">
+                    {reports.length}
+                  </span>
+                )}
+              </span>
+            )}
           </button>
         ))}
       </div>
@@ -301,6 +341,54 @@ export default function AdminPage() {
                 })
               )}
             </div>
+          </div>
+        </div>
+      )}
+      {/* Reports tab */}
+      {tab === 'reports' && (
+        <div className="bg-white border border-[#EDEFF1] rounded overflow-hidden">
+          <div className="p-4 border-b border-[#EDEFF1]">
+            <h2 className="font-semibold text-gray-800">Pending Reports</h2>
+            <p className="text-xs text-gray-500 mt-0.5">Auto-hidden content appears when a post/comment reaches 5 reports.</p>
+          </div>
+          <div className="divide-y divide-[#EDEFF1]">
+            {reports.length === 0 ? (
+              <p className="text-sm text-gray-400 p-4 text-center">No pending reports.</p>
+            ) : (
+              reports.map(r => (
+                <div key={r.id} className="px-4 py-3 flex flex-wrap items-start gap-3">
+                  <div className="flex-1 min-w-0 space-y-0.5">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${
+                        r.target_type === 'post' ? 'bg-blue-100 text-blue-700' :
+                        r.target_type === 'comment' ? 'bg-purple-100 text-purple-700' :
+                        'bg-orange-100 text-orange-700'
+                      }`}>
+                        {r.target_type}
+                      </span>
+                      <span className="text-xs font-medium text-gray-700">{r.reason}</span>
+                      <span className="text-xs text-gray-400">·</span>
+                      <span className="text-xs text-gray-400">by u/{r.reporter?.username ?? '?'}</span>
+                      <span className="text-xs text-gray-400">·</span>
+                      <span className="text-xs text-gray-400">{new Date(r.created_at).toLocaleDateString()}</span>
+                    </div>
+                    <p className="text-xs text-gray-500 font-mono truncate">ID: {r.target_id}</p>
+                    {r.target_type === 'post' && (
+                      <Link href={`/community/post/${r.target_id}`} target="_blank" className="text-xs text-[#C6973E] hover:underline">
+                        View post ↗
+                      </Link>
+                    )}
+                  </div>
+                  <button
+                    onClick={() => handleResolveReport(r.id)}
+                    disabled={isPending}
+                    className="text-xs px-3 py-1.5 bg-green-100 text-green-700 hover:bg-green-200 rounded font-medium disabled:opacity-40"
+                  >
+                    Resolve
+                  </button>
+                </div>
+              ))
+            )}
           </div>
         </div>
       )}

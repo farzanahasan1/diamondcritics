@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import VoteButtons from './VoteButtons'
+import ReportButton from './ReportButton'
 import type { Post } from '@/types/community'
 
 function timeAgo(dateStr: string) {
@@ -131,6 +132,9 @@ export default function PostCard({ post, userId, compact = false }: Props) {
             </svg>
             {post.comment_count} {post.comment_count === 1 ? 'comment' : 'comments'}
           </Link>
+          {userId && userId !== post.author_id && (
+            <ReportButton targetType="post" targetId={post.id} userId={userId} />
+          )}
         </div>
 
       </div>

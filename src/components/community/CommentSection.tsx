@@ -4,6 +4,7 @@ import { useState, useTransition } from 'react'
 import Link from 'next/link'
 import { createComment, deleteComment } from '@/app/community/actions'
 import VoteButtons from './VoteButtons'
+import ReportButton from './ReportButton'
 import type { Comment } from '@/types/community'
 
 function timeAgo(dateStr: string) {
@@ -126,6 +127,9 @@ function CommentNode({ comment, postId, userId, isAdmin, depth = 0 }: CommentNod
                     >
                       Reply
                     </button>
+                  )}
+                  {userId && userId !== comment.author_id && (
+                    <ReportButton targetType="comment" targetId={comment.id} userId={userId} />
                   )}
                   {canDelete && (
                     <button
