@@ -1,5 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
-import { notFound } from 'next/navigation'
+import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import CommentSection from '@/components/community/CommentSection'
 import VoteButtons from '@/components/community/VoteButtons'
@@ -112,7 +112,7 @@ export default async function PostDetailPage({ params }: { params: Promise<{ id:
     .eq('id', id)
     .single()
 
-  if (!postRaw || postRaw.is_deleted) notFound()
+  if (!postRaw || postRaw.is_deleted) redirect('/community')
 
   // Fetch author and community separately
   const [{ data: postAuthor }, { data: postCommunity }] = await Promise.all([

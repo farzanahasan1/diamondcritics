@@ -1,5 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
-import { notFound } from 'next/navigation'
+import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import PostCard from '@/components/community/PostCard'
 import type { Post } from '@/types/community'
@@ -28,7 +28,7 @@ export default async function UserProfilePage({ params }: { params: Promise<{ us
 
   const { data: profile } = await supabase
     .from('profiles').select('*').eq('username', username).single()
-  if (!profile) notFound()
+  if (!profile) redirect('/community')
 
   const { data: userBadges } = await supabase
     .from('user_badges').select('*, badge:badges(*)').eq('user_id', profile.id)

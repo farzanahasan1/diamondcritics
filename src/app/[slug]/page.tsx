@@ -1,4 +1,4 @@
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import type { Metadata } from "next";
 import {
   getAllPostSlugs,
@@ -200,5 +200,5 @@ export default async function SlugPage({ params }: Props) {
   const page = getPageBySlug(slug);
   if (page) return <PostContent type="page" data={page} />;
 
-  notFound();
+  redirect('/blog');
 }

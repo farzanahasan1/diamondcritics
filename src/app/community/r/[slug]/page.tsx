@@ -1,5 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
-import { notFound } from 'next/navigation'
+import { redirect } from 'next/navigation'
 import PostCard from '@/components/community/PostCard'
 import CommunitySidebar from '@/components/community/CommunitySidebar'
 import Link from 'next/link'
@@ -62,7 +62,7 @@ export default async function CommunityPage({
     .eq('slug', slug)
     .single()
 
-  if (!community) notFound()
+  if (!community) redirect('/community')
 
   // Fetch posts (plain select — avoids FK constraint dependency)
   let query = supabase

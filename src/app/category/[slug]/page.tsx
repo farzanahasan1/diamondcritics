@@ -1,4 +1,4 @@
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getPostsByCategory, getPostsBySubcategory } from "@/lib/content";
@@ -61,7 +61,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function CategoryPage({ params }: Props) {
   const { slug } = await params;
   const label = categoryLabels[slug];
-  if (!label) notFound();
+  if (!label) redirect('/blog');
 
   const posts = SUBCATEGORY_SLUGS.has(slug)
     ? getPostsBySubcategory(slug)
