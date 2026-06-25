@@ -95,7 +95,17 @@ export async function createPost(formData: FormData) {
 
   if (!title || title.length < 5) return { error: 'Title must be at least 5 characters.' }
   if (title.length > 300) return { error: 'Title must be under 300 characters.' }
-  if (type === 'link' && !url) return { error: 'A URL is required for link posts.' }
+  if (type === 'link') {
+    if (!url) return { error: 'A URL is required for link posts.' }
+    try {
+      const parsed = new URL(url)
+      if (!['http:', 'https:'].includes(parsed.protocol)) {
+        return { error: 'Only http:// and https:// URLs are allowed.' }
+      }
+    } catch {
+      return { error: 'Please enter a valid URL (must start with https://).' }
+    }
+  }
 
   // Rate limit: max 5 posts per hour
   const oneHourAgo = new Date(Date.now() - 3600000).toISOString()
@@ -190,15 +200,18 @@ export async function votePost(postId: string, vote: 1 | -1) {
 
   if (existing) {
     if (existing.vote === vote) {
-      // Remove vote (toggle off)
       await supabase.from('post_votes').delete().eq('post_id', postId).eq('user_id', user.id)
     } else {
-      // Change vote direction
       await supabase.from('post_votes').update({ vote }).eq('post_id', postId).eq('user_id', user.id)
     }
   } else {
     await supabase.from('post_votes').insert({ post_id: postId, user_id: user.id, vote })
   }
+
+  // Recalculate score from votes table to keep posts.score accurate
+  const { data: allVotes } = await supabase.from('post_votes').select('vote').eq('post_id', postId)
+  const newScore = allVotes?.reduce((s, v) => s + v.vote, 0) ?? 0
+  await supabase.from('posts').update({ score: newScore }).eq('id', postId)
 
   revalidatePath('/community', 'layout')
 }
@@ -225,6 +238,11 @@ export async function voteComment(commentId: string, vote: 1 | -1) {
     await supabase.from('comment_votes').insert({ comment_id: commentId, user_id: user.id, vote })
   }
 
+  // Recalculate score from votes table to keep comments.score accurate
+  const { data: allVotes } = await supabase.from('comment_votes').select('vote').eq('comment_id', commentId)
+  const newScore = allVotes?.reduce((s, v) => s + v.vote, 0) ?? 0
+  await supabase.from('comments').update({ score: newScore }).eq('id', commentId)
+
   revalidatePath('/community', 'layout')
 }
 
@@ -249,6 +267,18 @@ export async function createComment(formData: FormData) {
 
   if (!body || body.length < 2) return { error: 'Comment too short.' }
   if (body.length > 10000) return { error: 'Comment too long.' }
+
+  // Validate parent_id belongs to the same post (prevent cross-post reply injection)
+  if (parentId) {
+    const { data: parentComment } = await supabase
+      .from('comments')
+      .select('post_id')
+      .eq('id', parentId)
+      .maybeSingle()
+    if (!parentComment || parentComment.post_id !== postId) {
+      return { error: 'Invalid reply target.' }
+    }
+  }
 
   // Rate limit: max 20 comments per hour
   const oneHourAgo = new Date(Date.now() - 3600000).toISOString()
@@ -315,11 +345,12 @@ export async function createCommunity(formData: FormData) {
   if (!profile?.is_admin) return { error: 'Admin only.' }
 
   const name = (formData.get('name') as string).trim()
-  const slug = (formData.get('slug') as string).trim().toLowerCase().replace(/\s+/g, '-')
+  const slug = (formData.get('slug') as string).trim().toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
   const description = (formData.get('description') as string).trim()
   const rules = (formData.get('rules') as string).trim()
 
   if (!name || !slug) return { error: 'Name and slug required.' }
+  if (!/^[a-z0-9][a-z0-9-]{1,48}[a-z0-9]$/.test(slug)) return { error: 'Slug must be 3–50 characters, letters/numbers/hyphens only.' }
 
   const { error } = await supabase.from('communities').insert({ name, slug, description, rules })
   if (error) return { error: error.message }
@@ -393,8 +424,8 @@ export async function updateProfile(formData: FormData) {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return { error: 'Not authenticated.' }
 
-  const display_name = (formData.get('display_name') as string).trim()
-  const bio = (formData.get('bio') as string).trim()
+  const display_name = (formData.get('display_name') as string).trim().slice(0, 50)
+  const bio = (formData.get('bio') as string).trim().slice(0, 300)
 
   await supabase.from('profiles').update({ display_name, bio }).eq('id', user.id)
   revalidatePath('/community', 'layout')

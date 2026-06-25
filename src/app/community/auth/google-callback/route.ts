@@ -75,16 +75,13 @@ export async function GET(request: NextRequest) {
       .replace(/[^a-z0-9_]/g, '')
       .slice(0, 15) || 'user'
 
-    // Ensure unique username
+    // Ensure unique username — retry with random suffix until available
     let username = base
-    const { data: taken } = await supabase
-      .from('profiles')
-      .select('id')
-      .eq('username', username)
-      .maybeSingle()
-
-    if (taken) {
-      username = `${base}${Math.floor(Math.random() * 9000) + 1000}`
+    for (let i = 0; i < 10; i++) {
+      const { data: taken } = await supabase
+        .from('profiles').select('id').eq('username', username).maybeSingle()
+      if (!taken) break
+      username = `${base}${Math.floor(Math.random() * 90000) + 10000}`
     }
 
     await supabase.from('profiles').insert({
