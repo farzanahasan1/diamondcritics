@@ -113,9 +113,9 @@ function CommentNode({ comment, postId, userId, isAdmin, depth = 0 }: CommentNod
           <>
             {/* Author + meta */}
             <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '6px', marginBottom: '6px' }}>
-              <Link href={`/community/u/${author?.username}`} style={{ fontSize: '12px', fontWeight: 700, color: '#3A2208', textDecoration: 'none' }}>
-                u/{author?.username ?? '[deleted]'}
-              </Link>
+              {author?.username
+                ? <Link href={`/community/u/${author.username}`} style={{ fontSize: '12px', fontWeight: 700, color: '#3A2208', textDecoration: 'none' }}>u/{author.username}</Link>
+                : <span style={{ fontSize: '12px', fontWeight: 700, color: '#3A2208' }}>u/[deleted]</span>}
               <span style={{ fontSize: '11px', color: '#B0A89E' }}>{timeAgo(comment.created_at)}</span>
               <button onClick={() => setCollapsed(c => !c)} style={{ fontSize: '11px', color: '#B0A89E', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
                 [{collapsed ? '+' : '–'}]
@@ -240,7 +240,7 @@ interface Props {
 }
 
 export default function CommentSection({ comments, postId, userId, isAdmin }: Props) {
-  const topLevel = comments.filter(c => !c.parent_id)
+  const topLevel = comments
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>

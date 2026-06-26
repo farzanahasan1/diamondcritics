@@ -52,9 +52,9 @@ export default function PostCard({ post, userId, compact = false }: Props) {
           )}
           <span>
             Posted by{' '}
-            <Link href={`/community/u/${author?.username}`} style={{ color: '#7A6F66', textDecoration: 'none' }}>
-              {authorLabel}
-            </Link>
+            {author?.username
+              ? <Link href={`/community/u/${author.username}`} style={{ color: '#7A6F66', textDecoration: 'none' }}>{authorLabel}</Link>
+              : <span style={{ color: '#7A6F66' }}>{authorLabel}</span>}
           </span>
           <span style={{ color: '#D4C8BE' }}>·</span>
           <span>{timeAgo(post.created_at)}</span>

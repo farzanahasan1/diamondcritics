@@ -61,6 +61,9 @@ export default function VoteButtons({ id, type, initialScore, initialVote, userI
             <path d="M12 4l8 8H4z" />
           </svg>
         </button>
+        <span style={{ fontSize: '13px', fontWeight: 700, color: upActive ? '#C6973E' : downActive ? '#6576FF' : '#5A504A', minWidth: '20px', textAlign: 'center', lineHeight: 1 }}>
+          {score}
+        </span>
         <button
           onClick={() => handleVote(-1)}
           disabled={isPending}
@@ -86,7 +89,7 @@ export default function VoteButtons({ id, type, initialScore, initialVote, userI
 
   // Horizontal — inline footer buttons with labels
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+    <div style={{ display: 'flex', alignItems: 'center', gap: '2px' }}>
       <button
         onClick={() => handleVote(1)}
         disabled={isPending}
@@ -103,7 +106,7 @@ export default function VoteButtons({ id, type, initialScore, initialVote, userI
         <svg width="13" height="13" viewBox="0 0 24 24" fill={upActive ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2.5">
           <path d="M12 4l8 8H4z" />
         </svg>
-        Upvote
+        {score}
       </button>
       <button
         onClick={() => handleVote(-1)}

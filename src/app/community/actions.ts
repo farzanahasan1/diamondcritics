@@ -457,8 +457,8 @@ export async function createComment(formData: FormData) {
 
   // Notifications: reply → parent comment author; top-level → post author
   if (parentId) {
-    const { data: parent } = await supabase.from('comments').select('author_id').eq('id', parentId).single()
-    if (parent?.author_id) {
+    const { data: parent } = await supabase.from('comments').select('author_id, is_deleted').eq('id', parentId).single()
+    if (parent?.author_id && !parent.is_deleted) {
       await pushNotification(supabase, parent.author_id, user.id, 'reply_to_comment', postId, newComment?.id)
     }
   } else {
@@ -468,6 +468,7 @@ export async function createComment(formData: FormData) {
     }
   }
 
+  revalidatePath('/community')
   revalidatePath(`/community/post/${postId}`)
 }
 

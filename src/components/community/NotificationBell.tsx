@@ -79,6 +79,8 @@ export default function NotificationBell() {
 
   useEffect(() => { load() }, [load])
 
+  useEffect(() => { if (open) load() }, [open, load])
+
   useEffect(() => {
     if (!open) return
     const handler = (e: MouseEvent) => {

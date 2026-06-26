@@ -275,9 +275,9 @@ export default async function PostDetailPage({ params }: { params: Promise<{ id:
                 )}
                 <span>
                   Posted by{' '}
-                  <Link href={`/community/u/${author?.username}`} style={{ color: '#7A6F66', textDecoration: 'none', fontWeight: 500 }}>
-                    u/{author?.username ?? '[deleted]'}
-                  </Link>
+                  {author?.username
+                    ? <Link href={`/community/u/${author.username}`} style={{ color: '#7A6F66', textDecoration: 'none', fontWeight: 500 }}>u/{author.username}</Link>
+                    : <span style={{ color: '#7A6F66', fontWeight: 500 }}>u/[deleted]</span>}
                 </span>
                 <span style={{ color: '#D4C8BE' }}>·</span>
                 <span>{timeAgo(post.created_at)}</span>
