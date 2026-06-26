@@ -674,6 +674,13 @@ body {
 .c-content-wrap { padding: 28px 24px; }
 @media (max-width: 640px) { .c-content-wrap { padding: 16px 14px; } }
 
+/* ─── Auth pages (login / register) ─────────────────────── */
+/* On mobile hide the left branding panel — form gets full width */
+@media (max-width: 640px) {
+  .c-auth-left { display: none !important; }
+  .c-auth-right { padding: 32px 20px !important; }
+}
+
 /* ─── Blue Nile mid-article deals CTA ──────────────────────── */
 @keyframes bn-border-glow {
   0%, 100% { border-color: rgba(212,175,55,0.35); box-shadow: 0 4px 32px rgba(212,175,55,0.06); }

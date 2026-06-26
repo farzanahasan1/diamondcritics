@@ -50,7 +50,7 @@ export default function RegisterPage() {
       }}>
 
         {/* ── Left panel ── */}
-        <div style={{
+        <div className="c-auth-left" style={{
           width: '320px', flexShrink: 0, padding: '40px 32px',
           background: 'linear-gradient(160deg, #1C1209 0%, #3A2208 55%, #1C1209 100%)',
           display: 'flex', flexDirection: 'column', justifyContent: 'space-between',
@@ -83,7 +83,7 @@ export default function RegisterPage() {
         </div>
 
         {/* ── Right panel ── */}
-        <div style={{ flex: 1, background: '#fff', padding: '40px 36px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+        <div className="c-auth-right" style={{ flex: 1, background: '#fff', padding: '40px 36px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
           <h1 style={{ fontFamily: 'var(--font-ivy, Georgia, serif)', fontSize: '24px', fontWeight: 400, color: '#1C1209', marginBottom: '4px' }}>
             Create your account
           </h1>
