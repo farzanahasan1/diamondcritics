@@ -618,6 +618,62 @@ body {
 }
 .mega-nav-link:hover { color: var(--ink); }
 
+/* ─── Community responsive ──────────────────────────────────── */
+.c-layout {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 20px;
+}
+.c-layout > * { min-width: 0; }
+
+/* Post page has a slightly wider sidebar */
+.c-layout-post {
+  display: grid;
+  grid-template-columns: 1fr 316px;
+  gap: 20px;
+}
+.c-layout-post > * { min-width: 0; }
+
+/* Submit page sidebar */
+.c-layout-submit {
+  display: grid;
+  grid-template-columns: 1fr 272px;
+  gap: 16px;
+  align-items: start;
+}
+.c-layout-submit > * { min-width: 0; }
+
+@media (max-width: 860px) {
+  .c-layout,
+  .c-layout-post,
+  .c-layout-submit { grid-template-columns: 1fr; }
+  .c-sidebar { display: none !important; }
+}
+
+/* Community nav links — hide on small screens */
+.c-nav-links { display: flex; align-items: center; gap: 2px; }
+.c-nav-user-text { display: inline; }
+
+@media (max-width: 640px) {
+  .c-nav-links { display: none; }
+  .c-nav-user-text { display: none; }
+}
+
+/* Sort bar — scrollable on narrow screens */
+.c-sort-bar {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.c-sort-bar::-webkit-scrollbar { display: none; }
+
+/* Community content wrapper padding */
+.c-content-wrap { padding: 28px 24px; }
+@media (max-width: 640px) { .c-content-wrap { padding: 16px 14px; } }
+
 /* ─── Blue Nile mid-article deals CTA ──────────────────────── */
 @keyframes bn-border-glow {
   0%, 100% { border-color: rgba(212,175,55,0.35); box-shadow: 0 4px 32px rgba(212,175,55,0.06); }

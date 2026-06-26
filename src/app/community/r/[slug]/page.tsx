@@ -147,7 +147,7 @@ export default async function CommunityPage({
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(forumSchema) }} />
-    <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: '20px' }}>
+    <div className="c-layout">
       <div>
         {/* Community header */}
         <div style={{ background: '#fff', borderRadius: '12px', overflow: 'hidden', marginBottom: '12px', boxShadow: '0 1px 4px rgba(28,18,9,0.07), 0 4px 16px rgba(28,18,9,0.05)' }}>
@@ -182,7 +182,7 @@ export default async function CommunityPage({
         </div>
 
         {/* Sort tabs */}
-        <div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 1px 4px rgba(28,18,9,0.07), 0 4px 16px rgba(28,18,9,0.05)', padding: '8px 12px', display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '12px' }}>
+        <div className="c-sort-bar" style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 1px 4px rgba(28,18,9,0.07), 0 4px 16px rgba(28,18,9,0.05)', padding: '8px 12px', marginBottom: '12px' }}>
           {([{ key: 'hot', label: 'Hot', emoji: '🔥' }, { key: 'new', label: 'New', emoji: '✨' }, { key: 'top', label: 'Top', emoji: '📈' }] as const).map(tab => (
             <Link key={tab.key} href={`/community/r/${slug}?sort=${tab.key}`} style={{
               display: 'flex', alignItems: 'center', gap: '6px',

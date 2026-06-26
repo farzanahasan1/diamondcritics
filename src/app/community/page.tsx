@@ -247,7 +247,7 @@ export default async function CommunityPage({
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(forumSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
-    <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', gap: '20px' }}>
+    <div className="c-layout">
 
       {/* ── Main column ── */}
       <div>
@@ -297,14 +297,11 @@ export default async function CommunityPage({
         )}
 
         {/* Sort bar */}
-        <div style={{
+        <div className="c-sort-bar" style={{
           background: '#ffffff',
           borderRadius: '12px',
           boxShadow: '0 1px 4px rgba(28,18,9,0.07), 0 4px 16px rgba(28,18,9,0.05)',
           padding: '8px 12px',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '4px',
           marginBottom: '12px',
         }}>
           {sortTabs.filter(tab => !tab.authRequired || user).map(tab => (

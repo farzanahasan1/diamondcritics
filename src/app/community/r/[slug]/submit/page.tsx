@@ -37,7 +37,7 @@ export default function SubmitPage({ params }: { params: Promise<{ slug: string 
         </p>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 272px', gap: '16px', alignItems: 'start' }}>
+      <div className="c-layout-submit">
 
         {/* ── Form card ── */}
         <div style={{ background: '#fff', borderRadius: '12px', border: '1px solid #E2DDD7', overflow: 'hidden' }}>
@@ -209,7 +209,7 @@ export default function SubmitPage({ params }: { params: Promise<{ slug: string 
         </div>
 
         {/* ── Sidebar ── */}
-        <div style={{ background: '#fff', borderRadius: '12px', border: '1px solid #E2DDD7', padding: '18px' }}>
+        <div className="c-sidebar" style={{ background: '#fff', borderRadius: '12px', border: '1px solid #E2DDD7', padding: '18px' }}>
           <h3 style={{ fontFamily: 'var(--font-ivy, Georgia, serif)', fontSize: '15px', fontWeight: 600, color: '#1C1209', marginBottom: '14px' }}>
             Posting guidelines
           </h3>

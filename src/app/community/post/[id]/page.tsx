@@ -232,7 +232,7 @@ export default async function PostDetailPage({ params }: { params: Promise<{ id:
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(postSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
-    <div style={{ display: 'grid', gridTemplateColumns: '1fr 316px', gap: '20px' }}>
+    <div className="c-layout-post">
       <div style={{ minWidth: 0 }}>
 
         {/* Breadcrumb */}

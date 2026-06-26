@@ -24,7 +24,7 @@ export default function CommunitySidebar({ communities, user, activeCommunity }:
   const featured = activeCommunity ?? communities[0]
 
   return (
-    <aside style={{ width: '100%' }}>
+    <aside className="c-sidebar" style={{ width: '100%' }}>
 
       {featured && (
         <div style={card}>

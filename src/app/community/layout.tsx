@@ -70,10 +70,10 @@ export default async function CommunityLayout({ children }: { children: React.Re
 
       {/* ── Top bar ── */}
       <nav style={{ background: '#1C1209', borderBottom: '1px solid rgba(255,255,255,0.07)', position: 'sticky', top: 0, zIndex: 40 }}>
-        <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '0 24px', height: '52px', display: 'flex', alignItems: 'center', gap: '24px' }}>
+        <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '0 16px', height: '52px', display: 'flex', alignItems: 'center', gap: '16px' }}>
 
           {/* Brand */}
-          <Link href="/community" style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none', flexShrink: 0 }}>
+          <Link href="/community" style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none', flexShrink: 0 }}>
             <div style={{
               width: '32px', height: '32px', borderRadius: '9px', flexShrink: 0,
               background: 'linear-gradient(145deg, #D4A843 0%, #B8881E 100%)',
@@ -86,12 +86,12 @@ export default async function CommunityLayout({ children }: { children: React.Re
             </div>
             <div>
               <div style={{ color: '#F0D88A', fontWeight: 600, fontSize: '13px', lineHeight: 1 }}>Diamond Community</div>
-              <div style={{ color: 'rgba(255,255,255,0.3)', fontSize: '10px', marginTop: '2px', lineHeight: 1 }}>by DiamondCritics.com</div>
+              <div className="c-nav-user-text" style={{ color: 'rgba(255,255,255,0.3)', fontSize: '10px', marginTop: '2px', lineHeight: 1 }}>by DiamondCritics.com</div>
             </div>
           </Link>
 
-          {/* Nav links */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '2px' }}>
+          {/* Nav links — hidden on mobile */}
+          <div className="c-nav-links">
             <Link href="/community" style={{ color: 'rgba(255,255,255,0.5)', fontSize: '13px', fontWeight: 500, padding: '6px 12px', borderRadius: '7px', textDecoration: 'none' }}>
               Feed
             </Link>
@@ -104,7 +104,7 @@ export default async function CommunityLayout({ children }: { children: React.Re
 
           {/* Auth */}
           {user && profile ? (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
               {profile.is_admin && (
                 <Link href="/community/admin" style={{
                   fontSize: '12px', fontWeight: 600, padding: '5px 10px', borderRadius: '6px', textDecoration: 'none',
@@ -113,33 +113,35 @@ export default async function CommunityLayout({ children }: { children: React.Re
                   Admin
                 </Link>
               )}
-              <Link href={`/community/u/${profile.username}`} style={{ display: 'flex', alignItems: 'center', gap: '8px', textDecoration: 'none' }}>
+              <Link href={`/community/u/${profile.username}`} style={{ display: 'flex', alignItems: 'center', gap: '6px', textDecoration: 'none', flexShrink: 0 }}>
                 {profile.avatar_url ? (
-                  <img src={profile.avatar_url} alt="" style={{ width: '28px', height: '28px', borderRadius: '50%', objectFit: 'cover', outline: '2px solid rgba(212,168,67,0.4)' }} />
+                  <img src={profile.avatar_url} alt="" style={{ width: '28px', height: '28px', borderRadius: '50%', objectFit: 'cover', outline: '2px solid rgba(212,168,67,0.4)', flexShrink: 0 }} />
                 ) : (
-                  <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: 'linear-gradient(145deg, #D4A843, #B8881E)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '11px', fontWeight: 700 }}>
+                  <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: 'linear-gradient(145deg, #D4A843, #B8881E)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '11px', fontWeight: 700, flexShrink: 0 }}>
                     {profile.username[0].toUpperCase()}
                   </div>
                 )}
-                <span style={{ color: 'rgba(255,255,255,0.75)', fontSize: '13px', fontWeight: 500 }}>{profile.username}</span>
+                <span className="c-nav-user-text" style={{ color: 'rgba(255,255,255,0.75)', fontSize: '13px', fontWeight: 500 }}>{profile.username}</span>
               </Link>
               <form action={signOut}>
-                <button style={{ fontSize: '12px', fontWeight: 500, padding: '6px 12px', borderRadius: '7px', background: 'transparent', border: '1px solid rgba(255,255,255,0.15)', color: 'rgba(255,255,255,0.45)', cursor: 'pointer' }}>
+                <button style={{ fontSize: '12px', fontWeight: 500, padding: '6px 10px', borderRadius: '7px', background: 'transparent', border: '1px solid rgba(255,255,255,0.15)', color: 'rgba(255,255,255,0.45)', cursor: 'pointer', whiteSpace: 'nowrap' }}>
                   Log out
                 </button>
               </form>
             </div>
           ) : (
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
               <Link href="/community/login" style={{
-                fontSize: '13px', fontWeight: 500, padding: '7px 16px', borderRadius: '8px', textDecoration: 'none',
+                fontSize: '13px', fontWeight: 500, padding: '7px 12px', borderRadius: '8px', textDecoration: 'none',
                 color: 'rgba(255,255,255,0.75)', background: 'transparent', border: '1px solid rgba(255,255,255,0.2)',
+                whiteSpace: 'nowrap',
               }}>
                 Log In
               </Link>
               <Link href="/community/register" style={{
-                fontSize: '13px', fontWeight: 600, padding: '7px 16px', borderRadius: '8px', textDecoration: 'none',
+                fontSize: '13px', fontWeight: 600, padding: '7px 14px', borderRadius: '8px', textDecoration: 'none',
                 background: 'linear-gradient(145deg, #D4A843 0%, #B8881E 100%)', color: '#fff',
+                whiteSpace: 'nowrap',
               }}>
                 Sign Up
               </Link>
@@ -149,7 +151,7 @@ export default async function CommunityLayout({ children }: { children: React.Re
       </nav>
 
       {/* ── Page content ── */}
-      <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '28px 24px' }}>
+      <div className="c-content-wrap" style={{ maxWidth: '1100px', margin: '0 auto' }}>
         {children}
       </div>
 
