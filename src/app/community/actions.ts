@@ -35,8 +35,33 @@ async function fetchOgImage(url: string): Promise<string | null> {
 
 export async function signInWithEmail(formData: FormData) {
   const supabase = await createClient()
-  const email = formData.get('email') as string
+  const raw = ((formData.get('email') ?? '') as string).trim()
   const password = formData.get('password') as string
+
+  // Support login with either email address or username
+  let email = raw
+  if (!raw.includes('@')) {
+    // Treat as username — look up the real email via service role
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('id')
+      .eq('username', raw.toLowerCase())
+      .maybeSingle()
+
+    if (!profile) return { error: 'No account found with that username.' }
+
+    if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+      return { error: 'Username login is not configured yet. Please log in with your email address.' }
+    }
+    const { createClient: createAdmin } = await import('@supabase/supabase-js')
+    const adminClient = createAdmin(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY,
+    )
+    const { data: { user: authUser } } = await adminClient.auth.admin.getUserById(profile.id)
+    if (!authUser?.email) return { error: 'Could not look up your account. Try logging in with your email address.' }
+    email = authUser.email
+  }
 
   const { error } = await supabase.auth.signInWithPassword({ email, password })
   if (error) {

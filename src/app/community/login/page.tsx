@@ -106,8 +106,10 @@ export default function LoginPage() {
 
           <form action={handleSubmit}>
             <div style={{ marginBottom: '16px' }}>
-              <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: '#5A504A', marginBottom: '6px' }}>Email</label>
-              <input name="email" type="email" required autoComplete="email" style={inputStyle}
+              <label style={{ display: 'block', fontSize: '12px', fontWeight: 600, color: '#5A504A', marginBottom: '6px' }}>
+                Email or Username
+              </label>
+              <input name="email" type="text" required autoComplete="username" placeholder="you@email.com or your_username" style={inputStyle}
                 onFocus={e => e.currentTarget.style.borderColor = '#D4A843'}
                 onBlur={e => e.currentTarget.style.borderColor = '#E8E2DA'}
               />
