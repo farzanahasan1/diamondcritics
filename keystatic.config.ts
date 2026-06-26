@@ -36,6 +36,7 @@ export default config({
             { label: "Gemstone Guides", value: "gemstone-guides" },
             { label: "Market Value & Price Trends", value: "market-value-price-trends" },
             { label: "Round Cut Diamond", value: "round-cut-diamond" },
+            { label: "Princess Cut Diamond", value: "princess-cut-diamond" },
           ],
           defaultValue: "diamond-buying-guides",
         }),

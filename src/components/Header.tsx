@@ -225,6 +225,15 @@ const nav: NavItem[] = [
             { label: "Lab Grown Round", href: "/lab-grown-round-diamond" },
           ],
         },
+        {
+          heading: "Princess Diamond Deep Dive",
+          links: [
+            { label: "1ct Price Audit", href: "/1-carat-princess-cut-diamond-price" },
+            { label: "2ct Price Guide", href: "/2-carat-princess-cut-diamond-price" },
+            { label: "Princess vs Round", href: "/round-diamond-vs-princess-cut" },
+            { label: "All Princess Guides", href: "/category/princess-cut-diamond" },
+          ],
+        },
       ],
       viewAll: { label: "All Round Cut Guides", href: "/category/round-cut-diamond" },
     },
