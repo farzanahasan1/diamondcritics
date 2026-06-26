@@ -297,34 +297,39 @@ export default async function CommunityPage({
         )}
 
         {/* Sort bar */}
-        <div className="c-sort-bar" style={{
+        <div style={{
+          display: 'flex', alignItems: 'center', gap: '8px',
           background: '#ffffff',
           borderRadius: '12px',
           boxShadow: '0 1px 4px rgba(28,18,9,0.07), 0 4px 16px rgba(28,18,9,0.05)',
           padding: '8px 12px',
           marginBottom: '12px',
         }}>
-          {sortTabs.filter(tab => !tab.authRequired || user).map(tab => (
-            <Link key={tab.key} href={`/community?sort=${tab.key}`} style={{
-              display: 'flex', alignItems: 'center', gap: '6px',
-              padding: '7px 14px', borderRadius: '8px',
-              fontSize: '13px', textDecoration: 'none',
-              background: sortMode === tab.key ? '#F0E8D8' : 'transparent',
-              color: sortMode === tab.key ? '#1C1209' : '#9A8F87',
-              fontWeight: sortMode === tab.key ? 600 : 500,
-            }}>
-              <span>{tab.emoji}</span>
-              {tab.label}
-            </Link>
-          ))}
+          <div className="c-sort-bar" style={{ flex: 1, minWidth: 0 }}>
+            {sortTabs.filter(tab => !tab.authRequired || user).map(tab => (
+              <Link key={tab.key} href={`/community?sort=${tab.key}`} style={{
+                display: 'flex', alignItems: 'center', gap: '6px',
+                padding: '7px 14px', borderRadius: '8px',
+                fontSize: '13px', textDecoration: 'none',
+                whiteSpace: 'nowrap', flexShrink: 0,
+                background: sortMode === tab.key ? '#F0E8D8' : 'transparent',
+                color: sortMode === tab.key ? '#1C1209' : '#9A8F87',
+                fontWeight: sortMode === tab.key ? 600 : 500,
+              }}>
+                <span>{tab.emoji}</span>
+                {tab.label}
+              </Link>
+            ))}
+          </div>
 
           {user && communities?.[0] && (
             <Link href={`/community/r/${communities[0].slug}/submit`} style={{
-              marginLeft: 'auto',
+              flexShrink: 0,
               display: 'flex', alignItems: 'center', gap: '6px',
               background: 'linear-gradient(145deg, #D4A843, #B8881E)',
               color: '#fff', fontWeight: 600, fontSize: '13px',
               padding: '7px 14px', borderRadius: '8px', textDecoration: 'none',
+              whiteSpace: 'nowrap',
             }}>
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
               Create Post

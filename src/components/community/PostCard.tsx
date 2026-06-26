@@ -139,7 +139,7 @@ export default function PostCard({ post, userId, compact = false }: Props) {
         <Link href={`/community/post/${post.id}`} style={{
           display: 'flex', alignItems: 'center', gap: '5px',
           fontSize: '12px', color: '#9A8F87', textDecoration: 'none',
-          padding: '4px 8px', borderRadius: '6px',
+          padding: '4px 8px', borderRadius: '6px', whiteSpace: 'nowrap',
         }}>
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
