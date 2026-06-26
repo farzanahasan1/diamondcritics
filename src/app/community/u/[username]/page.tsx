@@ -95,7 +95,7 @@ export default async function UserProfilePage({ params }: { params: Promise<{ us
       </div>
 
       {/* ── Profile sidebar ── */}
-      <aside>
+      <aside className="c-profile-sidebar">
         <div style={{ ...card, marginBottom: '12px' }}>
           {/* Banner */}
           <div style={{ height: '72px', background: 'linear-gradient(135deg, #1C1209 0%, #3A2208 100%)' }} />

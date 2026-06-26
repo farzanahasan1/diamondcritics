@@ -80,7 +80,7 @@ export default function AdminClient() {
     <div style={{ maxWidth: '860px', margin: '0 auto' }}>
 
       {/* Header */}
-      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '16px', marginBottom: '20px' }}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'flex-start', justifyContent: 'space-between', gap: '12px', marginBottom: '20px' }}>
         <div>
           <h1 style={{ fontSize: '24px', fontWeight: 700, color: '#1C1209', margin: 0 }}>⚙ Admin Panel</h1>
           <p style={{ fontSize: '13px', color: '#9A8F87', marginTop: '4px' }}>Manage your Diamond Community</p>
@@ -116,15 +116,15 @@ export default function AdminClient() {
       )}
 
       {/* Tabs */}
-      <div style={{ display: 'flex', gap: '4px', marginBottom: '16px', background: '#fff', borderRadius: '10px', padding: '4px', boxShadow: '0 1px 4px rgba(28,18,9,0.07)' }}>
+      <div className="c-sort-bar" style={{ marginBottom: '16px', background: '#fff', borderRadius: '10px', padding: '4px', boxShadow: '0 1px 4px rgba(28,18,9,0.07)' }}>
         {tabs.map(t => (
           <button key={t.key} onClick={() => setTab(t.key)}
             style={{
-              flex: 1, padding: '8px 4px', borderRadius: '7px', border: 'none',
+              flexShrink: 0, padding: '8px 12px', borderRadius: '7px', border: 'none',
               background: tab === t.key ? 'linear-gradient(145deg, #D4A843, #B8881E)' : 'transparent',
               color: tab === t.key ? '#fff' : '#7A6F66',
               fontSize: '12px', fontWeight: tab === t.key ? 700 : 500,
-              cursor: 'pointer', transition: 'all 0.15s',
+              cursor: 'pointer', transition: 'all 0.15s', whiteSpace: 'nowrap',
             }}
           >
             {t.label}

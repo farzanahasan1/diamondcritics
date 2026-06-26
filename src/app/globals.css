@@ -674,6 +674,11 @@ body {
 .c-content-wrap { padding: 28px 24px; }
 @media (max-width: 640px) { .c-content-wrap { padding: 16px 14px; } }
 
+/* ─── Profile page sidebar — shows above posts on mobile ─── */
+@media (max-width: 860px) {
+  .c-profile-sidebar { order: -1; }
+}
+
 /* ─── Auth pages (login / register) ─────────────────────── */
 /* On mobile hide the left branding panel — form gets full width */
 @media (max-width: 640px) {
