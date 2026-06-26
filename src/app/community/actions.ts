@@ -273,6 +273,8 @@ export async function votePost(postId: string, vote: 1 | -1) {
     .eq('user_id', user.id)
     .maybeSingle()
 
+  const isNewUpvote = !existing && vote === 1
+
   if (existing) {
     if (existing.vote === vote) {
       await supabase.from('post_votes').delete().eq('post_id', postId).eq('user_id', user.id)
@@ -287,6 +289,12 @@ export async function votePost(postId: string, vote: 1 | -1) {
   const { data: allVotes } = await supabase.from('post_votes').select('vote').eq('post_id', postId)
   const newScore = allVotes?.reduce((s, v) => s + v.vote, 0) ?? 0
   await supabase.from('posts').update({ score: newScore }).eq('id', postId)
+
+  // Notify post author on new upvote only
+  if (isNewUpvote) {
+    const { data: post } = await supabase.from('posts').select('author_id').eq('id', postId).single()
+    if (post?.author_id) await pushNotification(supabase, post.author_id, user.id, 'post_upvote', postId)
+  }
 
   revalidatePath('/community', 'layout')
 }
@@ -303,6 +311,8 @@ export async function voteComment(commentId: string, vote: 1 | -1) {
     .eq('user_id', user.id)
     .maybeSingle()
 
+  const isNewUpvote = !existing && vote === 1
+
   if (existing) {
     if (existing.vote === vote) {
       await supabase.from('comment_votes').delete().eq('comment_id', commentId).eq('user_id', user.id)
@@ -318,7 +328,66 @@ export async function voteComment(commentId: string, vote: 1 | -1) {
   const newScore = allVotes?.reduce((s, v) => s + v.vote, 0) ?? 0
   await supabase.from('comments').update({ score: newScore }).eq('id', commentId)
 
+  // Notify comment author on new upvote only
+  if (isNewUpvote) {
+    const { data: comment } = await supabase.from('comments').select('author_id, post_id').eq('id', commentId).single()
+    if (comment?.author_id) await pushNotification(supabase, comment.author_id, user.id, 'comment_upvote', comment.post_id, commentId)
+  }
+
   revalidatePath('/community', 'layout')
+}
+
+// ─── Notifications ───────────────────────────────────────────────────────────
+
+type NotifType = 'comment_on_post' | 'reply_to_comment' | 'post_upvote' | 'comment_upvote'
+
+async function pushNotification(
+  supabase: Awaited<ReturnType<typeof createClient>>,
+  userId: string,
+  actorId: string,
+  type: NotifType,
+  postId?: string,
+  commentId?: string,
+) {
+  if (userId === actorId) return
+  await supabase.from('notifications').insert({
+    user_id: userId,
+    actor_id: actorId,
+    type,
+    post_id: postId ?? null,
+    comment_id: commentId ?? null,
+  })
+}
+
+export async function getNotifications() {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { notifications: [], unreadCount: 0 }
+
+  const { data } = await supabase
+    .from('notifications')
+    .select('id, type, read, created_at, post_id, comment_id, actor:profiles!actor_id(username, avatar_url), post:posts!post_id(title)')
+    .eq('user_id', user.id)
+    .order('created_at', { ascending: false })
+    .limit(30)
+
+  const notifications = data ?? []
+  const unreadCount = notifications.filter((n: { read: boolean }) => !n.read).length
+  return { notifications, unreadCount }
+}
+
+export async function markNotificationRead(id: string) {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return
+  await supabase.from('notifications').update({ read: true }).eq('id', id).eq('user_id', user.id)
+}
+
+export async function markAllNotificationsRead() {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return
+  await supabase.from('notifications').update({ read: true }).eq('user_id', user.id).eq('read', false)
 }
 
 // ─── Comments ────────────────────────────────────────────────────────────────
@@ -377,14 +446,27 @@ export async function createComment(formData: FormData) {
     return { error: 'Please slow down. Wait a few seconds between comments.' }
   }
 
-  const { error } = await supabase.from('comments').insert({
+  const { data: newComment, error } = await supabase.from('comments').insert({
     post_id: postId,
     author_id: user.id,
     parent_id: parentId || null,
     body,
-  })
+  }).select('id').single()
 
   if (error) return { error: error.message }
+
+  // Notifications: reply → parent comment author; top-level → post author
+  if (parentId) {
+    const { data: parent } = await supabase.from('comments').select('author_id').eq('id', parentId).single()
+    if (parent?.author_id) {
+      await pushNotification(supabase, parent.author_id, user.id, 'reply_to_comment', postId, newComment?.id)
+    }
+  } else {
+    const { data: post } = await supabase.from('posts').select('author_id').eq('id', postId).single()
+    if (post?.author_id) {
+      await pushNotification(supabase, post.author_id, user.id, 'comment_on_post', postId, newComment?.id)
+    }
+  }
 
   revalidatePath(`/community/post/${postId}`)
 }

@@ -406,6 +406,30 @@ CREATE TRIGGER on_membership_change
   AFTER INSERT OR DELETE ON public.community_members
   FOR EACH ROW EXECUTE FUNCTION public.update_member_count();
 
+-- ─── Notifications ───────────────────────────────────────────
+
+CREATE TABLE IF NOT EXISTS public.notifications (
+  id         UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  user_id    UUID REFERENCES public.profiles(id) ON DELETE CASCADE NOT NULL,
+  actor_id   UUID REFERENCES public.profiles(id) ON DELETE SET NULL,
+  type       TEXT NOT NULL CHECK (type IN ('comment_on_post', 'reply_to_comment', 'post_upvote', 'comment_upvote')),
+  post_id    UUID REFERENCES public.posts(id) ON DELETE CASCADE,
+  comment_id UUID REFERENCES public.comments(id) ON DELETE CASCADE,
+  read       BOOLEAN NOT NULL DEFAULT FALSE,
+  created_at TIMESTAMPTZ DEFAULT NOW() NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_notifications_user ON public.notifications(user_id, created_at DESC);
+
+ALTER TABLE public.notifications ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "notifications_select" ON public.notifications;
+DROP POLICY IF EXISTS "notifications_insert" ON public.notifications;
+DROP POLICY IF EXISTS "notifications_update" ON public.notifications;
+CREATE POLICY "notifications_select" ON public.notifications FOR SELECT USING (auth.uid() = user_id);
+CREATE POLICY "notifications_insert" ON public.notifications FOR INSERT WITH CHECK (auth.uid() IS NOT NULL);
+CREATE POLICY "notifications_update" ON public.notifications FOR UPDATE USING (auth.uid() = user_id);
+
 -- ─── Seed Data (skips if already exists) ─────────────────────
 
 INSERT INTO public.communities (slug, name, description, rules)

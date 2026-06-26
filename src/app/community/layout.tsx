@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { signOut } from './actions'
+import NotificationBell from '@/components/community/NotificationBell'
 
 const SITE_URL = 'https://diamondcritics.com'
 
@@ -113,6 +114,7 @@ export default async function CommunityLayout({ children }: { children: React.Re
                   Admin
                 </Link>
               )}
+              <NotificationBell />
               <Link href={`/community/u/${profile.username}`} style={{ display: 'flex', alignItems: 'center', gap: '6px', textDecoration: 'none', flexShrink: 0 }}>
                 {profile.avatar_url ? (
                   <img src={profile.avatar_url} alt="" style={{ width: '28px', height: '28px', borderRadius: '50%', objectFit: 'cover', outline: '2px solid rgba(212,168,67,0.4)', flexShrink: 0 }} />
