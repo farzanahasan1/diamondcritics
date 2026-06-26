@@ -95,5 +95,18 @@ export async function GET(request: NextRequest) {
     })
   }
 
+  // Auto-join all communities on login
+  const { data: communities } = await supabase.from('communities').select('id')
+  if (communities?.length) {
+    await supabase.from('community_members').upsert(
+      communities.map(c => ({ community_id: c.id, user_id: data.user.id })),
+      { onConflict: 'community_id,user_id', ignoreDuplicates: true }
+    )
+    for (const c of communities) {
+      const { count } = await supabase.from('community_members').select('*', { count: 'exact', head: true }).eq('community_id', c.id)
+      await supabase.from('communities').update({ member_count: count ?? 0 }).eq('id', c.id)
+    }
+  }
+
   return NextResponse.redirect(`${siteUrl}/community`)
 }

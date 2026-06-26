@@ -595,6 +595,13 @@ export async function refreshLinkPreviews() {
 
 // ─── Community membership ────────────────────────────────────────────────────
 
+async function syncMemberCount(supabase: Awaited<ReturnType<typeof createClient>>, communityId: string) {
+  const { count } = await supabase
+    .from('community_members').select('*', { count: 'exact', head: true })
+    .eq('community_id', communityId)
+  await supabase.from('communities').update({ member_count: count ?? 0 }).eq('id', communityId)
+}
+
 export async function joinCommunity(communityId: string) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
@@ -610,6 +617,7 @@ export async function joinCommunity(communityId: string) {
     return { error: error.message }
   }
 
+  await syncMemberCount(supabase, communityId)
   revalidatePath('/community', 'layout')
   return { success: true }
 }
@@ -624,6 +632,7 @@ export async function leaveCommunity(communityId: string) {
     .eq('community_id', communityId)
     .eq('user_id', user.id)
 
+  await syncMemberCount(supabase, communityId)
   revalidatePath('/community', 'layout')
   return { success: true }
 }
