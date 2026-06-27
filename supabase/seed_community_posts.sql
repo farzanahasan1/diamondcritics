@@ -218,8 +218,6 @@ BEGIN
    'text', 189, 200, 11, 3, false, false, false,
    now() - interval '8 hours', now() - interval '8 hours');
 
-  END IF; -- end idempotency guard
-
   -- ── 30 Comments ──────────────────────────────────────────────
 
   INSERT INTO public.comments
@@ -475,5 +473,7 @@ BEGIN
       WHERE post_id = posts.id AND is_deleted = false
     )
   WHERE id IN (p1, p2, p3, p4, p5, p6, p7, p8, p9, p10);
+
+  END IF; -- end idempotency guard (posts + comments + votes all skipped if already seeded)
 
 END $$;
