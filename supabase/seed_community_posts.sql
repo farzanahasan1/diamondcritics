@@ -134,7 +134,15 @@ BEGIN
     (u9, 'Daniel_Foster',       'Daniel Foster',    'Seattle, WA. Gem enthusiast and value hunter. VS1 or don''t bother.',                        567,  234,  now() - interval '180 days')
   ON CONFLICT (id) DO NOTHING;
 
-  -- ── 10 Posts ─────────────────────────────────────────────────
+  -- ── 10 Posts (skip if already seeded — idempotency guard) ───
+
+  IF EXISTS (
+    SELECT 1 FROM public.posts
+    WHERE community_id = comm
+    AND title = 'My jeweler insisted I needed VVS2 clarity for a princess cut. 3 days of research later, here''s what I actually found.'
+  ) THEN
+    RAISE NOTICE 'Posts already seeded — skipping post insert.';
+  ELSE
 
   INSERT INTO public.posts
     (id, community_id, author_id, title, body, type, score, upvotes, downvotes, comment_count, is_draft, is_deleted, is_pinned, created_at, updated_at)
@@ -209,6 +217,8 @@ BEGIN
    E'There is so much conflicting advice about G vs H color that I decided to go see it for myself.\n\nA local jeweler let me spend real time examining two stones side by side:\n\n• 1ct G-VS2 round brilliant in white gold — GIA Excellent cut\n• 1ct H-VS2 round brilliant in white gold — GIA Excellent cut\n\nSame carat, same cut, same clarity. Price difference: $480.\n\nI tested both under real conditions for 30 minutes:\n\nUnder store LED lighting: Identical. Could not tell which was which.\n\nIn north-facing window light (most revealing for color): I thought I detected faint warmth in one stone. Guessed correctly 3 times out of 5. That is 60% — barely above random chance (50%).\n\nIn the white gold prong head only, no finger: Identical in every attempt.\n\nConclusion:\n\nIn white gold, G and H are visually indistinguishable in real-world conditions. The H showed zero detectable warmth when mounted.\n\nWhat $480 actually buys:\n• In yellow gold: absolutely nothing. H is invisible in yellow gold. So is I color.\n• In white gold: a "G" on the GIA certificate. That is the entire difference.\n• In platinum: same as white gold — no visible advantage.\n\nI bought H-VS2. My fiancée has worn it for 4 months. Her friends, her mother, her coworkers: zero comments about color. The ring is stunning.\n\nIf $480 genuinely doesn''t matter to you: buy G for peace of mind. If it matters at all: buy H in white gold and spend the $480 on a better setting or a matching band.',
    'text', 189, 200, 11, 3, false, false, false,
    now() - interval '8 hours', now() - interval '8 hours');
+
+  END IF; -- end idempotency guard
 
   -- ── 30 Comments ──────────────────────────────────────────────
 
