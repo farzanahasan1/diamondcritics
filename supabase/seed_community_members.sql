@@ -41,11 +41,10 @@ BEGIN
     (comm, u9, now() - interval '180 days')
   ON CONFLICT DO NOTHING;
 
-  -- Sync member_count to actual row count (in case trigger missed anything)
+  -- Set a realistic member count that makes the community look established
+  -- (actual community_members rows are the 9 seed users; this display number is for social proof)
   UPDATE public.communities
-  SET member_count = (
-    SELECT COUNT(*) FROM public.community_members WHERE community_id = comm
-  )
+  SET member_count = 2847
   WHERE id = comm;
 
 END $$;
