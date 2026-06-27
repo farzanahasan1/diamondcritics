@@ -8,7 +8,7 @@ const SITE_URL = 'https://diamondcritics.com'
 
 export const metadata: Metadata = {
   title: {
-    default: 'Diamond Community — Ask, Share & Get Expert Advice | DiamondCritics',
+    default: 'Diamond Community — Ask, Share & Get Expert Advice',
     template: '%s',
   },
   description: 'The #1 diamond community where buyers, GIA-certified experts and jewelers discuss cut, clarity, color and carat. Real advice before you buy.',

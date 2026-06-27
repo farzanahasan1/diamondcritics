@@ -8,7 +8,7 @@ import type { Metadata } from 'next'
 const SITE_URL = 'https://diamondcritics.com'
 
 export const metadata: Metadata = {
-  title: 'Diamond Community — Ask Diamond Questions & Get Expert Answers | DiamondCritics',
+  title: 'Diamond Community — Ask Diamond Questions & Get Expert Answers',
   description: 'Join the #1 diamond community. Ask questions about cut, clarity, color, carat and GIA reports. Get real answers from diamond experts, GIA graduates and experienced buyers before you spend thousands.',
   alternates: { canonical: `${SITE_URL}/community` },
   openGraph: {
@@ -112,7 +112,7 @@ export default async function CommunityPage({
   let feedPrecomputedVotes: Record<string, number> = {}
 
   if (sortMode !== 'feed') {
-    let query = supabase.from('posts').select('*').eq('is_deleted', false)
+    let query = supabase.from('posts').select('*').eq('is_deleted', false).eq('is_draft', false)
     if (sortMode === 'new') query = query.order('created_at', { ascending: false })
     else if (sortMode === 'top') query = query.order('score', { ascending: false })
     else query = query.order('created_at', { ascending: false })
@@ -131,6 +131,7 @@ export default async function CommunityPage({
       .from('posts').select('*')
       .in('community_id', joinedCommunityIds)
       .eq('is_deleted', false)
+      .eq('is_draft', false)
       .gte('created_at', fourteenDaysAgo)
       .order('created_at', { ascending: false })
       .limit(200)

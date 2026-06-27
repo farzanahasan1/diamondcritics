@@ -4,7 +4,7 @@ import { getAllPosts } from "@/lib/content";
 import JamesAllenBanner from "@/components/JamesAllenBanner";
 
 export const metadata: Metadata = {
-  title: "Diamond Critics — Expert Diamond Buying Advice by Farzana Hasan",
+  title: { absolute: "Diamond Critics — Expert Diamond Buying Advice by Farzana Hasan" },
   description: "GIA-backed diamond buying guides covering cut, clarity, color, and carat. Data-driven advice from Farzana Hasan, GIA Expert — so you never overpay for a diamond.",
   alternates: { canonical: "https://diamondcritics.com" },
   openGraph: {

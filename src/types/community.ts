@@ -39,6 +39,7 @@ export interface Post {
   downvotes: number
   comment_count: number
   is_deleted: boolean
+  is_draft: boolean
   is_pinned: boolean
   created_at: string
   updated_at: string

@@ -5,6 +5,7 @@ import CommentSection from '@/components/community/CommentSection'
 import VoteButtons from '@/components/community/VoteButtons'
 import CommunitySidebar from '@/components/community/CommunitySidebar'
 import LinkPreviewImg from '@/components/community/LinkPreviewImg'
+import PostActions from '@/components/community/PostActions'
 import type { Comment, Post } from '@/types/community'
 import type { Metadata } from 'next'
 
@@ -114,6 +115,15 @@ export default async function PostDetailPage({ params }: { params: Promise<{ id:
 
   if (!postRaw || postRaw.is_deleted) redirect('/community')
 
+  // Check admin + draft access before doing any more work
+  let isAdmin = false
+  if (user) {
+    const { data: profile } = await supabase.from('profiles').select('is_admin').eq('id', user.id).single()
+    isAdmin = profile?.is_admin ?? false
+  }
+  const isOwner = user?.id === postRaw.author_id
+  if (postRaw.is_draft && !isOwner && !isAdmin) redirect('/community')
+
   // Fetch author and community separately
   const [{ data: postAuthor }, { data: postCommunity }] = await Promise.all([
     postRaw.author_id
@@ -139,17 +149,6 @@ export default async function PostDetailPage({ params }: { params: Promise<{ id:
   }
 
   const post: Post = { ...postRawEnriched, user_vote: postUserVote }
-
-  // Fetch profile for admin check
-  let isAdmin = false
-  if (user) {
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('is_admin')
-      .eq('id', user.id)
-      .single()
-    isAdmin = profile?.is_admin ?? false
-  }
 
   // Fetch all comments (plain select — avoids FK constraint dependency)
   const { data: flatCommentsData } = await supabase
@@ -364,16 +363,15 @@ export default async function PostDetailPage({ params }: { params: Promise<{ id:
               </svg>
               {post.comment_count} {post.comment_count === 1 ? 'comment' : 'comments'}
             </span>
-            {(user?.id === post.author_id || isAdmin) && (
-              <form action={async () => {
-                'use server'
-                const { deletePost } = await import('@/app/community/actions')
-                await deletePost(id)
-              }} style={{ marginLeft: 'auto' }}>
-                <button type="submit" style={{ fontSize: '12px', color: '#EF9999', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
-                  Delete
-                </button>
-              </form>
+            {(isOwner || isAdmin) && (
+              <PostActions
+                postId={post.id}
+                postTitle={post.title}
+                postBody={post.body}
+                postType={post.type}
+                postUrl={post.url}
+                isDraft={post.is_draft ?? false}
+              />
             )}
           </div>
         </article>

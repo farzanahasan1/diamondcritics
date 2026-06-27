@@ -229,6 +229,67 @@ export async function createPost(formData: FormData) {
   redirect(`/community/post/${post.id}`)
 }
 
+export async function editPost(postId: string, title: string, body: string, url: string) {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { error: 'Not authenticated.' }
+
+  const { data: post } = await supabase
+    .from('posts')
+    .select('author_id, type, community:communities(slug)')
+    .eq('id', postId)
+    .single()
+
+  const { data: profile } = await supabase.from('profiles').select('is_admin').eq('id', user.id).single()
+
+  if (!post || (post.author_id !== user.id && !profile?.is_admin)) {
+    return { error: 'Not authorized.' }
+  }
+
+  const cleanTitle = title.trim()
+  if (!cleanTitle || cleanTitle.length < 5) return { error: 'Title must be at least 5 characters.' }
+  if (cleanTitle.length > 300) return { error: 'Title must be under 300 characters.' }
+
+  const updates: Record<string, string> = { title: cleanTitle, updated_at: new Date().toISOString() }
+  if (post.type === 'text') updates.body = body.trim()
+  if (post.type === 'link') updates.url = url.trim()
+
+  const { error } = await supabase.from('posts').update(updates).eq('id', postId)
+  if (error) return { error: error.message }
+
+  const slug = (post.community as unknown as { slug: string } | null)?.slug
+  revalidatePath(`/community/post/${postId}`)
+  revalidatePath('/community')
+  if (slug) revalidatePath(`/community/r/${slug}`)
+  return { success: true }
+}
+
+export async function toggleDraft(postId: string, isDraft: boolean) {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { error: 'Not authenticated.' }
+
+  const { data: post } = await supabase
+    .from('posts')
+    .select('author_id, community:communities(slug)')
+    .eq('id', postId)
+    .single()
+
+  const { data: profile } = await supabase.from('profiles').select('is_admin').eq('id', user.id).single()
+
+  if (!post || (post.author_id !== user.id && !profile?.is_admin)) {
+    return { error: 'Not authorized.' }
+  }
+
+  await supabase.from('posts').update({ is_draft: isDraft }).eq('id', postId)
+
+  const slug = (post.community as unknown as { slug: string } | null)?.slug
+  revalidatePath(`/community/post/${postId}`)
+  revalidatePath('/community')
+  if (slug) revalidatePath(`/community/r/${slug}`)
+  return { success: true }
+}
+
 export async function deletePost(postId: string) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()

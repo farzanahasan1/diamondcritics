@@ -3,12 +3,13 @@ import Link from "next/link";
 import { getAllPosts } from "@/lib/content";
 
 export const metadata: Metadata = {
-  title: "All Diamond Guides — Diamond Critics",
+  title: "All Diamond Guides",
   description:
     "Every guide, review, and analysis by Farzana Hasan — GIA-certified diamond gemologist. Browse by category: round diamond, buying guides, retailer reviews, and more.",
   alternates: { canonical: "https://diamondcritics.com/blog" },
   openGraph: {
     title: "All Diamond Guides — Diamond Critics",
+
     description:
       "Every guide, review, and analysis by Farzana Hasan — GIA-certified diamond gemologist. Browse by category.",
     url: "https://diamondcritics.com/blog",

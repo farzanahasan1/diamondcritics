@@ -45,11 +45,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!label) return {};
   const description = categoryDescriptions[slug] ?? `Expert guides on ${label.toLowerCase()} by Farzana Hasan, GIA Expert.`;
   return {
-    title: `${label} — Diamond Critics`,
+    title: `${label}`,
     description,
     alternates: { canonical: `https://diamondcritics.com/category/${slug}` },
     openGraph: {
-      title: `${label} — Diamond Critics`,
+      title: `${label}`,
       description,
       url: `https://diamondcritics.com/category/${slug}`,
       type: "website",

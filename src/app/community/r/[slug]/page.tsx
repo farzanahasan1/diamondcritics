@@ -83,6 +83,7 @@ export default async function CommunityPage({
     .select('*')
     .eq('community_id', community.id)
     .eq('is_deleted', false)
+    .eq('is_draft', false)
 
   if (sortMode === 'new') query = query.order('created_at', { ascending: false })
   else if (sortMode === 'top') query = query.order('score', { ascending: false })
