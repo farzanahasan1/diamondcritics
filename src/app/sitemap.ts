@@ -64,11 +64,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       }));
     }
 
-    // Public posts (not deleted)
+    // Public posts (not deleted, not draft)
     const { data: dbPosts } = await supabase
       .from("posts")
       .select("id, updated_at, created_at")
       .eq("is_deleted", false)
+      .eq("is_draft", false)
       .order("created_at", { ascending: false })
       .limit(1000);
 
