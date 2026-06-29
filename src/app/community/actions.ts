@@ -146,6 +146,7 @@ export async function createPost(formData: FormData) {
   const title = ((formData.get('title') ?? '') as string).trim()
   const body = ((formData.get('body') ?? '') as string).trim()
   const url = ((formData.get('url') ?? '') as string).trim()
+  const imageUrl = ((formData.get('image_url') ?? '') as string).trim()
   const communitySlug = formData.get('community') as string
   const type = (formData.get('type') as string) || 'text'
 
@@ -161,6 +162,13 @@ export async function createPost(formData: FormData) {
       }
     } catch {
       return { error: 'Please enter a valid URL (must start with https://).' }
+    }
+  }
+  if (type === 'image') {
+    if (!imageUrl) return { error: 'Please upload an image before posting.' }
+    const expectedPrefix = process.env.NEXT_PUBLIC_SUPABASE_URL + '/storage/v1/object/public/community-images/'
+    if (!imageUrl.startsWith(expectedPrefix)) {
+      return { error: 'Invalid image URL.' }
     }
   }
 
@@ -199,8 +207,9 @@ export async function createPost(formData: FormData) {
       community_id: community.id,
       author_id: user.id,
       title,
-      body: type !== 'link' ? body || null : null,
+      body: type === 'text' ? body || null : null,
       url: type === 'link' ? url || null : null,
+      image_url: type === 'image' ? imageUrl || null : null,
       type,
     })
     .select('id')

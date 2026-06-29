@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/cleanup-community-images",
+      "schedule": "0 3 * * 0"
+    }
+  ]
+}
