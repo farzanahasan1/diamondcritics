@@ -29,8 +29,8 @@ export async function POST(req: NextRequest) {
       }),
     })
     results.push(`IndexNow: ${r.status}`)
-  } catch (e: any) {
-    results.push(`IndexNow error: ${e.message}`)
+  } catch (e) {
+    results.push(`IndexNow error: ${e instanceof Error ? e.message : String(e)}`)
   }
 
   // 2. Bing Webmaster API (direct, faster than IndexNow alone)
@@ -44,8 +44,8 @@ export async function POST(req: NextRequest) {
       }
     )
     results.push(`Bing: ${r.status}`)
-  } catch (e: any) {
-    results.push(`Bing error: ${e.message}`)
+  } catch (e) {
+    results.push(`Bing error: ${e instanceof Error ? e.message : String(e)}`)
   }
 
   // 3. Google sitemap ping (best way to signal Google without Indexing API)
@@ -54,8 +54,8 @@ export async function POST(req: NextRequest) {
       `https://www.google.com/ping?sitemap=${encodeURIComponent(`${BASE}/sitemap.xml`)}`
     )
     results.push(`Google sitemap ping: ${r.status}`)
-  } catch (e: any) {
-    results.push(`Google ping error: ${e.message}`)
+  } catch (e) {
+    results.push(`Google ping error: ${e instanceof Error ? e.message : String(e)}`)
   }
 
   return NextResponse.json({ postUrl, results })

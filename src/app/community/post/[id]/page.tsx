@@ -115,7 +115,8 @@ export default async function PostDetailPage({ params }: { params: Promise<{ id:
 
   // Fetch comment authors separately
   const commentAuthorIds = [...new Set((flatCommentsData ?? []).map(c => c.author_id).filter(Boolean))]
-  let commentAuthorsMap: Record<string, any> = {}
+  type AuthorRow = { id: string; username: string; avatar_url: string | null }
+  let commentAuthorsMap: Record<string, AuthorRow> = {}
   if (commentAuthorIds.length) {
     const { data: cAuthors } = await supabase.from('profiles').select('id,username,avatar_url').in('id', commentAuthorIds)
     if (cAuthors) commentAuthorsMap = Object.fromEntries(cAuthors.map(a => [a.id, a]))

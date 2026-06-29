@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { signOut } from './actions'
 import NotificationBell from '@/components/community/NotificationBell'
+import ErrorBoundary from '@/components/community/ErrorBoundary'
 import { Suspense } from 'react'
 import SearchBar from '@/components/community/SearchBar'
 
@@ -166,7 +167,9 @@ export default async function CommunityLayout({ children }: { children: React.Re
 
       {/* ── Page content ── */}
       <div className="c-content-wrap" style={{ maxWidth: '1100px', margin: '0 auto' }}>
-        {children}
+        <ErrorBoundary>
+          {children}
+        </ErrorBoundary>
       </div>
 
     </div>

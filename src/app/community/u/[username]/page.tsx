@@ -41,7 +41,8 @@ export default async function UserProfilePage({ params }: { params: Promise<{ us
 
   // Fetch communities for these posts separately (avoids FK constraint dependency)
   const communityIds = [...new Set((rawPostsData ?? []).map(p => p.community_id).filter(Boolean))]
-  let communitiesMap: Record<string, any> = {}
+  type CommunityRow = { id: string; slug: string; name: string }
+  let communitiesMap: Record<string, CommunityRow> = {}
   if (communityIds.length) {
     const { data: comms } = await supabase.from('communities').select('id,slug,name').in('id', communityIds)
     if (comms) communitiesMap = Object.fromEntries(comms.map(c => [c.id, c]))

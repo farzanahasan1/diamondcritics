@@ -870,3 +870,209 @@ body {
   .bn-cta-grid { grid-template-columns: 1fr; }
   .bn-cta-wrap { padding: 1.5rem 1.25rem 1.25rem; }
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   COMMUNITY DESIGN SYSTEM
+   ─ Design tokens and reusable classes for all /community pages
+   ═══════════════════════════════════════════════════════════════ */
+
+:root {
+  /* Community palette */
+  --c-bg:        #F4F0EA;
+  --c-surface:   #FFFFFF;
+  --c-border:    #E2DDD7;
+  --c-border-subtle: #F0EDE8;
+
+  /* Brand colours */
+  --c-gold:      #C6973E;
+  --c-gold-bg:   #FEF3DA;
+  --c-gold-dark: #B8881E;
+  --c-navy:      #1C1209;
+
+  /* Text */
+  --c-text:      #1C1209;
+  --c-text-sub:  #5A504A;
+  --c-text-muted:#9A8F87;
+  --c-text-faint:#C4B9AD;
+
+  /* Status colours */
+  --c-blue:      #0079D3;
+  --c-purple:    #6576FF;
+  --c-red:       #EF4444;
+  --c-orange:    #FF4500;
+
+  /* Shadows */
+  --c-shadow-sm: 0 1px 4px rgba(28,18,9,0.07);
+  --c-shadow-md: 0 1px 4px rgba(28,18,9,0.07), 0 4px 16px rgba(28,18,9,0.05);
+
+  /* Border radius */
+  --c-radius-sm: 6px;
+  --c-radius-md: 10px;
+  --c-radius-lg: 12px;
+}
+
+/* ── Cards ───────────────────────────────────────────────────── */
+.c-card {
+  background: var(--c-surface);
+  border-radius: var(--c-radius-lg);
+  border: 1px solid var(--c-border);
+  box-shadow: var(--c-shadow-sm);
+}
+.c-card-elevated {
+  background: var(--c-surface);
+  border-radius: var(--c-radius-lg);
+  box-shadow: var(--c-shadow-md);
+  overflow: hidden;
+}
+
+/* ── Buttons ─────────────────────────────────────────────────── */
+.c-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: none;
+  border-radius: var(--c-radius-sm);
+  font-family: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s, background 0.15s;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.c-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.c-btn-primary {
+  background: linear-gradient(145deg, #D4A843 0%, #B8881E 100%);
+  color: #fff;
+  padding: 9px 24px;
+  font-size: 13px;
+}
+.c-btn-primary:hover:not(:disabled) { opacity: 0.9; }
+
+.c-btn-outline {
+  background: transparent;
+  color: var(--c-text-muted);
+  border: 1px solid var(--c-border);
+  padding: 7px 14px;
+  font-size: 13px;
+}
+.c-btn-outline:hover:not(:disabled) { border-color: var(--c-gold); color: var(--c-gold); }
+
+.c-btn-ghost {
+  background: transparent;
+  color: var(--c-text-muted);
+  padding: 5px 10px;
+  font-size: 12px;
+  border: none;
+}
+.c-btn-ghost:hover:not(:disabled) { color: var(--c-text); }
+
+/* ── Avatar ──────────────────────────────────────────────────── */
+.c-avatar {
+  border-radius: 50%;
+  background: linear-gradient(145deg, #D4A843, #B8881E);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 700;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+.c-avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+/* ── Meta / label text ───────────────────────────────────────── */
+.c-meta {
+  font-size: 12px;
+  color: var(--c-text-muted);
+  line-height: 1;
+}
+.c-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--c-text-muted);
+}
+
+/* ── Flair badge ─────────────────────────────────────────────── */
+.c-flair {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+/* ── Divider ─────────────────────────────────────────────────── */
+.c-divider { border: none; border-top: 1px solid var(--c-border-subtle); }
+
+/* ── Error state ─────────────────────────────────────────────── */
+.c-error-box {
+  background: #FFF7ED;
+  border: 1px solid #FED7AA;
+  border-radius: var(--c-radius-md);
+  padding: 14px 18px;
+  font-size: 13px;
+  color: #9A3412;
+}
+
+/* ── Empty state ─────────────────────────────────────────────── */
+.c-empty {
+  background: var(--c-surface);
+  border-radius: var(--c-radius-lg);
+  border: 1px solid var(--c-border);
+  padding: 40px 24px;
+  text-align: center;
+}
+
+/* ── Sort tab pills ──────────────────────────────────────────── */
+.c-sort-tab {
+  padding: 4px 12px;
+  border-radius: 20px;
+  border: none;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+  background: transparent;
+  color: var(--c-text-sub);
+  transition: all 0.12s;
+  font-family: inherit;
+}
+.c-sort-tab[aria-pressed="true"],
+.c-sort-tab.active {
+  background: linear-gradient(145deg, #D4A843, #B8881E);
+  color: #fff;
+}
+
+/* ── Textarea ────────────────────────────────────────────────── */
+.c-textarea {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1.5px solid var(--c-border);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 14px;
+  color: var(--c-text);
+  background: #FAFAF9;
+  outline: none;
+  display: block;
+  resize: vertical;
+  line-height: 1.6;
+  font-family: inherit;
+  transition: border-color 0.15s;
+}
+.c-textarea:focus { border-color: var(--c-gold); }
+
+/* ── Score / vote display ────────────────────────────────────── */
+.c-score {
+  font-size: 13px;
+  font-weight: 700;
+  min-width: 20px;
+  text-align: center;
+  line-height: 1;
+  color: var(--c-text-sub);
+}
+.c-score.up   { color: var(--c-gold); }
+.c-score.down { color: var(--c-purple); }

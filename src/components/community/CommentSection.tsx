@@ -107,9 +107,9 @@ function CommentNode({ comment, postId, userId, isAdmin, depth = 0 }: CommentNod
               {author?.username
                 ? <Link href={`/community/u/${author.username}`} style={{ fontSize: '12px', fontWeight: 700, color: '#3A2208', textDecoration: 'none' }}>u/{author.username}</Link>
                 : <span style={{ fontSize: '12px', fontWeight: 700, color: '#3A2208' }}>u/[deleted]</span>}
-              {(author as any)?.user_flair && (
+              {author?.user_flair && (
                 <span style={{ fontSize: '10px', fontWeight: 600, padding: '1px 7px', borderRadius: '20px', background: '#F5EDD8', color: '#92400E' }}>
-                  {(author as any).user_flair}
+                  {author.user_flair}
                 </span>
               )}
               <span style={{ fontSize: '11px', color: '#B0A89E' }}>{timeAgo(comment.created_at)}</span>

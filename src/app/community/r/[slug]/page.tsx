@@ -93,7 +93,8 @@ export default async function CommunityPage({
 
   // Fetch authors separately
   const authorIds = [...new Set((rawPostsData ?? []).map(p => p.author_id).filter(Boolean))]
-  let authorsMap: Record<string, any> = {}
+  type AuthorRow = { id: string; username: string; avatar_url: string | null }
+  let authorsMap: Record<string, AuthorRow> = {}
   if (authorIds.length) {
     const { data: authors } = await supabase.from('profiles').select('id,username,avatar_url').in('id', authorIds)
     if (authors) authorsMap = Object.fromEntries(authors.map(a => [a.id, a]))

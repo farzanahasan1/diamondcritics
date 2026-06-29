@@ -21,22 +21,8 @@ function checkMagicBytes(buf: Buffer): boolean {
   return false
 }
 
-// Per-user upload rate limit: max 10 uploads per hour (in-memory, resets on cold start)
-const uploadCounts = new Map<string, { count: number; resetAt: number }>()
 const UPLOAD_LIMIT = 10
 const UPLOAD_WINDOW_MS = 3_600_000 // 1 hour
-
-function checkUploadRateLimit(userId: string): boolean {
-  const now = Date.now()
-  const entry = uploadCounts.get(userId)
-  if (!entry || now >= entry.resetAt) {
-    uploadCounts.set(userId, { count: 1, resetAt: now + UPLOAD_WINDOW_MS })
-    return true
-  }
-  if (entry.count >= UPLOAD_LIMIT) return false
-  entry.count++
-  return true
-}
 
 export async function POST(req: NextRequest) {
   const supabase = await createServerClient()
@@ -50,7 +36,15 @@ export async function POST(req: NextRequest) {
     .single()
   if (profile?.is_banned) return NextResponse.json({ error: 'Your account has been banned.' }, { status: 403 })
 
-  if (!checkUploadRateLimit(user.id)) {
+  // Supabase-backed rate limit — survives cold starts
+  const windowStart = new Date(Date.now() - UPLOAD_WINDOW_MS).toISOString()
+  const { count: recentUploads } = await supabase
+    .from('community_uploads')
+    .select('id', { count: 'exact', head: true })
+    .eq('user_id', user.id)
+    .gte('created_at', windowStart)
+
+  if ((recentUploads ?? 0) >= UPLOAD_LIMIT) {
     return NextResponse.json({ error: 'Too many uploads. Please wait before trying again.' }, { status: 429 })
   }
 
@@ -88,6 +82,9 @@ export async function POST(req: NextRequest) {
   if (error) {
     return NextResponse.json({ error: 'Upload failed. Please try again.' }, { status: 500 })
   }
+
+  // Track upload for rate limiting (fire-and-forget — use service role to bypass RLS)
+  await admin.from('community_uploads').insert({ user_id: user.id })
 
   const { data: { publicUrl } } = admin.storage
     .from('community-images')

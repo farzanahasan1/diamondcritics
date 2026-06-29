@@ -9,6 +9,23 @@ import { containsSpam, isDisposableEmail, AUTO_HIDE_THRESHOLD, type ReportReason
 
 type SupabaseClient = Awaited<ReturnType<typeof createClient>>
 
+async function logAdminAction(
+  supabase: SupabaseClient,
+  adminId: string,
+  action: string,
+  targetType: string,
+  targetId: string,
+  details?: Record<string, unknown>,
+) {
+  await supabase.from('admin_audit_log').insert({
+    admin_id: adminId,
+    action,
+    target_type: targetType,
+    target_id: targetId,
+    details: details ?? null,
+  })
+}
+
 async function requireAuth(supabase: SupabaseClient) {
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return { user: null, error: 'Not authenticated.' as const }
@@ -630,6 +647,7 @@ export async function banUser(userId: string, ban: boolean) {
   if (userId === user.id) return { error: 'You cannot ban yourself.' }
 
   await supabase.from('profiles').update({ is_banned: ban }).eq('id', userId)
+  await logAdminAction(supabase, user.id, ban ? 'ban_user' : 'unban_user', 'user', userId)
   revalidatePath('/community/admin')
   return { success: true }
 }
@@ -646,6 +664,7 @@ export async function awardBadge(userId: string, badgeId: string) {
     badge_id: badgeId,
     awarded_by: user.id,
   })
+  await logAdminAction(supabase, user.id, 'award_badge', 'user', userId, { badge_id: badgeId })
 
   revalidatePath('/community/admin')
   return { success: true }
@@ -659,6 +678,7 @@ export async function revokeBadge(userId: string, badgeId: string) {
   if (adminErr) return { error: adminErr }
 
   await supabase.from('user_badges').delete().eq('user_id', userId).eq('badge_id', badgeId)
+  await logAdminAction(supabase, user.id, 'revoke_badge', 'user', userId, { badge_id: badgeId })
   revalidatePath('/community/admin')
   return { success: true }
 }
@@ -686,21 +706,7 @@ export async function reportContent(
     return { error: 'Could not submit report. Try again.' }
   }
 
-  // Auto-hide if report threshold reached
-  const { count } = await supabase
-    .from('reports')
-    .select('id', { count: 'exact', head: true })
-    .eq('target_type', targetType)
-    .eq('target_id', targetId)
-
-  if ((count ?? 0) >= AUTO_HIDE_THRESHOLD) {
-    if (targetType === 'post') {
-      await supabase.from('posts').update({ is_deleted: true }).eq('id', targetId)
-    } else if (targetType === 'comment') {
-      await supabase.from('comments').update({ is_deleted: true }).eq('id', targetId)
-    }
-  }
-
+  // Reports are queued for admin review only — no auto-hide to prevent abuse
   revalidatePath('/community', 'layout')
   return { success: true }
 }
@@ -713,6 +719,7 @@ export async function resolveReport(reportId: string) {
   if (adminErr) return { error: adminErr }
 
   await supabase.from('reports').update({ status: 'resolved' }).eq('id', reportId)
+  await logAdminAction(supabase, user.id, 'resolve_report', 'report', reportId)
   revalidatePath('/community/admin')
   return { success: true }
 }

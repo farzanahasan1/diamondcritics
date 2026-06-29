@@ -108,7 +108,7 @@ export default async function CommunityPage({
   }
 
   // ─── Standard fetch (hot / new / top) ───────────────────────────────────────
-  let rawPostsData: any[] = []
+  let rawPostsData: Omit<Post, 'author' | 'community' | 'user_vote'>[] = []
   let feedPrecomputedVotes: Record<string, number> = {}
 
   if (sortMode !== 'feed') {
@@ -197,13 +197,15 @@ export default async function CommunityPage({
   const authorIds = [...new Set((rawPostsData ?? []).map(p => p.author_id).filter(Boolean))]
   const communityIds = [...new Set((rawPostsData ?? []).map(p => p.community_id).filter(Boolean))]
 
-  let authorsMap: Record<string, any> = {}
+  type AuthorRow = { id: string; username: string; avatar_url: string | null }
+  type CommunityRow = { id: string; slug: string; name: string }
+  let authorsMap: Record<string, AuthorRow> = {}
   if (authorIds.length) {
     const { data: authors } = await supabase.from('profiles').select('id,username,avatar_url').in('id', authorIds)
     if (authors) authorsMap = Object.fromEntries(authors.map(a => [a.id, a]))
   }
 
-  let communitiesMap: Record<string, any> = {}
+  let communitiesMap: Record<string, CommunityRow> = {}
   if (communityIds.length) {
     const { data: comms } = await supabase.from('communities').select('id,slug,name').in('id', communityIds)
     if (comms) communitiesMap = Object.fromEntries(comms.map(c => [c.id, c]))
