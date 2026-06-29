@@ -150,7 +150,7 @@ export default async function CommunityPage({
     community: { id: community.id, slug: community.slug, name: community.name },
   }))
 
-  let posts: Post[] = rawPosts.map(p => ({ ...p, user_vote: userVotes[p.id] ?? 0 }))
+  let posts: Post[] = rawPosts.map(p => ({ ...p, user_vote: userVotes[p.id] ?? 0 })) as Post[]
   if (sortMode === 'hot') {
     posts = posts.sort((a, b) => hotScore(b.score, b.created_at) - hotScore(a.score, a.created_at))
   }

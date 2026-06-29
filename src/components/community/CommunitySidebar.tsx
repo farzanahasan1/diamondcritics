@@ -63,8 +63,8 @@ export default function CommunitySidebar({ communities, user, activeCommunity }:
             {/* Stats */}
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '20px', paddingBottom: '20px', borderBottom: '1px solid #EDE8E1' }}>
               {[
-                { label: 'Members', value: fmt(featured.member_count) },
-                { label: 'Posts', value: fmt(featured.post_count) },
+                { label: 'Members', value: fmt(featured.member_count ?? 0) },
+                { label: 'Posts', value: fmt(featured.post_count ?? 0) },
               ].map(s => (
                 <div key={s.label} style={{ background: '#FAF8F5', borderRadius: '8px', padding: '10px 12px' }}>
                   <div style={{ fontWeight: 700, fontSize: '20px', color: '#1C1209' }}>{s.value}</div>

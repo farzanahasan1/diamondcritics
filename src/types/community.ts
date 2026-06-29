@@ -27,13 +27,13 @@ export interface Community {
   id: string
   slug: string
   name: string
-  description: string | null
-  rules: string | null
-  icon_url: string | null
-  banner_url: string | null
-  member_count: number
-  post_count: number
-  created_at: string
+  description?: string | null
+  rules?: string | null
+  icon_url?: string | null
+  banner_url?: string | null
+  member_count?: number
+  post_count?: number
+  created_at?: string
 }
 
 export const FLAIR_OPTIONS = [
@@ -63,8 +63,8 @@ export interface Post {
   flair: FlairValue | null
   type: 'text' | 'link' | 'image'
   score: number
-  upvotes: number
-  downvotes: number
+  upvotes?: number
+  downvotes?: number
   comment_count: number
   is_deleted: boolean
   is_draft: boolean

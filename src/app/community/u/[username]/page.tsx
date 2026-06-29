@@ -61,7 +61,7 @@ export default async function UserProfilePage({ params }: { params: Promise<{ us
     author: { id: profile.id, username: profile.username, avatar_url: profile.avatar_url },
     community: communitiesMap[p.community_id] ?? null,
     user_vote: userVotes[p.id] ?? 0,
-  }))
+  })) as Post[]
   const totalKarma = profile.post_karma + profile.comment_karma
   const isOwnProfile = user?.id === profile.id
 
@@ -121,11 +121,15 @@ export default async function UserProfilePage({ params }: { params: Promise<{ us
             {/* Badges */}
             {userBadges && userBadges.length > 0 && (
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginTop: '10px', marginBottom: '4px' }}>
-                {userBadges.map((ub: { badge: { id: string; icon: string; name: string; color: string }; badge_id: string }) => (
-                  <span key={ub.badge_id} title={ub.badge.name} style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', padding: '3px 9px', borderRadius: '20px', fontSize: '11px', fontWeight: 600, color: '#fff', background: ub.badge.color }}>
-                    {ub.badge.icon} {ub.badge.name}
-                  </span>
-                ))}
+                {userBadges.map((ub) => {
+                  const badge = Array.isArray(ub.badge) ? ub.badge[0] : ub.badge
+                  if (!badge) return null
+                  return (
+                    <span key={ub.badge_id} title={badge.name} style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', padding: '3px 9px', borderRadius: '20px', fontSize: '11px', fontWeight: 600, color: '#fff', background: badge.color }}>
+                      {badge.icon} {badge.name}
+                    </span>
+                  )
+                })}
               </div>
             )}
 

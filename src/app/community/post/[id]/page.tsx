@@ -121,7 +121,7 @@ export default async function PostDetailPage({ params }: { params: Promise<{ id:
     postUserVote = (v?.vote as -1 | 1) ?? 0
   }
 
-  const post: Post = { ...postRawEnriched, user_vote: postUserVote }
+  const post = { ...postRawEnriched, user_vote: postUserVote } as Post
 
   // Fetch comments — keep deleted ones that have replies (needed for nesting UI)
   const { data: flatCommentsData } = await supabase
@@ -151,11 +151,11 @@ export default async function PostDetailPage({ params }: { params: Promise<{ id:
     if (cv) commentVotes = Object.fromEntries(cv.map(v => [v.comment_id, v.vote]))
   }
 
-  const commentsWithVotes: Comment[] = (flatComments ?? []).map(c => ({
+  const commentsWithVotes = (flatComments ?? []).map(c => ({
     ...c,
     user_vote: commentVotes[c.id] ?? 0,
     body_html: renderMarkdown(c.body ?? ''),
-  }))
+  })) as Comment[]
 
   const nestedComments = nestComments(commentsWithVotes)
 

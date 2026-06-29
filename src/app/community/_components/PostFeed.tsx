@@ -116,10 +116,10 @@ export default async function PostFeed({
 
   let posts: Post[] = rawPostsData.map(p => ({
     ...p,
-    author: authorsMap[p.author_id] ?? null,
-    community: communitiesMap[p.community_id] ?? null,
+    author: p.author_id ? (authorsMap[p.author_id] ?? null) : null,
+    community: p.community_id ? (communitiesMap[p.community_id] ?? null) : null,
     user_vote: userVotes[p.id] ?? 0,
-  }))
+  } as Post))
   if (sortMode === 'hot') {
     posts = posts.sort((a, b) => hotScore(b.score, b.created_at) - hotScore(a.score, a.created_at))
   }

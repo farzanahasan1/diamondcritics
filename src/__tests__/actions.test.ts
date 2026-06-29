@@ -450,7 +450,7 @@ describe('resolveReport', () => {
     } as never)
 
     const { resolveReport } = await import('@/app/community/actions/admin')
-    const result = await resolveReport('report-1', 'removed')
+    const result = await resolveReport('report-1')
     expect(result).toEqual({ error: 'Admin only.' })
   })
 })

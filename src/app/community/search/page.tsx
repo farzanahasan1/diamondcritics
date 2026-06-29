@@ -43,7 +43,7 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
-  let posts: { id: string; title: string; body: string | null; type: string; flair: string | null; score: number; comment_count: number; created_at: string; author?: { username: string } | null; community?: { slug: string; name: string } | null }[] = []
+  let posts: { id: string; title: string; body: string | null; type: string; flair: string | null; score: number; comment_count: number; created_at: string; author_id?: string | null; community_id?: string | null; author?: { username: string } | null; community?: { slug: string; name: string } | null }[] = []
   let error = false
 
   if (query.length >= 2) {
@@ -74,8 +74,8 @@ export default async function SearchPage({ searchParams }: { searchParams: Promi
 
       posts = posts.map(p => ({
         ...p,
-        author: authorMap[p.author_id] ?? null,
-        community: communityMap[p.community_id] ?? null,
+        author: p.author_id ? (authorMap[p.author_id] ?? null) : null,
+        community: p.community_id ? (communityMap[p.community_id] ?? null) : null,
       }))
     }
   }
