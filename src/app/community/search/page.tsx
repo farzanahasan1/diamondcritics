@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import Link from 'next/link'
 import type { Metadata } from 'next'
 import { FLAIR_OPTIONS } from '@/types/community'
+import { timeAgo } from '@/lib/community/timeAgo'
 
 export async function generateMetadata({ searchParams }: { searchParams: Promise<{ q?: string }> }): Promise<Metadata> {
   const { q } = await searchParams
@@ -9,17 +10,6 @@ export async function generateMetadata({ searchParams }: { searchParams: Promise
     title: q ? `"${q}" — Community Search` : 'Search Community',
     description: `Search the DiamondCritics community for posts about ${q ?? 'diamonds'}.`,
   }
-}
-
-function timeAgo(dateStr: string) {
-  const diff = Date.now() - new Date(dateStr).getTime()
-  const mins = Math.floor(diff / 60000)
-  if (mins < 1) return 'just now'
-  if (mins < 60) return `${mins}m ago`
-  const hrs = Math.floor(mins / 60)
-  if (hrs < 24) return `${hrs}h ago`
-  const days = Math.floor(hrs / 24)
-  return days < 30 ? `${days}d ago` : new Date(dateStr).toLocaleDateString()
 }
 
 // Bold-highlight every occurrence of `term` inside `text`
@@ -46,16 +36,17 @@ function snippet(body: string | null, term: string, maxLen = 160): string {
 
 export default async function SearchPage({ searchParams }: { searchParams: Promise<{ q?: string }> }) {
   const { q } = await searchParams
-  const query = q?.trim() ?? ''
+  // Cap query length to prevent ILIKE DoS on large text input
+  const query = (q?.trim() ?? '').slice(0, 200)
 
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
-  let posts: any[] = []
+  let posts: { id: string; title: string; body: string | null; type: string; flair: string | null; score: number; comment_count: number; created_at: string; author?: { username: string } | null; community?: { slug: string; name: string } | null }[] = []
   let error = false
 
   if (query.length >= 2) {
-    const safe = query.replace(/[%_]/g, '\\$&') // escape ILIKE wildcards
+    const safe = query.replace(/[%_\\]/g, '\\$&') // escape ILIKE wildcards + backslash
     const { data, error: err } = await supabase
       .from('posts')
       .select('id, title, body, type, flair, score, comment_count, created_at, author_id, community_id')

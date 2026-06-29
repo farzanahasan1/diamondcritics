@@ -45,7 +45,8 @@ export default function VoteButtons({ id, type, initialScore, initialVote, userI
         <button
           onClick={() => handleVote(1)}
           disabled={isPending}
-          title="Upvote"
+          aria-label={upActive ? 'Remove upvote' : 'Upvote'}
+          aria-pressed={upActive}
           style={{
             background: upActive ? '#FEF3DA' : 'transparent',
             border: 'none', borderRadius: '6px',
@@ -57,17 +58,18 @@ export default function VoteButtons({ id, type, initialScore, initialVote, userI
           onMouseEnter={e => { if (!upActive) (e.currentTarget as HTMLButtonElement).style.color = '#C6973E' }}
           onMouseLeave={e => { if (!upActive) (e.currentTarget as HTMLButtonElement).style.color = '#C4B9AD' }}
         >
-          <svg width="18" height="18" viewBox="0 0 24 24" fill={upActive ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2.2">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill={upActive ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2.2" aria-hidden="true">
             <path d="M12 4l8 8H4z" />
           </svg>
         </button>
-        <span style={{ fontSize: '13px', fontWeight: 700, color: upActive ? '#C6973E' : downActive ? '#6576FF' : '#5A504A', minWidth: '20px', textAlign: 'center', lineHeight: 1 }}>
+        <span style={{ fontSize: '13px', fontWeight: 700, color: upActive ? '#C6973E' : downActive ? '#6576FF' : '#5A504A', minWidth: '20px', textAlign: 'center', lineHeight: 1 }} aria-label={`Score: ${score}`}>
           {score}
         </span>
         <button
           onClick={() => handleVote(-1)}
           disabled={isPending}
-          title="Downvote"
+          aria-label={downActive ? 'Remove downvote' : 'Downvote'}
+          aria-pressed={downActive}
           style={{
             background: downActive ? '#EEF0FF' : 'transparent',
             border: 'none', borderRadius: '6px',
@@ -79,7 +81,7 @@ export default function VoteButtons({ id, type, initialScore, initialVote, userI
           onMouseEnter={e => { if (!downActive) (e.currentTarget as HTMLButtonElement).style.color = '#6576FF' }}
           onMouseLeave={e => { if (!downActive) (e.currentTarget as HTMLButtonElement).style.color = '#C4B9AD' }}
         >
-          <svg width="18" height="18" viewBox="0 0 24 24" fill={downActive ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2.2">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill={downActive ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2.2" aria-hidden="true">
             <path d="M12 20l-8-8h16z" />
           </svg>
         </button>
@@ -93,6 +95,8 @@ export default function VoteButtons({ id, type, initialScore, initialVote, userI
       <button
         onClick={() => handleVote(1)}
         disabled={isPending}
+        aria-label={upActive ? `Remove upvote (score: ${score})` : `Upvote (score: ${score})`}
+        aria-pressed={upActive}
         style={{
           background: upActive ? '#FEF3DA' : 'transparent',
           border: 'none', borderRadius: '6px',
@@ -103,7 +107,7 @@ export default function VoteButtons({ id, type, initialScore, initialVote, userI
           transition: 'background 0.15s, color 0.15s',
         }}
       >
-        <svg width="13" height="13" viewBox="0 0 24 24" fill={upActive ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2.5">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill={upActive ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2.5" aria-hidden="true">
           <path d="M12 4l8 8H4z" />
         </svg>
         {score}
@@ -111,6 +115,8 @@ export default function VoteButtons({ id, type, initialScore, initialVote, userI
       <button
         onClick={() => handleVote(-1)}
         disabled={isPending}
+        aria-label={downActive ? 'Remove downvote' : 'Downvote'}
+        aria-pressed={downActive}
         style={{
           background: downActive ? '#EEF0FF' : 'transparent',
           border: 'none', borderRadius: '6px',
@@ -121,7 +127,7 @@ export default function VoteButtons({ id, type, initialScore, initialVote, userI
           transition: 'background 0.15s, color 0.15s',
         }}
       >
-        <svg width="13" height="13" viewBox="0 0 24 24" fill={downActive ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2.5">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill={downActive ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2.5" aria-hidden="true">
           <path d="M12 20l-8-8h16z" />
         </svg>
         Downvote

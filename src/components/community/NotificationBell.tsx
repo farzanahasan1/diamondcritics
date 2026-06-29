@@ -15,13 +15,7 @@ type Notif = {
   post: { title: string } | null
 }
 
-function timeAgo(iso: string) {
-  const s = Math.floor((Date.now() - new Date(iso).getTime()) / 1000)
-  if (s < 60) return `${s}s ago`
-  if (s < 3600) return `${Math.floor(s / 60)}m ago`
-  if (s < 86400) return `${Math.floor(s / 3600)}h ago`
-  return `${Math.floor(s / 86400)}d ago`
-}
+import { timeAgo } from '@/lib/community/timeAgo'
 
 function notifText(n: Notif) {
   const who = n.actor?.username ?? 'Someone'
@@ -57,7 +51,7 @@ function Avatar({ actor }: { actor: Notif['actor'] }) {
   return (
     <div style={{ width: 32, height: 32, borderRadius: '50%', flexShrink: 0, overflow: 'hidden', background: 'linear-gradient(145deg, #D4A843, #B8881E)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: 12, fontWeight: 700 }}>
       {actor?.avatar_url
-        ? <img src={actor.avatar_url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+        ? <img src={actor.avatar_url} alt={`${actor.username}'s avatar`} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
         : initial}
     </div>
   )
@@ -71,10 +65,15 @@ export default function NotificationBell() {
   const ref = useRef<HTMLDivElement>(null)
 
   const load = useCallback(async () => {
-    const res = await getNotifications()
-    setNotifs(res.notifications as unknown as Notif[])
-    setUnread(res.unreadCount)
-    setLoading(false)
+    try {
+      const res = await getNotifications()
+      setNotifs((res.notifications ?? []) as unknown as Notif[])
+      setUnread(res.unreadCount ?? 0)
+    } catch {
+      // Silently ignore — bell just shows 0 if network fails
+    } finally {
+      setLoading(false)
+    }
   }, [])
 
   useEffect(() => { load() }, [load])
@@ -110,6 +109,8 @@ export default function NotificationBell() {
       {/* Bell button */}
       <button
         onClick={() => setOpen(v => !v)}
+        aria-label={unread > 0 ? `Notifications — ${unread} unread` : 'Notifications'}
+        aria-expanded={open}
         title="Notifications"
         style={{
           position: 'relative', background: open ? 'rgba(255,255,255,0.08)' : 'transparent',

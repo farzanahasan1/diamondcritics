@@ -12,17 +12,7 @@ import type { Comment, Post } from '@/types/community'
 import { FLAIR_OPTIONS } from '@/types/community'
 import type { Metadata } from 'next'
 import { renderMarkdown } from '@/lib/community/markdown'
-
-function timeAgo(dateStr: string) {
-  const diff = Date.now() - new Date(dateStr).getTime()
-  const mins = Math.floor(diff / 60000)
-  if (mins < 1) return 'just now'
-  if (mins < 60) return `${mins}m ago`
-  const hours = Math.floor(mins / 60)
-  if (hours < 24) return `${hours}h ago`
-  const days = Math.floor(hours / 24)
-  return days < 30 ? `${days}d ago` : new Date(dateStr).toLocaleDateString()
-}
+import { timeAgo } from '@/lib/community/timeAgo'
 
 function nestComments(flat: Comment[]): Comment[] {
   const map: Record<string, Comment> = {}
@@ -116,10 +106,10 @@ export default async function PostDetailPage({ params }: { params: Promise<{ id:
 
   const post: Post = { ...postRawEnriched, user_vote: postUserVote }
 
-  // Fetch all comments (plain select — avoids FK constraint dependency)
+  // Fetch comments — keep deleted ones that have replies (needed for nesting UI)
   const { data: flatCommentsData } = await supabase
     .from('comments')
-    .select('*')
+    .select('id, post_id, author_id, parent_id, body, score, is_deleted, created_at')
     .eq('post_id', id)
     .order('created_at', { ascending: true })
 

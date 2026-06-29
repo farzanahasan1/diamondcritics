@@ -6,17 +6,8 @@ import { createComment, deleteComment } from '@/app/community/actions'
 import VoteButtons from './VoteButtons'
 import ReportButton from './ReportButton'
 import type { Comment } from '@/types/community'
+import { timeAgo } from '@/lib/community/timeAgo'
 
-function timeAgo(dateStr: string) {
-  const diff = Date.now() - new Date(dateStr).getTime()
-  const mins = Math.floor(diff / 60000)
-  if (mins < 1) return 'just now'
-  if (mins < 60) return `${mins}m ago`
-  const hours = Math.floor(mins / 60)
-  if (hours < 24) return `${hours}h ago`
-  const days = Math.floor(hours / 24)
-  return days < 30 ? `${days}d ago` : new Date(dateStr).toLocaleDateString()
-}
 
 const textareaStyle: React.CSSProperties = {
   width: '100%', boxSizing: 'border-box',
@@ -122,7 +113,12 @@ function CommentNode({ comment, postId, userId, isAdmin, depth = 0 }: CommentNod
                 </span>
               )}
               <span style={{ fontSize: '11px', color: '#B0A89E' }}>{timeAgo(comment.created_at)}</span>
-              <button onClick={() => setCollapsed(c => !c)} style={{ fontSize: '11px', color: '#B0A89E', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
+              <button
+                onClick={() => setCollapsed(c => !c)}
+                aria-expanded={!collapsed}
+                aria-label={collapsed ? 'Expand comment thread' : 'Collapse comment thread'}
+                style={{ fontSize: '11px', color: '#B0A89E', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
+              >
                 [{collapsed ? '+' : '–'}]
               </button>
             </div>

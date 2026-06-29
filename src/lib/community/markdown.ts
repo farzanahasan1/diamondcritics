@@ -11,13 +11,21 @@ renderer.link = ({ href, title, text }: { href: string; title?: string | null; t
 
 marked.use({ renderer })
 
-// Strip event handlers and script tags from any HTML that slips through
+// Strip XSS vectors: script tags, ALL inline event handlers, dangerous protocols, SVG abuse
 function sanitize(html: string): string {
   return html
+    // Remove <script> blocks entirely
     .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
-    .replace(/\son\w+="[^"]*"/gi, '')
-    .replace(/\son\w+='[^']*'/gi, '')
-    .replace(/javascript:/gi, 'blocked:')
+    // Remove <style> blocks (can contain expression() exploits)
+    .replace(/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi, '')
+    // Remove on* event handlers regardless of quote style (onerror, onload, onclick, etc.)
+    .replace(/\s+on[a-z]+\s*=\s*(?:"[^"]*"|'[^']*'|[^\s>]*)/gi, '')
+    // Neutralise javascript: and data: URIs in href/src/action
+    .replace(/(href|src|action)\s*=\s*["']\s*(?:javascript|data|vbscript):/gi, '$1="#blocked:')
+    // Remove <iframe>, <object>, <embed>, <base>, <form> — not needed in comments
+    .replace(/<\/?(iframe|object|embed|base|form|input|button|select|textarea)\b[^>]*>/gi, '')
+    // Remove SVG event attributes (onload etc. inside <svg ...>)
+    .replace(/<svg[^>]*>/gi, '<svg>')
 }
 
 export function renderMarkdown(text: string): string {

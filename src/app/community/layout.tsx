@@ -129,7 +129,7 @@ export default async function CommunityLayout({ children }: { children: React.Re
               <NotificationBell />
               <Link href={`/community/u/${profile.username}`} style={{ display: 'flex', alignItems: 'center', gap: '6px', textDecoration: 'none', flexShrink: 0 }}>
                 {profile.avatar_url ? (
-                  <img src={profile.avatar_url} alt="" style={{ width: '28px', height: '28px', borderRadius: '50%', objectFit: 'cover', outline: '2px solid rgba(212,168,67,0.4)', flexShrink: 0 }} />
+                  <img src={profile.avatar_url} alt={`${profile.username}'s avatar`} style={{ width: '28px', height: '28px', borderRadius: '50%', objectFit: 'cover', outline: '2px solid rgba(212,168,67,0.4)', flexShrink: 0 }} />
                 ) : (
                   <div style={{ width: '28px', height: '28px', borderRadius: '50%', background: 'linear-gradient(145deg, #D4A843, #B8881E)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '11px', fontWeight: 700, flexShrink: 0 }}>
                     {profile.username[0].toUpperCase()}

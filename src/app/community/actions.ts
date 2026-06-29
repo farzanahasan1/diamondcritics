@@ -5,6 +5,23 @@ import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { containsSpam, isDisposableEmail, AUTO_HIDE_THRESHOLD, type ReportReason } from '@/lib/community/moderation'
 
+// ─── Auth helpers ────────────────────────────────────────────────────────────
+
+type SupabaseClient = Awaited<ReturnType<typeof createClient>>
+
+async function requireAuth(supabase: SupabaseClient) {
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { user: null, error: 'Not authenticated.' as const }
+  return { user, error: null }
+}
+
+async function requireAdmin(supabase: SupabaseClient, userId: string) {
+  const { data: profile } = await supabase
+    .from('profiles').select('is_admin').eq('id', userId).single()
+  if (!profile?.is_admin) return { isAdmin: false, error: 'Admin only.' as const }
+  return { isAdmin: true, error: null }
+}
+
 // ─── OG Image fetcher ────────────────────────────────────────────────────────
 
 async function fetchOgImage(url: string): Promise<string | null> {
@@ -261,9 +278,9 @@ export async function editPost(postId: string, title: string, body: string, url:
     .eq('id', postId)
     .single()
 
-  const { data: profile } = await supabase.from('profiles').select('is_admin').eq('id', user.id).single()
+  const { isAdmin } = await requireAdmin(supabase, user.id)
 
-  if (!post || (post.author_id !== user.id && !profile?.is_admin)) {
+  if (!post || (post.author_id !== user.id && !isAdmin)) {
     return { error: 'Not authorized.' }
   }
 
@@ -296,9 +313,9 @@ export async function toggleDraft(postId: string, isDraft: boolean) {
     .eq('id', postId)
     .single()
 
-  const { data: profile } = await supabase.from('profiles').select('is_admin').eq('id', user.id).single()
+  const { isAdmin } = await requireAdmin(supabase, user.id)
 
-  if (!post || (post.author_id !== user.id && !profile?.is_admin)) {
+  if (!post || (post.author_id !== user.id && !isAdmin)) {
     return { error: 'Not authorized.' }
   }
 
@@ -583,16 +600,10 @@ export async function deleteComment(commentId: string, postId: string) {
 
 export async function createCommunity(formData: FormData) {
   const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) return { error: 'Not authenticated.' }
-
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('is_admin')
-    .eq('id', user.id)
-    .single()
-
-  if (!profile?.is_admin) return { error: 'Admin only.' }
+  const { user, error: authErr } = await requireAuth(supabase)
+  if (!user) return { error: authErr }
+  const { error: adminErr } = await requireAdmin(supabase, user.id)
+  if (adminErr) return { error: adminErr }
 
   const name = ((formData.get('name') ?? '') as string).trim()
   const slug = ((formData.get('slug') ?? '') as string).trim().toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
@@ -612,16 +623,10 @@ export async function createCommunity(formData: FormData) {
 
 export async function banUser(userId: string, ban: boolean) {
   const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) return { error: 'Not authenticated.' }
-
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('is_admin')
-    .eq('id', user.id)
-    .single()
-
-  if (!profile?.is_admin) return { error: 'Admin only.' }
+  const { user, error: authErr } = await requireAuth(supabase)
+  if (!user) return { error: authErr }
+  const { error: adminErr } = await requireAdmin(supabase, user.id)
+  if (adminErr) return { error: adminErr }
   if (userId === user.id) return { error: 'You cannot ban yourself.' }
 
   await supabase.from('profiles').update({ is_banned: ban }).eq('id', userId)
@@ -631,16 +636,10 @@ export async function banUser(userId: string, ban: boolean) {
 
 export async function awardBadge(userId: string, badgeId: string) {
   const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) return { error: 'Not authenticated.' }
-
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('is_admin')
-    .eq('id', user.id)
-    .single()
-
-  if (!profile?.is_admin) return { error: 'Admin only.' }
+  const { user, error: authErr } = await requireAuth(supabase)
+  if (!user) return { error: authErr }
+  const { error: adminErr } = await requireAdmin(supabase, user.id)
+  if (adminErr) return { error: adminErr }
 
   await supabase.from('user_badges').upsert({
     user_id: userId,
@@ -654,16 +653,10 @@ export async function awardBadge(userId: string, badgeId: string) {
 
 export async function revokeBadge(userId: string, badgeId: string) {
   const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) return { error: 'Not authenticated.' }
-
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('is_admin')
-    .eq('id', user.id)
-    .single()
-
-  if (!profile?.is_admin) return { error: 'Admin only.' }
+  const { user, error: authErr } = await requireAuth(supabase)
+  if (!user) return { error: authErr }
+  const { error: adminErr } = await requireAdmin(supabase, user.id)
+  if (adminErr) return { error: adminErr }
 
   await supabase.from('user_badges').delete().eq('user_id', userId).eq('badge_id', badgeId)
   revalidatePath('/community/admin')
@@ -714,11 +707,10 @@ export async function reportContent(
 
 export async function resolveReport(reportId: string) {
   const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) return { error: 'Not authenticated.' }
-
-  const { data: profile } = await supabase.from('profiles').select('is_admin').eq('id', user.id).single()
-  if (!profile?.is_admin) return { error: 'Admin only.' }
+  const { user, error: authErr } = await requireAuth(supabase)
+  if (!user) return { error: authErr }
+  const { error: adminErr } = await requireAdmin(supabase, user.id)
+  if (adminErr) return { error: adminErr }
 
   await supabase.from('reports').update({ status: 'resolved' }).eq('id', reportId)
   revalidatePath('/community/admin')
@@ -729,11 +721,10 @@ export async function resolveReport(reportId: string) {
 
 export async function refreshLinkPreviews() {
   const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) return { error: 'Not authenticated.' }
-
-  const { data: profile } = await supabase.from('profiles').select('is_admin').eq('id', user.id).single()
-  if (!profile?.is_admin) return { error: 'Admin only.' }
+  const { user, error: authErr } = await requireAuth(supabase)
+  if (!user) return { error: authErr }
+  const { error: adminErr } = await requireAdmin(supabase, user.id)
+  if (adminErr) return { error: adminErr }
 
   const { data: posts } = await supabase
     .from('posts')
