@@ -16,29 +16,66 @@ function hotScore(score: number, createdAt: string) {
 
 const SITE_URL = 'https://diamondcritics.com'
 
+// Per-community SEO config — title, description, and keywords tailored to each community
+const COMMUNITY_SEO: Record<string, { title: string; description: (m: number, p: number) => string; keywords: string[] }> = {
+  diamonds: {
+    title: 'r/diamonds — Diamond Advice, Prices & GIA Reviews | DiamondCritics',
+    description: (m, p) =>
+      `${m.toLocaleString()} members · ${p.toLocaleString()} posts. The go-to diamond community for GIA-certified advice, engagement ring prices, cut grades, and honest reviews. Ask an expert before you buy.`,
+    keywords: ['diamond community', 'diamond advice', 'GIA diamond', 'diamond prices', 'engagement ring forum', 'diamond cut grade', 'buy diamond online'],
+  },
+  'lab-diamonds': {
+    title: 'r/lab-diamonds — Lab Grown Diamond Community | DiamondCritics',
+    description: (m, p) =>
+      `${m.toLocaleString()} members · ${p.toLocaleString()} posts. Lab grown diamond advice, IGI vs GIA comparison, CVD vs HPHT discussion, and price comparisons from real buyers.`,
+    keywords: ['lab grown diamond', 'lab diamond forum', 'CVD diamond', 'HPHT diamond', 'IGI diamond', 'lab diamond price'],
+  },
+  'engagement-rings': {
+    title: 'r/engagement-rings — Ring Advice & Show & Tell | DiamondCritics',
+    description: (m, p) =>
+      `${m.toLocaleString()} members · ${p.toLocaleString()} posts. Engagement ring advice, show & tell, setting styles, and metal choices. Get feedback before you propose.`,
+    keywords: ['engagement ring forum', 'engagement ring advice', 'ring setting', 'solitaire ring', 'halo ring', 'proposal ideas'],
+  },
+}
+
+function communityMeta(slug: string, name: string, description: string | null, memberCount: number, postCount: number) {
+  const custom = COMMUNITY_SEO[slug]
+  const m = memberCount ?? 0
+  const p = postCount ?? 0
+  const title = custom?.title ?? `r/${slug} — ${name} | DiamondCritics Diamond Community`
+  const desc  = custom
+    ? custom.description(m, p)
+    : `${m.toLocaleString()} members · ${p.toLocaleString()} posts. ${description ?? `Discuss ${name} with diamond enthusiasts and experts on DiamondCritics.`}`
+  const keywords = custom?.keywords ?? [slug, name.toLowerCase(), 'diamond community', 'diamond forum']
+  return { title, desc, keywords }
+}
+
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params
   const supabase = await createClient()
-  const { data: community } = await supabase.from('communities').select('name, description, member_count, post_count').eq('slug', slug).single()
-  if (!community) return {}
-  const title = slug === 'diamonds'
-    ? `Diamonds Community — Expert Diamond Advice, Prices & Reviews | DiamondCritics`
-    : `${community.name} — Diamond Community | DiamondCritics`
-  const description = slug === 'diamonds'
-    ? `Join ${community.member_count?.toLocaleString() ?? 'thousands of'} diamond enthusiasts. Discuss GIA-certified diamonds, engagement ring prices, cut grades and buying advice from real experts.`
-    : (community.description ?? `${community.name} discussion in the DiamondCritics diamond community.`)
+  const { data: c } = await supabase
+    .from('communities')
+    .select('name, description, member_count, post_count')
+    .eq('slug', slug)
+    .single()
+  if (!c) return {}
+
+  const { title, desc, keywords } = communityMeta(slug, c.name, c.description, c.member_count ?? 0, c.post_count ?? 0)
+
   return {
     title,
-    description,
+    description: desc,
+    keywords,
     alternates: { canonical: `${SITE_URL}/community/r/${slug}` },
     openGraph: {
       title,
-      description,
+      description: desc,
       url: `${SITE_URL}/community/r/${slug}`,
       type: 'website',
-      images: [{ url: '/images/diamondcritics-og.png', width: 1200, height: 630 }],
+      siteName: 'DiamondCritics',
+      images: [{ url: '/images/diamondcritics-og.png', width: 1200, height: 630, alt: `${c.name} — DiamondCritics Community` }],
     },
-    twitter: { card: 'summary_large_image' },
+    twitter: { card: 'summary_large_image', title, description: desc },
   }
 }
 
@@ -142,7 +179,18 @@ export default async function CommunityPage({
     inLanguage: 'en-US',
     about: { '@type': 'Thing', name: community.name },
     publisher: { '@type': 'Organization', name: 'DiamondCritics', url: SITE_URL },
-    ...(community.member_count && { numberOfEmployees: { '@type': 'QuantitativeValue', value: community.member_count } }),
+    interactionStatistic: [
+      {
+        '@type': 'InteractionCounter',
+        interactionType: 'https://schema.org/FollowAction',
+        userInteractionCount: community.member_count ?? 0,
+      },
+      {
+        '@type': 'InteractionCounter',
+        interactionType: 'https://schema.org/WriteAction',
+        userInteractionCount: community.post_count ?? 0,
+      },
+    ],
   }
 
   return (
@@ -164,7 +212,11 @@ export default async function CommunityPage({
           <div style={{ padding: '28px 20px 16px', display: 'flex', alignItems: 'flex-end', gap: '12px' }}>
             <div style={{ flex: 1 }}>
               <h1 style={{ fontFamily: 'var(--font-ivy, Georgia, serif)', fontSize: '18px', fontWeight: 600, color: '#1C1209', marginBottom: '3px' }}>r/{slug}</h1>
-              <p style={{ fontSize: '13px', color: '#7A6F66' }}>{community.description}</p>
+              <p style={{ fontSize: '13px', color: '#7A6F66', marginBottom: '4px' }}>{community.description}</p>
+              <p style={{ fontSize: '12px', color: '#9A8F87' }}>
+                <strong style={{ color: '#5A504A' }}>{(community.member_count ?? 0).toLocaleString()}</strong> members
+                {community.post_count ? <> · <strong style={{ color: '#5A504A' }}>{community.post_count.toLocaleString()}</strong> posts</> : null}
+              </p>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
               <JoinButton communityId={community.id} initialIsMember={isMember} userId={user?.id} />
