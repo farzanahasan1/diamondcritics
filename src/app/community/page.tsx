@@ -149,8 +149,3 @@ export default async function CommunityPage({
     </>
   )
 }
-
-
-
-  )
-}
