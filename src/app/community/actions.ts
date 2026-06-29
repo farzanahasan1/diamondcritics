@@ -147,8 +147,12 @@ export async function createPost(formData: FormData) {
   const body = ((formData.get('body') ?? '') as string).trim()
   const url = ((formData.get('url') ?? '') as string).trim()
   const imageUrl = ((formData.get('image_url') ?? '') as string).trim()
+  const rawFlair = ((formData.get('flair') ?? '') as string).trim()
   const communitySlug = formData.get('community') as string
   const type = (formData.get('type') as string) || 'text'
+
+  const VALID_FLAIRS = ['engaged','natural','lab','just-bought','need-advice','price-check','show-tell','comparison','gia-igi','discussion']
+  const flair = VALID_FLAIRS.includes(rawFlair) ? rawFlair : null
 
   if (!title || title.length < 5) return { error: 'Title must be at least 5 characters.' }
   if (title.length > 300) return { error: 'Title must be under 300 characters.' }
@@ -210,6 +214,7 @@ export async function createPost(formData: FormData) {
       body: type === 'text' ? body || null : null,
       url: type === 'link' ? url || null : null,
       image_url: type === 'image' ? imageUrl || null : null,
+      flair,
       type,
     })
     .select('id')

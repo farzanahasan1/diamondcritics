@@ -24,6 +24,21 @@ export interface Community {
   created_at: string
 }
 
+export const FLAIR_OPTIONS = [
+  { value: 'engaged',     label: "I'm Engaged! 💍",    bg: '#FDF2F8', color: '#9D174D' },
+  { value: 'natural',     label: 'Natural Diamond 💎',  bg: '#EFF6FF', color: '#1D4ED8' },
+  { value: 'lab',         label: 'Lab Diamond 🔬',      bg: '#F0FDF4', color: '#166534' },
+  { value: 'just-bought', label: 'Just Bought 🛍️',      bg: '#FFFBEB', color: '#92400E' },
+  { value: 'need-advice', label: 'Need Advice 🙋',      bg: '#FFF7ED', color: '#9A3412' },
+  { value: 'price-check', label: 'Price Check 💰',      bg: '#F5F3FF', color: '#5B21B6' },
+  { value: 'show-tell',   label: 'Show & Tell ✨',      bg: '#ECFDF5', color: '#065F46' },
+  { value: 'comparison',  label: 'Comparison 🔍',       bg: '#F8FAFC', color: '#334155' },
+  { value: 'gia-igi',     label: 'GIA / IGI Report 📋', bg: '#FEF9C3', color: '#713F12' },
+  { value: 'discussion',  label: 'Discussion 💬',       bg: '#F9FAFB', color: '#374151' },
+] as const
+
+export type FlairValue = typeof FLAIR_OPTIONS[number]['value']
+
 export interface Post {
   id: string
   community_id: string
@@ -33,6 +48,7 @@ export interface Post {
   url: string | null
   image_url: string | null
   link_preview_image: string | null
+  flair: FlairValue | null
   type: 'text' | 'link' | 'image'
   score: number
   upvotes: number

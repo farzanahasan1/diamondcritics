@@ -4,6 +4,7 @@ import Link from 'next/link'
 import VoteButtons from './VoteButtons'
 import ReportButton from './ReportButton'
 import type { Post } from '@/types/community'
+import { FLAIR_OPTIONS } from '@/types/community'
 
 function timeAgo(dateStr: string) {
   const diff = Date.now() - new Date(dateStr).getTime()
@@ -29,6 +30,7 @@ export default function PostCard({ post, userId, compact = false }: Props) {
   const author = post.author
   const community = post.community
   const authorLabel = author?.username ? `u/${author.username}` : '[deleted]'
+  const flairMeta = post.flair ? FLAIR_OPTIONS.find(f => f.value === post.flair) : null
 
   return (
     <article style={{
@@ -60,6 +62,22 @@ export default function PostCard({ post, userId, compact = false }: Props) {
           <span>{timeAgo(post.created_at)}</span>
           {post.is_pinned && <span style={{ color: '#16A34A', fontWeight: 500 }}>📌 Pinned</span>}
         </div>
+
+        {/* Flair */}
+        {flairMeta && (
+          <span style={{
+            display: 'inline-block',
+            padding: '2px 9px',
+            borderRadius: '20px',
+            fontSize: '11px',
+            fontWeight: 700,
+            background: flairMeta.bg,
+            color: flairMeta.color,
+            marginBottom: '6px',
+          }}>
+            {flairMeta.label}
+          </span>
+        )}
 
         {/* Title */}
         <Link href={`/community/post/${post.id}`} style={{ textDecoration: 'none' }}>

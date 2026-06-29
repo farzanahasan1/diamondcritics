@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import { createPost } from '@/app/community/actions'
 import Link from 'next/link'
 import { use } from 'react'
+import { FLAIR_OPTIONS, type FlairValue } from '@/types/community'
 
 export default function SubmitPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = use(params)
@@ -12,6 +13,9 @@ export default function SubmitPage({ params }: { params: Promise<{ slug: string 
   const [error, setError] = useState('')
   const [isPending, startTransition] = useTransition()
   const router = useRouter()
+
+  // Flair state
+  const [flair, setFlair] = useState<FlairValue | ''>('')
 
   // Image upload state
   const [imagePreview, setImagePreview] = useState('')
@@ -84,6 +88,7 @@ export default function SubmitPage({ params }: { params: Promise<{ slug: string 
     formData.set('community', slug)
     formData.set('type', type)
     if (type === 'image') formData.set('image_url', imageUrl)
+    if (flair) formData.set('flair', flair)
     startTransition(async () => {
       const result = await createPost(formData)
       if (result?.error) setError(result.error)
@@ -360,6 +365,39 @@ export default function SubmitPage({ params }: { params: Promise<{ slug: string 
                 <style>{`@keyframes spin { to { transform: rotate(360deg) } }`}</style>
               </div>
             )}
+
+            {/* Flair picker */}
+            <div>
+              <p style={{ fontSize: '12px', fontWeight: 600, color: '#7A6F66', marginBottom: '8px' }}>
+                Post Flair <span style={{ fontWeight: 400, color: '#B8B0A8' }}>(optional)</span>
+              </p>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                {FLAIR_OPTIONS.map(opt => {
+                  const selected = flair === opt.value
+                  return (
+                    <button
+                      key={opt.value}
+                      type="button"
+                      onClick={() => setFlair(selected ? '' : opt.value as FlairValue)}
+                      style={{
+                        padding: '4px 10px',
+                        borderRadius: '20px',
+                        fontSize: '12px',
+                        fontWeight: 600,
+                        border: selected ? `2px solid ${opt.color}` : '2px solid transparent',
+                        background: selected ? opt.bg : '#F5F0EB',
+                        color: selected ? opt.color : '#7A6F66',
+                        cursor: 'pointer',
+                        transition: 'all 0.12s',
+                        outline: 'none',
+                      }}
+                    >
+                      {opt.label}
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
 
             {/* Error */}
             {error && (

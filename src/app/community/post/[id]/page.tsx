@@ -7,6 +7,7 @@ import CommunitySidebar from '@/components/community/CommunitySidebar'
 import LinkPreviewImg from '@/components/community/LinkPreviewImg'
 import PostActions from '@/components/community/PostActions'
 import type { Comment, Post } from '@/types/community'
+import { FLAIR_OPTIONS } from '@/types/community'
 import type { Metadata } from 'next'
 
 function renderBody(body: string) {
@@ -282,6 +283,25 @@ export default async function PostDetailPage({ params }: { params: Promise<{ id:
                 <span>{timeAgo(post.created_at)}</span>
                 {post.is_pinned && <span style={{ color: '#16A34A', fontWeight: 600, fontSize: '11px' }}>📌 Pinned</span>}
               </div>
+
+              {/* Flair */}
+              {post.flair && (() => {
+                const f = FLAIR_OPTIONS.find(o => o.value === post.flair)
+                return f ? (
+                  <span style={{
+                    display: 'inline-block',
+                    padding: '3px 11px',
+                    borderRadius: '20px',
+                    fontSize: '12px',
+                    fontWeight: 700,
+                    background: f.bg,
+                    color: f.color,
+                    marginBottom: '10px',
+                  }}>
+                    {f.label}
+                  </span>
+                ) : null
+              })()}
 
               {/* Title */}
               <h1 style={{ fontFamily: 'var(--font-ivy, Georgia, serif)', fontSize: '22px', fontWeight: 600, color: '#1C1209', lineHeight: 1.35, marginBottom: '14px' }}>
