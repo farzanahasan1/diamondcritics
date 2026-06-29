@@ -3,8 +3,9 @@
 import { useState, useTransition, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { updateProfile } from '@/app/community/actions'
+import { updateProfile, updateUserFlair } from '@/app/community/actions'
 import { createClient } from '@/lib/supabase/client'
+import { USER_FLAIR_OPTIONS } from '@/types/community'
 
 const inputStyle: React.CSSProperties = {
   width: '100%', boxSizing: 'border-box',
@@ -21,6 +22,8 @@ export default function EditProfilePage() {
   const [username, setUsername] = useState('')
   const [displayName, setDisplayName] = useState('')
   const [bio, setBio] = useState('')
+  const [selectedFlair, setSelectedFlair] = useState<string | null>(null)
+  const [flairPending, startFlairTransition] = useTransition()
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -28,15 +31,22 @@ export default function EditProfilePage() {
     supabase.auth.getUser().then(async ({ data: { user } }) => {
       if (!user) { router.push('/community/login'); return }
       const { data: profile } = await supabase
-        .from('profiles').select('username, display_name, bio').eq('id', user.id).single()
+        .from('profiles').select('username, display_name, bio, user_flair').eq('id', user.id).single()
       if (profile) {
         setUsername(profile.username ?? '')
         setDisplayName(profile.display_name ?? '')
         setBio(profile.bio ?? '')
+        setSelectedFlair(profile.user_flair ?? null)
       }
       setLoading(false)
     })
   }, [router])
+
+  function handleFlairSelect(flair: string) {
+    const next = flair === selectedFlair ? null : flair
+    setSelectedFlair(next)
+    startFlairTransition(async () => { await updateUserFlair(next) })
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -137,6 +147,52 @@ export default function EditProfilePage() {
                 onBlur={e => e.currentTarget.style.borderColor = '#E8E2DA'}
               />
               <p style={{ fontSize: '11px', color: '#C4BCB6', marginTop: '4px' }}>{bio.length}/300 characters</p>
+            </div>
+
+            {/* User Flair */}
+            <div style={{ marginBottom: '24px', paddingTop: '20px', borderTop: '1px solid #EDE8E1' }}>
+              <div style={{ marginBottom: '10px' }}>
+                <span style={{ fontSize: '12px', fontWeight: 600, color: '#5A504A' }}>User Flair</span>
+                <span style={{ fontSize: '11px', color: '#B0A89E', marginLeft: '6px' }}>
+                  · shown next to your username on comments
+                  {flairPending && <span style={{ marginLeft: '6px', color: '#D4A843' }}>Saving…</span>}
+                </span>
+              </div>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                {USER_FLAIR_OPTIONS.map(opt => {
+                  const active = selectedFlair === opt.value
+                  return (
+                    <button
+                      key={opt.value}
+                      type="button"
+                      onClick={() => handleFlairSelect(opt.value)}
+                      style={{
+                        padding: '6px 14px', borderRadius: '20px', cursor: 'pointer',
+                        fontSize: '12px', fontWeight: 600,
+                        border: active ? `2px solid ${opt.color}` : '1.5px solid #E8E2DA',
+                        background: active ? opt.bg : 'transparent',
+                        color: active ? opt.color : '#7A6F66',
+                        transition: 'all 0.12s',
+                      }}
+                    >
+                      {opt.value}
+                    </button>
+                  )
+                })}
+                {selectedFlair && (
+                  <button
+                    type="button"
+                    onClick={() => handleFlairSelect(selectedFlair)}
+                    style={{
+                      padding: '6px 12px', borderRadius: '20px', cursor: 'pointer',
+                      fontSize: '11px', fontWeight: 500,
+                      border: '1.5px solid #EDE8E1', background: 'transparent', color: '#B0A89E',
+                    }}
+                  >
+                    ✕ Remove
+                  </button>
+                )}
+              </div>
             </div>
 
             <div style={{ display: 'flex', gap: '10px' }}>

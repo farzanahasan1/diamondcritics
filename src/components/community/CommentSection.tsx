@@ -6,7 +6,6 @@ import { createComment, deleteComment } from '@/app/community/actions'
 import VoteButtons from './VoteButtons'
 import ReportButton from './ReportButton'
 import type { Comment } from '@/types/community'
-import { renderMarkdown } from '@/lib/community/markdown'
 
 function timeAgo(dateStr: string) {
   const diff = Date.now() - new Date(dateStr).getTime()
@@ -132,7 +131,7 @@ function CommentNode({ comment, postId, userId, isAdmin, depth = 0 }: CommentNod
               <>
                 <div
                   className="c-comment-body"
-                  dangerouslySetInnerHTML={{ __html: renderMarkdown(comment.body) }}
+                  dangerouslySetInnerHTML={{ __html: comment.body_html ?? comment.body }}
                   style={{ marginBottom: '8px' }}
                 />
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>

@@ -82,6 +82,7 @@ export interface Comment {
   author_id: string | null
   parent_id: string | null
   body: string
+  body_html?: string
   score: number
   is_deleted: boolean
   created_at: string

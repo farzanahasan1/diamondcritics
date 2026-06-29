@@ -146,6 +146,7 @@ export default async function PostDetailPage({ params }: { params: Promise<{ id:
   const commentsWithVotes: Comment[] = (flatComments ?? []).map(c => ({
     ...c,
     user_vote: commentVotes[c.id] ?? 0,
+    body_html: renderMarkdown(c.body ?? ''),
   }))
 
   const nestedComments = nestComments(commentsWithVotes)
@@ -318,10 +319,11 @@ export default async function PostDetailPage({ params }: { params: Promise<{ id:
                 )
               })()}
 
-              {/* Image */}
+              {/* Image — fetchpriority high because it's often the LCP element */}
               {post.type === 'image' && post.image_url && (
                 <div style={{ marginBottom: '14px' }}>
-                  <img src={post.image_url} alt={post.title} style={{ maxWidth: '100%', borderRadius: '8px' }} />
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={post.image_url} alt={post.title} fetchPriority="high" decoding="async" style={{ maxWidth: '100%', borderRadius: '8px', display: 'block' }} />
                 </div>
               )}
 

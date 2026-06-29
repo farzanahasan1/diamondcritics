@@ -115,6 +115,8 @@ export default function PostCard({ post, userId, compact = false }: Props) {
                 <img
                   src={imgUrl}
                   alt={post.title}
+                  loading="lazy"
+                  decoding="async"
                   style={{ width: '100%', maxHeight: '180px', objectFit: 'cover', display: 'block' }}
                   onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }}
                 />
@@ -132,7 +134,7 @@ export default function PostCard({ post, userId, compact = false }: Props) {
         {/* Image */}
         {post.type === 'image' && post.image_url && (
           <div style={{ marginBottom: '10px' }}>
-            <img src={post.image_url} alt={post.title} style={{ maxHeight: '384px', borderRadius: '8px', objectFit: 'contain' }} />
+            <img src={post.image_url} alt={post.title} loading="lazy" decoding="async" style={{ maxHeight: '384px', borderRadius: '8px', objectFit: 'contain', display: 'block' }} />
           </div>
         )}
 

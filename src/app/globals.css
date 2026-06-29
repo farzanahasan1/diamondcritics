@@ -718,6 +718,19 @@ body {
 .c-post-body h1, .c-post-body h2, .c-post-body h3 {
   font-weight: 600; color: #1C1209; margin: 1em 0 0.4em;
 }
+.c-post-body table, .c-comment-body table {
+  border-collapse: collapse; width: 100%; margin-bottom: 0.75em; font-size: 13px;
+}
+.c-post-body th, .c-comment-body th {
+  background: #FAF8F5; font-weight: 700; color: #3A2208;
+  padding: 6px 12px; border: 1px solid #EDE8E1; text-align: left;
+}
+.c-post-body td, .c-comment-body td {
+  padding: 5px 12px; border: 1px solid #EDE8E1; color: #5A504A;
+}
+.c-post-body tr:nth-child(even), .c-comment-body tr:nth-child(even) {
+  background: #FAFAF8;
+}
 
 /* ─── Search results hover ───────────────────────────────── */
 .c-search-result {

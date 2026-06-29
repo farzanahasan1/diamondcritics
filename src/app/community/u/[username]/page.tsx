@@ -104,7 +104,7 @@ export default async function UserProfilePage({ params }: { params: Promise<{ us
           <div style={{ padding: '0 20px 20px' }}>
             <div style={{ marginTop: '-28px', marginBottom: '12px' }}>
               {profile.avatar_url ? (
-                <img src={profile.avatar_url} alt={username} style={{ width: '56px', height: '56px', borderRadius: '50%', objectFit: 'cover', outline: '3px solid #fff', boxShadow: '0 2px 8px rgba(0,0,0,0.15)' }} />
+                <img src={profile.avatar_url} alt={username} width={56} height={56} loading="lazy" decoding="async" style={{ width: '56px', height: '56px', borderRadius: '50%', objectFit: 'cover', outline: '3px solid #fff', boxShadow: '0 2px 8px rgba(0,0,0,0.15)' }} />
               ) : (
                 <div style={{ width: '56px', height: '56px', borderRadius: '50%', background: 'linear-gradient(145deg, #D4A843, #B8881E)', display: 'flex', alignItems: 'center', justifyContent: 'center', outline: '3px solid #fff', boxShadow: '0 2px 8px rgba(0,0,0,0.15)', fontSize: '22px', fontWeight: 700, color: '#fff' }}>
                   {username[0].toUpperCase()}
