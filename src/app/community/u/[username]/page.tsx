@@ -27,15 +27,15 @@ export default async function UserProfilePage({ params }: { params: Promise<{ us
   const { data: { user } } = await supabase.auth.getUser()
 
   const { data: profile } = await supabase
-    .from('profiles').select('*').eq('username', username).single()
+    .from('profiles').select('id,username,avatar_url,display_name,bio,user_flair,post_karma,comment_karma,is_admin,is_banned,created_at').eq('username', username).single()
   if (!profile) redirect('/community')
 
   const { data: userBadges } = await supabase
-    .from('user_badges').select('*, badge:badges(*)').eq('user_id', profile.id)
+    .from('user_badges').select('id,user_id,badge_id,awarded_at,badge:badges(id,name,description,icon,color)').eq('user_id', profile.id)
 
   const { data: rawPostsData } = await supabase
     .from('posts')
-    .select('*')
+    .select('id,community_id,author_id,title,body,url,image_url,link_preview_image,flair,type,score,comment_count,is_deleted,is_draft,is_pinned,created_at,updated_at')
     .eq('author_id', profile.id).eq('is_deleted', false)
     .order('created_at', { ascending: false }).limit(20)
 

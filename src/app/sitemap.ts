@@ -74,12 +74,22 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       .limit(1000);
 
     if (dbPosts) {
-      communityPosts = dbPosts.map((p) => ({
-        url: `${BASE}/community/post/${p.id}`,
-        lastModified: p.updated_at ?? p.created_at ?? new Date(),
-        changeFrequency: "daily" as const,
-        priority: 0.7,
-      }));
+      const now = Date.now()
+      communityPosts = dbPosts.map((p) => {
+        const ageMs = now - new Date(p.created_at ?? 0).getTime()
+        const ageDays = ageMs / 86_400_000
+        const changeFrequency =
+          ageDays < 2   ? 'hourly'  as const :
+          ageDays < 14  ? 'daily'   as const :
+          ageDays < 90  ? 'weekly'  as const :
+                          'monthly' as const
+        return {
+          url: `${BASE}/community/post/${p.id}`,
+          lastModified: p.updated_at ?? p.created_at ?? new Date(),
+          changeFrequency,
+          priority: ageDays < 7 ? 0.8 : 0.6,
+        }
+      })
     }
   } catch {
     // Supabase unavailable at build time — community URLs omitted gracefully

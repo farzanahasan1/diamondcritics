@@ -35,15 +35,30 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   const supabase = await createClient()
   const { data: post } = await supabase
     .from('posts')
-    .select('title, body, url, created_at, author:profiles(username)')
+    .select('title, body, url, image_url, community_id, created_at, author:profiles(username)')
     .eq('id', id)
     .single()
   if (!post) return {}
+
+  let communitySlug: string | null = null
+  let communityName: string | null = null
+  if (post.community_id) {
+    const { data: c } = await supabase
+      .from('communities').select('slug,name').eq('id', post.community_id).single()
+    communitySlug = c?.slug ?? null
+    communityName = c?.name ?? null
+  }
+
   const description = post.body
     ? post.body.slice(0, 155).replace(/\s+/g, ' ').trim() + (post.body.length > 155 ? '…' : '')
     : `Diamond community discussion: ${post.title}. Join DiamondCritics to share your knowledge and get expert answers.`
+
+  const communityLabel = communitySlug ? `r/${communitySlug}` : 'Diamond Community'
+  const title = `${post.title} — ${communityLabel} | DiamondCritics`
+  const ogImage = post.image_url ?? '/images/diamondcritics-og.png'
+
   return {
-    title: `${post.title} — Diamond Community`,
+    title,
     description,
     alternates: { canonical: `${SITE_URL}/community/post/${id}` },
     openGraph: {
@@ -51,9 +66,11 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
       description,
       url: `${SITE_URL}/community/post/${id}`,
       type: 'article',
+      siteName: 'DiamondCritics',
       publishedTime: post.created_at,
+      images: [{ url: ogImage, width: 1200, height: 630, alt: post.title }],
     },
-    twitter: { card: 'summary_large_image' },
+    twitter: { card: 'summary_large_image', title: post.title, description },
   }
 }
 
@@ -165,8 +182,8 @@ export default async function PostDetailPage({ params }: { params: Promise<{ id:
     ...(post.url && { sharedContent: { '@type': 'WebPage', url: post.url } }),
     isPartOf: {
       '@type': 'WebForum',
-      name: 'Diamond Community',
-      url: `${SITE_URL}/community`,
+      name: community ? community.name : 'Diamond Community',
+      url: community ? `${SITE_URL}/community/r/${community.slug}` : `${SITE_URL}/community`,
     },
     interactionStatistic: {
       '@type': 'InteractionCounter',

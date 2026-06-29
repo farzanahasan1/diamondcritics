@@ -18,29 +18,13 @@ export const metadata: Metadata = {
     type: 'website',
     images: [{ url: '/images/diamondcritics-og.png', width: 1200, height: 630 }],
   },
-  twitter: { card: 'summary_large_image' },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Diamond Community — Ask Questions, Get Expert Diamond Advice',
+    description: 'The most trusted diamond community. Real answers from GIA-certified experts, jewelers and buyers on engagement rings, diamond prices and everything diamonds.',
+  },
 }
 
-const forumSchema = {
-  '@context': 'https://schema.org',
-  '@type': 'WebForum',
-  name: 'Diamond Community',
-  alternateName: 'DiamondCritics Diamond Forum',
-  description: 'The premier online diamond community where buyers, GIA-certified experts and professional jewelers discuss diamonds, engagement rings, and diamond prices. Get honest, expert advice before you buy.',
-  url: `${SITE_URL}/community`,
-  inLanguage: 'en-US',
-  about: {
-    '@type': 'Thing',
-    name: 'Diamonds',
-    sameAs: 'https://en.wikipedia.org/wiki/Diamond',
-  },
-  publisher: {
-    '@type': 'Organization',
-    name: 'DiamondCritics',
-    url: SITE_URL,
-  },
-  keywords: 'diamond community, diamond forum, diamond advice, GIA diamond, engagement ring help, diamond price, buy diamond',
-}
 
 const faqSchema = {
   '@context': 'https://schema.org',
@@ -238,6 +222,26 @@ export default async function CommunityPage({
 
   const { data: communities } = await supabase
     .from('communities').select('id,slug,name,description,icon_url,banner_url,member_count,post_count,created_at').order('member_count', { ascending: false })
+
+  const totalMembers = (communities ?? []).reduce((s, c) => s + (c.member_count ?? 0), 0)
+  const totalPosts   = (communities ?? []).reduce((s, c) => s + (c.post_count   ?? 0), 0)
+
+  const forumSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'WebForum',
+    name: 'Diamond Community',
+    alternateName: 'DiamondCritics Diamond Forum',
+    description: 'The premier online diamond community where buyers, GIA-certified experts and professional jewelers discuss diamonds, engagement rings, and diamond prices. Get honest, expert advice before you buy.',
+    url: `${SITE_URL}/community`,
+    inLanguage: 'en-US',
+    about: { '@type': 'Thing', name: 'Diamonds', sameAs: 'https://en.wikipedia.org/wiki/Diamond' },
+    publisher: { '@type': 'Organization', name: 'DiamondCritics', url: SITE_URL },
+    keywords: 'diamond community, diamond forum, diamond advice, GIA diamond, engagement ring help, diamond price, buy diamond',
+    interactionStatistic: [
+      { '@type': 'InteractionCounter', interactionType: 'https://schema.org/FollowAction', userInteractionCount: totalMembers },
+      { '@type': 'InteractionCounter', interactionType: 'https://schema.org/WriteAction',  userInteractionCount: totalPosts },
+    ],
+  }
 
   const sortTabs: { key: SortMode; label: string; emoji: string; authRequired?: boolean }[] = [
     { key: 'hot', label: 'Hot', emoji: '🔥' },

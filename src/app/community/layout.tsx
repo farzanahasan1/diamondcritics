@@ -37,7 +37,7 @@ const orgSchema = {
   name: 'DiamondCritics',
   url: SITE_URL,
   logo: `${SITE_URL}/logo.png`,
-  sameAs: ['https://diamondcritics.com'],
+  sameAs: ['https://twitter.com/diamondcritics'],
   description: 'DiamondCritics is the expert diamond buying resource with GIA-backed guides, live price data, and an active diamond community.',
 }
 

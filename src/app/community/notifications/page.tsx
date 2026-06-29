@@ -6,6 +6,7 @@ import { markAllNotificationsRead } from '../actions'
 
 export const metadata: Metadata = {
   title: 'Notifications — Diamond Community',
+  robots: { index: false, follow: false },
 }
 
 type Notif = {

@@ -8,6 +8,7 @@ import type { Post } from '@/types/community'
 export const metadata: Metadata = {
   title: 'Saved Posts — Diamond Community',
   description: 'Your saved posts from the DiamondCritics community.',
+  robots: { index: false, follow: false },
 }
 
 export default async function SavedPage() {

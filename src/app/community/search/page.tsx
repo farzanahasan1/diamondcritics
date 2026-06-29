@@ -9,6 +9,7 @@ export async function generateMetadata({ searchParams }: { searchParams: Promise
   return {
     title: q ? `"${q}" — Community Search` : 'Search Community',
     description: `Search the DiamondCritics community for posts about ${q ?? 'diamonds'}.`,
+    robots: { index: false, follow: false },
   }
 }
 
