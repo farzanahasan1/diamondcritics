@@ -1,4 +1,7 @@
-import { marked, Renderer } from 'marked'
+import { Marked, Renderer } from 'marked'
+
+// Isolated Marked instance — does NOT touch the global marked singleton used by content.ts
+const communityMarked = new Marked()
 
 // Custom renderer — opens external links in new tab, strips javascript: hrefs
 const renderer = new Renderer()
@@ -9,7 +12,7 @@ renderer.link = ({ href, title, text }: { href: string; title?: string | null; t
   return `<a href="${safe}"${t}${external}>${text}</a>`
 }
 
-marked.use({ renderer })
+communityMarked.use({ renderer })
 
 // Strip XSS vectors: script tags, ALL inline event handlers, dangerous protocols, SVG abuse
 function sanitize(html: string): string {
@@ -29,6 +32,6 @@ function sanitize(html: string): string {
 }
 
 export function renderMarkdown(text: string): string {
-  const html = marked.parse(text, { breaks: true, gfm: true }) as string
+  const html = communityMarked.parse(text, { breaks: true, gfm: true }) as string
   return sanitize(html)
 }
