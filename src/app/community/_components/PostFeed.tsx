@@ -30,7 +30,7 @@ export default async function PostFeed({
       const fourteenDaysAgo = new Date(Date.now() - 14 * 24 * 3_600_000).toISOString()
       const { data: candidates } = await supabase
         .from('posts')
-        .select('id,community_id,author_id,title,body,url,image_url,link_preview_image,flair,type,score,comment_count,is_deleted,is_draft,is_pinned,created_at,updated_at')
+        .select('id,community_id,author_id,title,body,url,image_url,link_preview_image,flair,type,score,upvotes,downvotes,comment_count,is_deleted,is_draft,is_pinned,created_at,updated_at')
         .in('community_id', joinedIds)
         .eq('is_deleted', false).eq('is_draft', false)
         .gte('created_at', fourteenDaysAgo)
@@ -74,7 +74,7 @@ export default async function PostFeed({
   } else {
     let query = supabase
       .from('posts')
-      .select('id,community_id,author_id,title,body,url,image_url,link_preview_image,flair,type,score,comment_count,is_deleted,is_draft,is_pinned,created_at,updated_at')
+      .select('id,community_id,author_id,title,body,url,image_url,link_preview_image,flair,type,score,upvotes,downvotes,comment_count,is_deleted,is_draft,is_pinned,created_at,updated_at')
       .eq('is_deleted', false).eq('is_draft', false)
     if (sortMode === 'new') query = query.order('created_at', { ascending: false })
     else if (sortMode === 'top') query = query.order('score', { ascending: false })
