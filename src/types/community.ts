@@ -1,9 +1,21 @@
+export const USER_FLAIR_OPTIONS = [
+  { value: "Just Engaged 💍",      color: '#9D174D', bg: '#FDF2F8' },
+  { value: "GIA Graduate 🎓",      color: '#1D4ED8', bg: '#EFF6FF' },
+  { value: "Lab Diamond Fan 🔬",   color: '#166534', bg: '#F0FDF4' },
+  { value: "Veteran Buyer ⭐",     color: '#92400E', bg: '#FFFBEB' },
+  { value: "Jeweller 💼",          color: '#5B21B6', bg: '#F5F3FF' },
+  { value: "2ct Club 💎",          color: '#065F46', bg: '#ECFDF5' },
+  { value: "First Timer 🌱",       color: '#9A3412', bg: '#FFF7ED' },
+  { value: "Ring Nerd 🔍",         color: '#334155', bg: '#F8FAFC' },
+] as const
+
 export interface Profile {
   id: string
   username: string
   display_name: string | null
   avatar_url: string | null
   bio: string | null
+  user_flair?: string | null
   post_karma: number
   comment_karma: number
   is_admin: boolean

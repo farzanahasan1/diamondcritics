@@ -751,6 +751,29 @@ export async function refreshLinkPreviews() {
   return { updated, total: posts.length }
 }
 
+// ─── Save posts ──────────────────────────────────────────────────────────────
+
+export async function toggleSavePost(postId: string) {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { error: 'Login to save posts.' }
+
+  const { data: existing } = await supabase
+    .from('saved_posts')
+    .select('post_id')
+    .eq('user_id', user.id)
+    .eq('post_id', postId)
+    .maybeSingle()
+
+  if (existing) {
+    await supabase.from('saved_posts').delete().eq('user_id', user.id).eq('post_id', postId)
+    return { saved: false }
+  } else {
+    await supabase.from('saved_posts').insert({ user_id: user.id, post_id: postId })
+    return { saved: true }
+  }
+}
+
 // ─── Community membership ────────────────────────────────────────────────────
 
 async function syncMemberCount(supabase: Awaited<ReturnType<typeof createClient>>, communityId: string) {
@@ -806,6 +829,19 @@ export async function updateProfile(formData: FormData) {
   const bio = (formData.get('bio') as string).trim().slice(0, 300)
 
   await supabase.from('profiles').update({ display_name, bio }).eq('id', user.id)
+  revalidatePath('/community', 'layout')
+  return { success: true }
+}
+
+export async function updateUserFlair(flair: string | null) {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { error: 'Not authenticated.' }
+
+  const VALID = ["Just Engaged 💍","GIA Graduate 🎓","Lab Diamond Fan 🔬","Veteran Buyer ⭐","Jeweller 💼","2ct Club 💎","First Timer 🌱","Ring Nerd 🔍"]
+  const safe = flair && VALID.includes(flair) ? flair : null
+
+  await supabase.from('profiles').update({ user_flair: safe }).eq('id', user.id)
   revalidatePath('/community', 'layout')
   return { success: true }
 }

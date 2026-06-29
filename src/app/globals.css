@@ -686,6 +686,39 @@ body {
   .c-auth-right { padding: 32px 20px !important; }
 }
 
+/* ─── Community markdown body (posts + comments) ────────── */
+.c-post-body, .c-comment-body {
+  font-size: 14px;
+  color: #2D2318;
+  line-height: 1.7;
+  word-break: break-word;
+}
+.c-post-body { font-size: 15px; }
+.c-post-body p, .c-comment-body p { margin-bottom: 0.75em; }
+.c-post-body p:last-child, .c-comment-body p:last-child { margin-bottom: 0; }
+.c-post-body strong, .c-comment-body strong { font-weight: 700; color: #1C1209; }
+.c-post-body em, .c-comment-body em { font-style: italic; }
+.c-post-body code, .c-comment-body code {
+  font-family: ui-monospace, monospace; font-size: 0.88em;
+  background: #F5F0EB; padding: 1px 5px; border-radius: 4px; color: #3A2208;
+}
+.c-post-body pre, .c-comment-body pre {
+  background: #F5F0EB; border-radius: 8px; padding: 12px 14px;
+  overflow-x: auto; margin: 0.75em 0;
+}
+.c-post-body pre code, .c-comment-body pre code { background: none; padding: 0; }
+.c-post-body ul, .c-comment-body ul,
+.c-post-body ol, .c-comment-body ol { padding-left: 1.4em; margin-bottom: 0.75em; }
+.c-post-body li, .c-comment-body li { margin-bottom: 0.25em; }
+.c-post-body blockquote, .c-comment-body blockquote {
+  border-left: 3px solid #C6973E; padding-left: 12px;
+  color: #7A6F66; font-style: italic; margin: 0.75em 0;
+}
+.c-post-body a, .c-comment-body a { color: #C6973E; text-decoration: underline; }
+.c-post-body h1, .c-post-body h2, .c-post-body h3 {
+  font-weight: 600; color: #1C1209; margin: 1em 0 0.4em;
+}
+
 /* ─── Search results hover ───────────────────────────────── */
 .c-search-result {
   transition: box-shadow 0.15s, border-color 0.15s;

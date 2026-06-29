@@ -101,6 +101,11 @@ export default async function CommunityLayout({ children }: { children: React.Re
             <Link href="/community/r/diamonds" style={{ color: 'rgba(255,255,255,0.5)', fontSize: '13px', fontWeight: 500, padding: '6px 12px', borderRadius: '7px', textDecoration: 'none' }}>
               r/diamonds
             </Link>
+            {user && (
+              <Link href="/community/saved" style={{ color: 'rgba(255,255,255,0.5)', fontSize: '13px', fontWeight: 500, padding: '6px 12px', borderRadius: '7px', textDecoration: 'none' }}>
+                Saved
+              </Link>
+            )}
           </div>
 
           {/* Search */}

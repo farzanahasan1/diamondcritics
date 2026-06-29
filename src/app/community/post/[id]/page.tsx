@@ -6,47 +6,12 @@ import VoteButtons from '@/components/community/VoteButtons'
 import CommunitySidebar from '@/components/community/CommunitySidebar'
 import LinkPreviewImg from '@/components/community/LinkPreviewImg'
 import PostActions from '@/components/community/PostActions'
+import ShareButton from '@/components/community/ShareButton'
+import SaveButton from '@/components/community/SaveButton'
 import type { Comment, Post } from '@/types/community'
 import { FLAIR_OPTIONS } from '@/types/community'
 import type { Metadata } from 'next'
-
-function renderBody(body: string) {
-  const blocks = body.split(/\n\n+/)
-  return blocks.map((block, i) => {
-    const lines = block.split('\n').map(l => l.trim()).filter(Boolean)
-    if (!lines.length) return null
-    const isBulletBlock = lines.some(l => l.startsWith('•') || l.startsWith('-'))
-    if (isBulletBlock) {
-      return (
-        <ul key={i} className="my-3 space-y-1.5">
-          {lines.map((line, j) => {
-            const isBullet = line.startsWith('•') || line.startsWith('-')
-            if (!isBullet) return <li key={j} className="text-sm sm:text-base text-gray-700 leading-relaxed">{line}</li>
-            return (
-              <li key={j} className="flex gap-2 text-sm sm:text-base text-gray-800 leading-relaxed">
-                <span className="text-[#C6973E] font-bold mt-0.5 flex-shrink-0">•</span>
-                <span>{line.replace(/^[•\-]\s*/, '')}</span>
-              </li>
-            )
-          })}
-        </ul>
-      )
-    }
-    const text = lines.join(' ')
-    if (text.startsWith('—') || text.startsWith('–')) {
-      return (
-        <p key={i} className="text-sm text-gray-500 italic mt-4 border-t border-[#EDEFF1] pt-3">
-          {text}
-        </p>
-      )
-    }
-    return (
-      <p key={i} className="text-sm sm:text-base text-gray-800 leading-relaxed mb-0">
-        {text}
-      </p>
-    )
-  })
-}
+import { renderMarkdown } from '@/lib/community/markdown'
 
 function timeAgo(dateStr: string) {
   const diff = Date.now() - new Date(dateStr).getTime()
@@ -309,10 +274,12 @@ export default async function PostDetailPage({ params }: { params: Promise<{ id:
               </h1>
 
               {/* Body */}
-              {post.type === 'text' && post.body && (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '16px' }}>
-                  {renderBody(post.body)}
-                </div>
+              {post.body && (
+                <div
+                  className="c-post-body"
+                  dangerouslySetInnerHTML={{ __html: renderMarkdown(post.body) }}
+                  style={{ marginBottom: '16px' }}
+                />
               )}
 
               {/* Link */}
@@ -383,16 +350,20 @@ export default async function PostDetailPage({ params }: { params: Promise<{ id:
               </svg>
               {post.comment_count} {post.comment_count === 1 ? 'comment' : 'comments'}
             </span>
-            {(isOwner || isAdmin) && (
-              <PostActions
-                postId={post.id}
-                postTitle={post.title}
-                postBody={post.body}
-                postType={post.type}
-                postUrl={post.url}
-                isDraft={post.is_draft ?? false}
-              />
-            )}
+            <div style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '4px' }}>
+              {user && <SaveButton postId={post.id} userId={user.id} />}
+              <ShareButton title={post.title} />
+              {(isOwner || isAdmin) && (
+                <PostActions
+                  postId={post.id}
+                  postTitle={post.title}
+                  postBody={post.body}
+                  postType={post.type}
+                  postUrl={post.url}
+                  isDraft={post.is_draft ?? false}
+                />
+              )}
+            </div>
           </div>
         </article>
 

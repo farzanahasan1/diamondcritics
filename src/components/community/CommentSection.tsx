@@ -1,11 +1,12 @@
 'use client'
 
-import { useState, useTransition } from 'react'
+import { useState, useTransition, useMemo } from 'react'
 import Link from 'next/link'
 import { createComment, deleteComment } from '@/app/community/actions'
 import VoteButtons from './VoteButtons'
 import ReportButton from './ReportButton'
 import type { Comment } from '@/types/community'
+import { renderMarkdown } from '@/lib/community/markdown'
 
 function timeAgo(dateStr: string) {
   const diff = Date.now() - new Date(dateStr).getTime()
@@ -116,6 +117,11 @@ function CommentNode({ comment, postId, userId, isAdmin, depth = 0 }: CommentNod
               {author?.username
                 ? <Link href={`/community/u/${author.username}`} style={{ fontSize: '12px', fontWeight: 700, color: '#3A2208', textDecoration: 'none' }}>u/{author.username}</Link>
                 : <span style={{ fontSize: '12px', fontWeight: 700, color: '#3A2208' }}>u/[deleted]</span>}
+              {(author as any)?.user_flair && (
+                <span style={{ fontSize: '10px', fontWeight: 600, padding: '1px 7px', borderRadius: '20px', background: '#F5EDD8', color: '#92400E' }}>
+                  {(author as any).user_flair}
+                </span>
+              )}
               <span style={{ fontSize: '11px', color: '#B0A89E' }}>{timeAgo(comment.created_at)}</span>
               <button onClick={() => setCollapsed(c => !c)} style={{ fontSize: '11px', color: '#B0A89E', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
                 [{collapsed ? '+' : '–'}]
@@ -124,9 +130,11 @@ function CommentNode({ comment, postId, userId, isAdmin, depth = 0 }: CommentNod
 
             {!collapsed && (
               <>
-                <p style={{ fontSize: '14px', color: '#2D2318', lineHeight: 1.65, marginBottom: '8px', whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
-                  {comment.body}
-                </p>
+                <div
+                  className="c-comment-body"
+                  dangerouslySetInnerHTML={{ __html: renderMarkdown(comment.body) }}
+                  style={{ marginBottom: '8px' }}
+                />
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                   <VoteButtons
                     id={comment.id}
@@ -232,6 +240,8 @@ function TopLevelCommentForm({ postId, userId }: TopLevelFormProps) {
   )
 }
 
+type SortMode = 'best' | 'new' | 'top'
+
 interface Props {
   comments: Comment[]
   postId: string
@@ -240,13 +250,48 @@ interface Props {
 }
 
 export default function CommentSection({ comments, postId, userId, isAdmin }: Props) {
-  const topLevel = comments
+  const [sort, setSort] = useState<SortMode>('best')
+
+  const topLevel = useMemo(() => {
+    const copy = [...comments]
+    if (sort === 'new') copy.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+    else copy.sort((a, b) => b.score - a.score) // best + top both sort by score
+    return copy
+  }, [comments, sort])
+
+  const SORTS: { key: SortMode; label: string }[] = [
+    { key: 'best', label: 'Best' },
+    { key: 'new',  label: 'New' },
+    { key: 'top',  label: 'Top' },
+  ]
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
       <TopLevelCommentForm postId={postId} userId={userId} />
 
       <div style={{ background: '#fff', borderRadius: '12px', boxShadow: '0 1px 4px rgba(28,18,9,0.07)', overflow: 'hidden' }}>
+        {/* Sort bar */}
+        {comments.length > 1 && (
+          <div style={{ display: 'flex', alignItems: 'center', gap: '2px', padding: '10px 16px 0', borderBottom: '1px solid #F0ECE5', paddingBottom: '10px' }}>
+            <span style={{ fontSize: '12px', color: '#9A8F87', marginRight: '6px' }}>Sort by:</span>
+            {SORTS.map(s => (
+              <button
+                key={s.key}
+                onClick={() => setSort(s.key)}
+                style={{
+                  padding: '4px 12px', borderRadius: '20px', border: 'none', cursor: 'pointer',
+                  fontSize: '12px', fontWeight: 600,
+                  background: sort === s.key ? 'linear-gradient(145deg, #D4A843, #B8881E)' : 'transparent',
+                  color: sort === s.key ? '#fff' : '#7A6F66',
+                  transition: 'all 0.12s',
+                }}
+              >
+                {s.label}
+              </button>
+            ))}
+          </div>
+        )}
+
         {topLevel.length === 0 ? (
           <div style={{ padding: '32px 20px', textAlign: 'center' }}>
             <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: '#F5EDD8', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px' }}>
