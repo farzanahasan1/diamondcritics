@@ -6,13 +6,9 @@ import JoinButton from '@/components/community/JoinButton'
 import Link from 'next/link'
 import type { Post } from '@/types/community'
 import type { Metadata } from 'next'
+import { hotScore } from '@/lib/community/hotScore'
 
 type SortMode = 'hot' | 'new' | 'top'
-
-function hotScore(score: number, createdAt: string) {
-  const ageHours = (Date.now() - new Date(createdAt).getTime()) / 3600000
-  return Math.log(Math.max(score, 1)) - ageHours / 45
-}
 
 const SITE_URL = 'https://diamondcritics.com'
 
