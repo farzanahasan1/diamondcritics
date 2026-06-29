@@ -3,6 +3,8 @@ import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { signOut } from './actions'
 import NotificationBell from '@/components/community/NotificationBell'
+import { Suspense } from 'react'
+import SearchBar from '@/components/community/SearchBar'
 
 const SITE_URL = 'https://diamondcritics.com'
 
@@ -45,7 +47,7 @@ const websiteSchema = {
   url: SITE_URL,
   potentialAction: {
     '@type': 'SearchAction',
-    target: { '@type': 'EntryPoint', urlTemplate: `${SITE_URL}/community?q={search_term_string}` },
+    target: { '@type': 'EntryPoint', urlTemplate: `${SITE_URL}/community/search?q={search_term_string}` },
     'query-input': 'required name=search_term_string',
   },
 }
@@ -101,7 +103,12 @@ export default async function CommunityLayout({ children }: { children: React.Re
             </Link>
           </div>
 
-          <div style={{ flex: 1 }} />
+          {/* Search */}
+          <div className="c-search-wrap" style={{ flex: 1, display: 'flex', justifyContent: 'center', padding: '0 12px' }}>
+            <Suspense fallback={null}>
+              <SearchBar />
+            </Suspense>
+          </div>
 
           {/* Auth */}
           {user && profile ? (

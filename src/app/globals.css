@@ -686,6 +686,23 @@ body {
   .c-auth-right { padding: 32px 20px !important; }
 }
 
+/* ─── Search results hover ───────────────────────────────── */
+.c-search-result {
+  transition: box-shadow 0.15s, border-color 0.15s;
+}
+.c-search-result:hover {
+  box-shadow: 0 4px 16px rgba(28,18,9,0.1);
+  border-color: #C6973E !important;
+}
+
+/* ─── Community nav search bar — shrink on mobile ───────── */
+@media (max-width: 640px) {
+  .c-search-wrap { display: none; }
+}
+@media (max-width: 860px) {
+  .c-search-wrap form > div { width: 140px !important; }
+}
+
 /* ─── Blue Nile mid-article deals CTA ──────────────────────── */
 @keyframes bn-border-glow {
   0%, 100% { border-color: rgba(212,175,55,0.35); box-shadow: 0 4px 32px rgba(212,175,55,0.06); }
