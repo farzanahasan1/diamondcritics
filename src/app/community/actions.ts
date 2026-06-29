@@ -238,6 +238,13 @@ export async function createPost(formData: FormData) {
     }
   }
 
+  // Ping search engines about the new post (fire-and-forget, never block)
+  fetch(`${process.env.NEXT_PUBLIC_SITE_URL ?? 'https://diamondcritics.com'}/api/community/ping-indexnow`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ postId: post.id }),
+  }).catch(() => {})
+
   revalidatePath('/community')
   revalidatePath(`/community/r/${communitySlug}`)
   redirect(`/community/post/${post.id}`)

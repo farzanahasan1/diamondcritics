@@ -77,8 +77,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       communityPosts = dbPosts.map((p) => ({
         url: `${BASE}/community/post/${p.id}`,
         lastModified: p.updated_at ?? p.created_at ?? new Date(),
-        changeFrequency: "weekly" as const,
-        priority: 0.5,
+        changeFrequency: "daily" as const,
+        priority: 0.7,
       }));
     }
   } catch {
