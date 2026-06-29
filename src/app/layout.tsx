@@ -6,6 +6,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SearchModal from "@/components/SearchModal";
 import { getAllPosts } from "@/lib/content";
+import Script from "next/script";
 
 const ivyPresto = localFont({
   src: "./fonts/ivy-presto-headline-light.woff2",
@@ -74,9 +75,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${ivyPresto.variable} ${dmSans.variable}`}>
       <head>
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://jfknkkemecwvohxaeqpl.supabase.co" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://www.bluenile.com" />
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-76MCD0Y7G9" />
-        <script dangerouslySetInnerHTML={{ __html: `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-76MCD0Y7G9');` }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(orgSchema) }} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }} />
       </head>
@@ -85,6 +87,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <main className="flex-1">{children}</main>
         <Footer />
         <SearchModal posts={searchPosts} />
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-76MCD0Y7G9"
+          strategy="afterInteractive"
+        />
+        <Script id="gtag-init" strategy="afterInteractive">
+          {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-76MCD0Y7G9');`}
+        </Script>
       </body>
     </html>
   );

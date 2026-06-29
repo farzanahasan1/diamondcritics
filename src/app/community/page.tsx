@@ -177,34 +177,44 @@ export default async function CommunityPage({
     }
   }
 
-  // Fetch authors and communities separately (avoids FK constraint dependency)
+  // Fetch all secondary data in parallel (avoids sequential round-trips)
   const authorIds = [...new Set((rawPostsData ?? []).map(p => p.author_id).filter(Boolean))]
   const communityIds = [...new Set((rawPostsData ?? []).map(p => p.community_id).filter(Boolean))]
 
   type AuthorRow = { id: string; username: string; avatar_url: string | null }
   type CommunityRow = { id: string; slug: string; name: string }
-  let authorsMap: Record<string, AuthorRow> = {}
-  if (authorIds.length) {
-    const { data: authors } = await supabase.from('profiles').select('id,username,avatar_url').in('id', authorIds)
-    if (authors) authorsMap = Object.fromEntries(authors.map(a => [a.id, a]))
-  }
 
-  let communitiesMap: Record<string, CommunityRow> = {}
-  if (communityIds.length) {
-    const { data: comms } = await supabase.from('communities').select('id,slug,name').in('id', communityIds)
-    if (comms) communitiesMap = Object.fromEntries(comms.map(c => [c.id, c]))
-  }
+  const needVotes = sortMode !== 'feed' && !!user && rawPostsData.length > 0
+
+  const [authorsResult, commsMapResult, sidebarResult, votesResult] = await Promise.all([
+    authorIds.length
+      ? supabase.from('profiles').select('id,username,avatar_url').in('id', authorIds)
+      : Promise.resolve({ data: null }),
+    communityIds.length
+      ? supabase.from('communities').select('id,slug,name').in('id', communityIds)
+      : Promise.resolve({ data: null }),
+    supabase.from('communities').select('id,slug,name,description,icon_url,banner_url,member_count,post_count,created_at').order('member_count', { ascending: false }),
+    needVotes
+      ? supabase.from('post_votes').select('post_id, vote').eq('user_id', user!.id).in('post_id', rawPostsData.map(p => p.id))
+      : Promise.resolve({ data: null }),
+  ])
+
+  const authorsMap: Record<string, AuthorRow> = authorsResult.data
+    ? Object.fromEntries(authorsResult.data.map((a: AuthorRow) => [a.id, a]))
+    : {}
+
+  const communitiesMap: Record<string, CommunityRow> = commsMapResult.data
+    ? Object.fromEntries(commsMapResult.data.map((c: CommunityRow) => [c.id, c]))
+    : {}
+
+  const communities = sidebarResult.data ?? []
 
   let userVotes: Record<string, -1 | 1> = {}
   if (sortMode === 'feed') {
     // Algorithm already fetched votes for the full candidate set — reuse them
     userVotes = feedPrecomputedVotes as Record<string, -1 | 1>
-  } else if (user && rawPostsData.length) {
-    const { data: votes } = await supabase
-      .from('post_votes').select('post_id, vote')
-      .eq('user_id', user.id)
-      .in('post_id', rawPostsData.map(p => p.id))
-    if (votes) userVotes = Object.fromEntries(votes.map(v => [v.post_id, v.vote]))
+  } else if (votesResult.data) {
+    userVotes = Object.fromEntries(votesResult.data.map((v: { post_id: string; vote: -1 | 1 }) => [v.post_id, v.vote]))
   }
 
   const rawPosts = (rawPostsData ?? []).map(p => ({
@@ -219,9 +229,6 @@ export default async function CommunityPage({
   }
   // 'feed' order preserved from algorithm (diversity-sorted scored list)
   // 'new' and 'top' order preserved from DB query
-
-  const { data: communities } = await supabase
-    .from('communities').select('id,slug,name,description,icon_url,banner_url,member_count,post_count,created_at').order('member_count', { ascending: false })
 
   const totalMembers = (communities ?? []).reduce((s, c) => s + (c.member_count ?? 0), 0)
   const totalPosts   = (communities ?? []).reduce((s, c) => s + (c.post_count   ?? 0), 0)

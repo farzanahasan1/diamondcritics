@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import VoteButtons from './VoteButtons'
 import ReportButton from './ReportButton'
 import type { Post } from '@/types/community'
@@ -107,8 +108,15 @@ export default function PostCard({ post, userId, compact = false }: Props) {
 
         {/* Image */}
         {post.type === 'image' && post.image_url && (
-          <div style={{ marginBottom: '10px' }}>
-            <img src={post.image_url} alt={post.title} loading="lazy" decoding="async" style={{ maxHeight: '384px', borderRadius: '8px', objectFit: 'contain', display: 'block' }} />
+          <div style={{ marginBottom: '10px', position: 'relative', maxHeight: '384px', overflow: 'hidden', borderRadius: '8px' }}>
+            <Image
+              src={post.image_url}
+              alt={post.title}
+              width={800}
+              height={600}
+              loading="lazy"
+              style={{ width: '100%', height: 'auto', maxHeight: '384px', objectFit: 'contain', display: 'block' }}
+            />
           </div>
         )}
 
