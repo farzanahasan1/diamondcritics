@@ -254,6 +254,31 @@ export default function SubmitPage({ params }: { params: Promise<{ slug: string 
               </div>
             )}
 
+            {/* Body text for image posts */}
+            {type === 'image' && (
+              <textarea
+                name="body"
+                placeholder="Describe what you're sharing or ask your question… (optional)"
+                rows={4}
+                style={{
+                  width: '100%',
+                  border: '1px solid #E2DDD7',
+                  borderRadius: '8px',
+                  padding: '10px 14px',
+                  fontSize: '14px',
+                  color: '#1C1209',
+                  resize: 'vertical',
+                  outline: 'none',
+                  boxSizing: 'border-box',
+                  fontFamily: 'inherit',
+                  lineHeight: 1.6,
+                  transition: 'border-color 0.15s',
+                }}
+                onFocus={e => (e.target.style.borderColor = '#C6973E')}
+                onBlur={e => (e.target.style.borderColor = '#E2DDD7')}
+              />
+            )}
+
             {/* Image upload */}
             {type === 'image' && (
               <div>

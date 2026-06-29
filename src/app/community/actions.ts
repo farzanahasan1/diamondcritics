@@ -211,7 +211,7 @@ export async function createPost(formData: FormData) {
       community_id: community.id,
       author_id: user.id,
       title,
-      body: type === 'text' ? body || null : null,
+      body: type !== 'link' ? body || null : null,
       url: type === 'link' ? url || null : null,
       image_url: type === 'image' ? imageUrl || null : null,
       flair,
