@@ -8,16 +8,6 @@ import ReportButton from './ReportButton'
 import type { Comment } from '@/types/community'
 import { timeAgo } from '@/lib/community/timeAgo'
 
-
-const textareaStyle: React.CSSProperties = {
-  width: '100%', boxSizing: 'border-box',
-  border: '1.5px solid #E8E2DA', borderRadius: '8px',
-  padding: '10px 14px', fontSize: '14px', color: '#1C1209',
-  background: '#FAFAF9', outline: 'none', display: 'block',
-  resize: 'vertical', lineHeight: 1.6, fontFamily: 'inherit',
-  transition: 'border-color 0.15s',
-}
-
 interface ReplyFormProps {
   postId: string
   parentId: string
@@ -45,25 +35,14 @@ function ReplyForm({ postId, parentId, onCancel }: ReplyFormProps) {
         placeholder="Write a reply…"
         required
         rows={3}
-        style={textareaStyle}
-        onFocus={e => (e.target.style.borderColor = '#D4A843')}
-        onBlur={e => (e.target.style.borderColor = '#E8E2DA')}
+        className="c-textarea"
       />
       {error && <p style={{ fontSize: '12px', color: '#B91C1C', marginTop: '4px' }}>{error}</p>}
       <div style={{ display: 'flex', gap: '8px', marginTop: '8px' }}>
-        <button type="submit" disabled={isPending} style={{
-          padding: '6px 16px', borderRadius: '6px', border: 'none',
-          background: 'linear-gradient(145deg, #D4A843, #B8881E)',
-          color: '#fff', fontSize: '12px', fontWeight: 600,
-          cursor: isPending ? 'not-allowed' : 'pointer', opacity: isPending ? 0.6 : 1,
-        }}>
+        <button type="submit" disabled={isPending} className="c-btn c-btn-primary" style={{ padding: '6px 16px', fontSize: '12px' }}>
           {isPending ? 'Posting…' : 'Reply'}
         </button>
-        <button type="button" onClick={onCancel} style={{
-          padding: '6px 14px', borderRadius: '6px',
-          border: '1px solid #E2DDD7', background: 'transparent',
-          color: '#7A6F66', fontSize: '12px', cursor: 'pointer',
-        }}>
+        <button type="button" onClick={onCancel} className="c-btn c-btn-outline" style={{ fontSize: '12px' }}>
           Cancel
         </button>
       </div>
@@ -215,19 +194,11 @@ function TopLevelCommentForm({ postId, userId }: TopLevelFormProps) {
         placeholder="What are your thoughts?"
         required
         rows={4}
-        style={textareaStyle}
-        onFocus={e => (e.target.style.borderColor = '#D4A843')}
-        onBlur={e => (e.target.style.borderColor = '#E8E2DA')}
+        className="c-textarea"
       />
       {error && <p style={{ fontSize: '12px', color: '#B91C1C', marginTop: '6px' }}>{error}</p>}
       <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '10px' }}>
-        <button type="submit" disabled={isPending} style={{
-          padding: '9px 28px', borderRadius: '8px', border: 'none',
-          background: isPending ? '#D4B87A' : 'linear-gradient(145deg, #D4A843, #B8881E)',
-          color: '#fff', fontSize: '13px', fontWeight: 700,
-          cursor: isPending ? 'not-allowed' : 'pointer', opacity: isPending ? 0.7 : 1,
-          transition: 'opacity 0.15s',
-        }}>
+        <button type="submit" disabled={isPending} className="c-btn c-btn-primary">
           {isPending ? 'Posting…' : 'Comment'}
         </button>
       </div>
@@ -273,13 +244,7 @@ export default function CommentSection({ comments, postId, userId, isAdmin }: Pr
               <button
                 key={s.key}
                 onClick={() => setSort(s.key)}
-                style={{
-                  padding: '4px 12px', borderRadius: '20px', border: 'none', cursor: 'pointer',
-                  fontSize: '12px', fontWeight: 600,
-                  background: sort === s.key ? 'linear-gradient(145deg, #D4A843, #B8881E)' : 'transparent',
-                  color: sort === s.key ? '#fff' : '#7A6F66',
-                  transition: 'all 0.12s',
-                }}
+                className={`c-sort-tab${sort === s.key ? ' active' : ''}`}
               >
                 {s.label}
               </button>

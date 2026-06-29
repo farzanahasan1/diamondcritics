@@ -112,7 +112,7 @@ export default async function CommunityPage({
   let feedPrecomputedVotes: Record<string, number> = {}
 
   if (sortMode !== 'feed') {
-    let query = supabase.from('posts').select('*').eq('is_deleted', false).eq('is_draft', false)
+    let query = supabase.from('posts').select('id,community_id,author_id,title,body,url,image_url,link_preview_image,flair,type,score,comment_count,is_deleted,is_draft,is_pinned,created_at,updated_at').eq('is_deleted', false).eq('is_draft', false)
     if (sortMode === 'new') query = query.order('created_at', { ascending: false })
     else if (sortMode === 'top') query = query.order('score', { ascending: false })
     else query = query.order('created_at', { ascending: false })
@@ -128,7 +128,7 @@ export default async function CommunityPage({
 
     // Pull a wide candidate set — 200 posts from the last 14 days
     const { data: candidates } = await supabase
-      .from('posts').select('*')
+      .from('posts').select('id,community_id,author_id,title,body,url,image_url,link_preview_image,flair,type,score,comment_count,is_deleted,is_draft,is_pinned,created_at,updated_at')
       .in('community_id', joinedCommunityIds)
       .eq('is_deleted', false)
       .eq('is_draft', false)
@@ -237,7 +237,7 @@ export default async function CommunityPage({
   // 'new' and 'top' order preserved from DB query
 
   const { data: communities } = await supabase
-    .from('communities').select('*').order('member_count', { ascending: false })
+    .from('communities').select('id,slug,name,description,icon_url,banner_url,member_count,post_count,created_at').order('member_count', { ascending: false })
 
   const sortTabs: { key: SortMode; label: string; emoji: string; authRequired?: boolean }[] = [
     { key: 'hot', label: 'Hot', emoji: '🔥' },

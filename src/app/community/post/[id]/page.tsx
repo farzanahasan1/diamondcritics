@@ -65,7 +65,7 @@ export default async function PostDetailPage({ params }: { params: Promise<{ id:
   // Fetch post (plain select — avoids FK constraint dependency)
   const { data: postRaw } = await supabase
     .from('posts')
-    .select('*')
+    .select('id,community_id,author_id,title,body,url,image_url,link_preview_image,flair,type,score,comment_count,is_deleted,is_draft,is_pinned,created_at,updated_at')
     .eq('id', id)
     .single()
 
@@ -86,7 +86,7 @@ export default async function PostDetailPage({ params }: { params: Promise<{ id:
       ? supabase.from('profiles').select('id,username,avatar_url,is_admin').eq('id', postRaw.author_id).single()
       : Promise.resolve({ data: null }),
     postRaw.community_id
-      ? supabase.from('communities').select('*').eq('id', postRaw.community_id).single()
+      ? supabase.from('communities').select('id,slug,name,description,rules,icon_url,banner_url,member_count,post_count,created_at').eq('id', postRaw.community_id).single()
       : Promise.resolve({ data: null }),
   ])
 
@@ -143,7 +143,7 @@ export default async function PostDetailPage({ params }: { params: Promise<{ id:
   const nestedComments = nestComments(commentsWithVotes)
 
   // Sidebar communities
-  const { data: communities } = await supabase.from('communities').select('*').order('member_count', { ascending: false })
+  const { data: communities } = await supabase.from('communities').select('id,slug,name,description,icon_url,banner_url,member_count,post_count,created_at').order('member_count', { ascending: false })
   const activeCommunity = communities?.find(c => c.id === post.community_id) ?? null
 
   const author = post.author

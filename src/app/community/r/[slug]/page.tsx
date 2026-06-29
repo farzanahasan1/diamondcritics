@@ -59,7 +59,7 @@ export default async function CommunityPage({
   // Fetch community
   const { data: community } = await supabase
     .from('communities')
-    .select('*')
+    .select('id,slug,name,description,rules,icon_url,banner_url,member_count,post_count,created_at')
     .eq('slug', slug)
     .single()
 
@@ -80,7 +80,7 @@ export default async function CommunityPage({
   // Fetch posts (plain select — avoids FK constraint dependency)
   let query = supabase
     .from('posts')
-    .select('*')
+    .select('id,community_id,author_id,title,body,url,image_url,link_preview_image,flair,type,score,comment_count,is_deleted,is_draft,is_pinned,created_at,updated_at')
     .eq('community_id', community.id)
     .eq('is_deleted', false)
     .eq('is_draft', false)
@@ -122,7 +122,7 @@ export default async function CommunityPage({
     posts = posts.sort((a, b) => hotScore(b.score, b.created_at) - hotScore(a.score, a.created_at))
   }
 
-  const { data: allCommunities } = await supabase.from('communities').select('*').order('member_count', { ascending: false })
+  const { data: allCommunities } = await supabase.from('communities').select('id,slug,name,description,icon_url,banner_url,member_count,post_count,created_at').order('member_count', { ascending: false })
 
   const breadcrumbSchema = {
     '@context': 'https://schema.org',

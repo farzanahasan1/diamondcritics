@@ -69,5 +69,3 @@ export const REPORT_REASONS = [
 
 export type ReportReason = typeof REPORT_REASONS[number]['value']
 
-// Auto-action threshold: posts with this many unique reports get hidden
-export const AUTO_HIDE_THRESHOLD = 5

@@ -48,10 +48,10 @@ export default function VoteButtons({ id, type, initialScore, initialVote, userI
           aria-label={upActive ? 'Remove upvote' : 'Upvote'}
           aria-pressed={upActive}
           style={{
-            background: upActive ? '#FEF3DA' : 'transparent',
+            background: upActive ? 'var(--c-gold-bg)' : 'transparent',
             border: 'none', borderRadius: '6px',
             padding: '6px 8px', cursor: isPending ? 'default' : 'pointer',
-            color: upActive ? '#C6973E' : '#C4B9AD',
+            color: upActive ? 'var(--c-gold)' : 'var(--c-text-faint)',
             transition: 'background 0.15s, color 0.15s',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
           }}
@@ -74,7 +74,7 @@ export default function VoteButtons({ id, type, initialScore, initialVote, userI
             background: downActive ? '#EEF0FF' : 'transparent',
             border: 'none', borderRadius: '6px',
             padding: '6px 8px', cursor: isPending ? 'default' : 'pointer',
-            color: downActive ? '#6576FF' : '#C4B9AD',
+            color: downActive ? 'var(--c-purple)' : 'var(--c-text-faint)',
             transition: 'background 0.15s, color 0.15s',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
           }}
@@ -98,10 +98,10 @@ export default function VoteButtons({ id, type, initialScore, initialVote, userI
         aria-label={upActive ? `Remove upvote (score: ${score})` : `Upvote (score: ${score})`}
         aria-pressed={upActive}
         style={{
-          background: upActive ? '#FEF3DA' : 'transparent',
+          background: upActive ? 'var(--c-gold-bg)' : 'transparent',
           border: 'none', borderRadius: '6px',
           padding: '5px 10px', cursor: isPending ? 'default' : 'pointer',
-          color: upActive ? '#C6973E' : '#9A8F87',
+          color: upActive ? 'var(--c-gold)' : 'var(--c-text-muted)',
           display: 'flex', alignItems: 'center', gap: '5px',
           fontSize: '12px', fontWeight: 600,
           transition: 'background 0.15s, color 0.15s',
@@ -121,7 +121,7 @@ export default function VoteButtons({ id, type, initialScore, initialVote, userI
           background: downActive ? '#EEF0FF' : 'transparent',
           border: 'none', borderRadius: '6px',
           padding: '5px 10px', cursor: isPending ? 'default' : 'pointer',
-          color: downActive ? '#6576FF' : '#9A8F87',
+          color: downActive ? 'var(--c-purple)' : 'var(--c-text-muted)',
           display: 'flex', alignItems: 'center', gap: '5px',
           fontSize: '12px', fontWeight: 600,
           transition: 'background 0.15s, color 0.15s',

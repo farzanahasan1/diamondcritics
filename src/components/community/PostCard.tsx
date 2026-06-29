@@ -5,18 +5,7 @@ import VoteButtons from './VoteButtons'
 import ReportButton from './ReportButton'
 import type { Post } from '@/types/community'
 import { FLAIR_OPTIONS } from '@/types/community'
-
-function timeAgo(dateStr: string) {
-  const diff = Date.now() - new Date(dateStr).getTime()
-  const mins = Math.floor(diff / 60000)
-  if (mins < 1) return 'just now'
-  if (mins < 60) return `${mins}m ago`
-  const hours = Math.floor(mins / 60)
-  if (hours < 24) return `${hours}h ago`
-  const days = Math.floor(hours / 24)
-  if (days < 30) return `${days}d ago`
-  return new Date(dateStr).toLocaleDateString()
-}
+import { timeAgo } from '@/lib/community/timeAgo'
 
 interface Props {
   post: Post
@@ -33,17 +22,11 @@ export default function PostCard({ post, userId, compact = false }: Props) {
   const flairMeta = post.flair ? FLAIR_OPTIONS.find(f => f.value === post.flair) : null
 
   return (
-    <article style={{
-      background: '#ffffff',
-      borderRadius: '12px',
-      boxShadow: '0 1px 4px rgba(28,18,9,0.07), 0 4px 16px rgba(28,18,9,0.05)',
-      overflow: 'hidden',
-      transition: 'box-shadow 0.15s',
-    }}>
+    <article className="c-card-elevated" style={{ transition: 'box-shadow 0.15s' }}>
       <div style={{ padding: '14px 16px 10px' }}>
 
         {/* Meta */}
-        <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '5px', fontSize: '12px', color: '#9A8F87', marginBottom: '6px' }}>
+        <div className="c-meta" style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '5px', marginBottom: '6px' }}>
           {community && (
             <>
               <Link href={`/community/r/${community.slug}`} style={{ fontWeight: 600, color: '#3A2208', textDecoration: 'none' }}>
@@ -65,16 +48,7 @@ export default function PostCard({ post, userId, compact = false }: Props) {
 
         {/* Flair */}
         {flairMeta && (
-          <span style={{
-            display: 'inline-block',
-            padding: '2px 9px',
-            borderRadius: '20px',
-            fontSize: '11px',
-            fontWeight: 700,
-            background: flairMeta.bg,
-            color: flairMeta.color,
-            marginBottom: '6px',
-          }}>
+          <span className="c-flair" style={{ background: flairMeta.bg, color: flairMeta.color, marginBottom: '6px' }}>
             {flairMeta.label}
           </span>
         )}
@@ -144,7 +118,7 @@ export default function PostCard({ post, userId, compact = false }: Props) {
       <div style={{
         display: 'flex', alignItems: 'center', gap: '4px',
         padding: '8px 12px',
-        borderTop: '1px solid #F5F0EA',
+        borderTop: '1px solid var(--c-border-subtle)',
         background: '#FAFAF8',
       }}>
         <VoteButtons
