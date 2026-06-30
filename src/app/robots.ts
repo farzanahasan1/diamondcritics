@@ -19,6 +19,9 @@ export default function robots(): MetadataRoute.Robots {
         "/community/search",
       ],
     },
-    sitemap: "https://diamondcritics.com/sitemap.xml",
+    sitemap: [
+      "https://diamondcritics.com/sitemap.xml",
+      "https://diamondcritics.com/image-sitemap.xml",
+    ],
   };
 }
