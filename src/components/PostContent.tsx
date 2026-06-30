@@ -68,12 +68,19 @@ function injectPinterestButtons(html: string, slug: string): string {
   return parts.join('');
 }
 
+function decodeEntities(str: string): string {
+  return str
+    .replace(/&#39;/g, "'").replace(/&#x27;/g, "'").replace(/&apos;/g, "'")
+    .replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"').replace(/&nbsp;/g, " ");
+}
+
 // Extracts <h2> headings, injects id attributes, returns TOC list + modified HTML
 function buildToc(html: string): { toc: TocItem[]; html: string } {
   const toc: TocItem[] = [];
   const seen: Record<string, number> = {};
   const processed = html.replace(/<h2([^>]*)>([\s\S]*?)<\/h2>/gi, (_, attrs, inner) => {
-    const text = inner.replace(/<[^>]+>/g, "").trim();
+    const text = decodeEntities(inner.replace(/<[^>]+>/g, "").trim());
     if (!text) return `<h2${attrs}>${inner}</h2>`;
     // Skip if id already present
     if (/\bid=/.test(attrs)) { toc.push({ id: /id="([^"]+)"/.exec(attrs)?.[1] ?? "", text }); return `<h2${attrs}>${inner}</h2>`; }
