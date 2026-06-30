@@ -5,6 +5,7 @@ import BluenileDealsCTA from "@/components/BluenileDealsCTA";
 import ReadingProgress from "@/components/ReadingProgress";
 import TocWidget, { type TocItem } from "@/components/TocWidget";
 import JamesAllenBanner from "@/components/JamesAllenBanner";
+import ShareButtons from "@/components/ShareButtons";
 
 const categoryLabels: Record<string, string> = {
   "diamond-buying-guides": "Diamond Buying Guides",
@@ -272,6 +273,13 @@ export default function PostContent({ type, data, related }: Props) {
             </div>
           )}
 
+          {/* Share buttons — hero */}
+          {type === "post" && (
+            <div style={{ marginTop: "1.5rem" }}>
+              <ShareButtons url={`https://diamondcritics.com/${data.slug}`} title={data.title} dark={true} />
+            </div>
+          )}
+
         </div>
       </div>
 
@@ -330,6 +338,13 @@ export default function PostContent({ type, data, related }: Props) {
                   <p style={{ marginTop: "1rem", fontFamily: "var(--heading)", fontStyle: "italic", fontSize: "0.85rem", color: "#888" }}>
                     — Farzana Hasan, GIA Expert · DiamondCritics.com
                   </p>
+                </div>
+              )}
+
+              {/* Share buttons — bottom of article */}
+              {type === "post" && (
+                <div style={{ marginTop: "3rem", paddingTop: "2rem", borderTop: "1px solid #f0f0f0" }}>
+                  <ShareButtons url={`https://diamondcritics.com/${data.slug}`} title={data.title} />
                 </div>
               )}
 
