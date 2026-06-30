@@ -105,30 +105,28 @@ export default function HomePage() {
 
       {/* ── Filter nav ───────────────────────────────────────── */}
       <nav aria-label="Content categories" style={{ borderBottom: "1px solid #ebebeb", background: "#fafafa" }}>
-        <div style={{ ...wrap, display: "flex", alignItems: "center", height: "46px", overflowX: "auto", gap: "0" }}>
-          <span style={{ fontSize: "0.68rem", letterSpacing: "0.14em", textTransform: "uppercase", color: "#aaa", marginRight: "16px", whiteSpace: "nowrap", flexShrink: 0 }} aria-hidden="true">
+        <ul style={{ ...wrap, display: "flex", alignItems: "center", height: "46px", overflowX: "auto", listStyle: "none", margin: "0 auto", padding: "0 2rem", gap: 0 }}>
+          <li style={{ fontSize: "0.68rem", letterSpacing: "0.14em", textTransform: "uppercase", color: "#aaa", marginRight: "16px", whiteSpace: "nowrap", flexShrink: 0 }} aria-hidden="true">
             Explore
-          </span>
-          <ul style={{ display: "contents", listStyle: "none", margin: 0, padding: 0 }}>
-            {[
-              { label: "Guides", href: "/category/diamond-buying-guides" },
-              { label: "Clarity", href: "/diamond-clarity-chart" },
-              { label: "Color", href: "/diamond-color-scale" },
-              { label: "Shapes", href: "/diamond-shapes-guide" },
-              { label: "Reviews", href: "/category/diamond-retailer-reviews" },
-              { label: "Prices", href: "/diamond-prices" },
-              { label: "Lab vs Natural", href: "/lab-grown-vs-natural-diamond-price" },
-              { label: "4Cs Guide", href: "/diamond-4cs" },
-            ].map((item) => (
-              <li key={item.href} style={{ display: "contents" }}>
-                <Link href={item.href}
-                  style={{ fontSize: "0.78rem", color: "#555", padding: "0 14px", whiteSpace: "nowrap", textDecoration: "none", height: "46px", display: "flex", alignItems: "center", borderRight: "1px solid #ebebeb", flexShrink: 0 }}>
-                  {item.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
+          </li>
+          {[
+            { label: "Guides", href: "/category/diamond-buying-guides" },
+            { label: "Clarity", href: "/diamond-clarity-chart" },
+            { label: "Color", href: "/diamond-color-scale" },
+            { label: "Shapes", href: "/diamond-shapes-guide" },
+            { label: "Reviews", href: "/category/diamond-retailer-reviews" },
+            { label: "Prices", href: "/diamond-prices" },
+            { label: "Lab vs Natural", href: "/lab-grown-vs-natural-diamond-price" },
+            { label: "4Cs Guide", href: "/diamond-4cs" },
+          ].map((item) => (
+            <li key={item.href} style={{ display: "flex", height: "100%", flexShrink: 0 }}>
+              <Link href={item.href}
+                style={{ fontSize: "0.78rem", color: "#555", padding: "0 14px", whiteSpace: "nowrap", textDecoration: "none", height: "100%", display: "flex", alignItems: "center", borderRight: "1px solid #ebebeb" }}>
+                {item.label}
+              </Link>
+            </li>
+          ))}
+        </ul>
       </nav>
 
       {/* ── James Allen Sale Banner ──────────────────────────── */}
