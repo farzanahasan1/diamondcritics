@@ -24,7 +24,7 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   compress: true,
   outputFileTracingExcludes: {
-    "*": ["./public/**/*"],
+    "/**": ["./public/**/*"],
   },
   images: {
     formats: ["image/avif", "image/webp"],

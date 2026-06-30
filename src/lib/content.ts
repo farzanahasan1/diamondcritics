@@ -3,8 +3,8 @@ import path from "path";
 import matter from "gray-matter";
 import { marked } from "marked";
 
-const postsDir = path.join(process.cwd(), "content/posts");
-const pagesDir = path.join(process.cwd(), "content/pages");
+const postsDir = path.join(/*turbopackIgnore: true*/ process.cwd(), "content/posts");
+const pagesDir = path.join(/*turbopackIgnore: true*/ process.cwd(), "content/pages");
 
 // Configure marked for clean, safe output
 marked.use({
@@ -71,7 +71,7 @@ export function getAllPageSlugs(): string[] {
   return readDir(pagesDir).map((f) => f.replace(/\.(mdoc|mdx|md)$/, ""));
 }
 
-const publicImagesDir = path.join(process.cwd(), "public/images");
+const publicImagesDir = path.join(/*turbopackIgnore: true*/ process.cwd(), "public/images");
 
 function decodeEntities(str: string): string {
   return str

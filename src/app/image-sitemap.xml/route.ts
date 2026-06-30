@@ -3,7 +3,7 @@ import path from "path";
 import matter from "gray-matter";
 
 const BASE = "https://diamondcritics.com";
-const postsDir = path.join(process.cwd(), "content/posts");
+const postsDir = path.join(/*turbopackIgnore: true*/ process.cwd(), "content/posts");
 
 function escapeXml(str: string): string {
   return str
