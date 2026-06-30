@@ -91,58 +91,66 @@ export default function Footer() {
             </a>
 
             {/* Social icons */}
-            <div style={{ display: "flex", gap: "12px" }}>
+            <ul style={{ display: "flex", gap: "12px", listStyle: "none", margin: 0, padding: 0 }} aria-label="Social media">
               {socials.map((s) => (
-                <a key={s.href} href={s.href} target="_blank" rel="noopener noreferrer"
-                  aria-label={s.label} className="footer-social"
-                >
-                  {s.svg}
-                </a>
+                <li key={s.href}>
+                  <a href={s.href} target="_blank" rel="noopener noreferrer"
+                    aria-label={s.label} className="footer-social"
+                  >
+                    {s.svg}
+                  </a>
+                </li>
               ))}
-            </div>
+            </ul>
           </div>
 
           {/* Explore */}
-          <div>
-            <p style={{ fontFamily: "var(--body)", fontSize: "0.65rem", fontWeight: 600, letterSpacing: "0.14em", textTransform: "uppercase", color: "#555", marginBottom: "1.25rem" }}>
+          <nav aria-label="Explore">
+            <h3 style={{ fontFamily: "var(--body)", fontSize: "0.65rem", fontWeight: 600, letterSpacing: "0.14em", textTransform: "uppercase", color: "#555", marginBottom: "1.25rem" }}>
               Explore
-            </p>
-            <div>
+            </h3>
+            <ul style={{ listStyle: "none", margin: 0, padding: 0 }}>
               {explore.map((l) => (
-                <Link key={l.href} href={l.href} style={{ display: "block", fontFamily: "var(--body)", fontSize: "0.85rem", color: "#888", textDecoration: "none", marginBottom: "10px" }}>
-                  {l.label}
-                </Link>
+                <li key={l.href}>
+                  <Link href={l.href} style={{ display: "block", fontFamily: "var(--body)", fontSize: "0.85rem", color: "#888", textDecoration: "none", marginBottom: "10px" }}>
+                    {l.label}
+                  </Link>
+                </li>
               ))}
-            </div>
-          </div>
+            </ul>
+          </nav>
 
           {/* Tools */}
-          <div>
-            <p style={{ fontFamily: "var(--body)", fontSize: "0.65rem", fontWeight: 600, letterSpacing: "0.14em", textTransform: "uppercase", color: "#555", marginBottom: "1.25rem" }}>
+          <nav aria-label="Tools">
+            <h3 style={{ fontFamily: "var(--body)", fontSize: "0.65rem", fontWeight: 600, letterSpacing: "0.14em", textTransform: "uppercase", color: "#555", marginBottom: "1.25rem" }}>
               Tools
-            </p>
-            <div>
+            </h3>
+            <ul style={{ listStyle: "none", margin: 0, padding: 0 }}>
               {tools.map((l) => (
-                <Link key={l.href} href={l.href} style={{ display: "block", fontFamily: "var(--body)", fontSize: "0.85rem", color: "#888", textDecoration: "none", marginBottom: "10px" }}>
-                  {l.label}
-                </Link>
+                <li key={l.href}>
+                  <Link href={l.href} style={{ display: "block", fontFamily: "var(--body)", fontSize: "0.85rem", color: "#888", textDecoration: "none", marginBottom: "10px" }}>
+                    {l.label}
+                  </Link>
+                </li>
               ))}
-            </div>
-          </div>
+            </ul>
+          </nav>
 
           {/* Company */}
-          <div>
-            <p style={{ fontFamily: "var(--body)", fontSize: "0.65rem", fontWeight: 600, letterSpacing: "0.14em", textTransform: "uppercase", color: "#555", marginBottom: "1.25rem" }}>
+          <nav aria-label="Company">
+            <h3 style={{ fontFamily: "var(--body)", fontSize: "0.65rem", fontWeight: 600, letterSpacing: "0.14em", textTransform: "uppercase", color: "#555", marginBottom: "1.25rem" }}>
               Company
-            </p>
-            <div>
+            </h3>
+            <ul style={{ listStyle: "none", margin: 0, padding: 0 }}>
               {company.map((l) => (
-                <Link key={l.href} href={l.href} style={{ display: "block", fontFamily: "var(--body)", fontSize: "0.85rem", color: "#888", textDecoration: "none", marginBottom: "10px" }}>
-                  {l.label}
-                </Link>
+                <li key={l.href}>
+                  <Link href={l.href} style={{ display: "block", fontFamily: "var(--body)", fontSize: "0.85rem", color: "#888", textDecoration: "none", marginBottom: "10px" }}>
+                    {l.label}
+                  </Link>
+                </li>
               ))}
-            </div>
-          </div>
+            </ul>
+          </nav>
 
         </div>
 

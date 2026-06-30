@@ -104,28 +104,32 @@ export default function HomePage() {
       </section>
 
       {/* ── Filter nav ───────────────────────────────────────── */}
-      <div style={{ borderBottom: "1px solid #ebebeb", background: "#fafafa" }}>
+      <nav aria-label="Content categories" style={{ borderBottom: "1px solid #ebebeb", background: "#fafafa" }}>
         <div style={{ ...wrap, display: "flex", alignItems: "center", height: "46px", overflowX: "auto", gap: "0" }}>
-          <span style={{ fontSize: "0.68rem", letterSpacing: "0.14em", textTransform: "uppercase", color: "#aaa", marginRight: "16px", whiteSpace: "nowrap", flexShrink: 0 }}>
+          <span style={{ fontSize: "0.68rem", letterSpacing: "0.14em", textTransform: "uppercase", color: "#aaa", marginRight: "16px", whiteSpace: "nowrap", flexShrink: 0 }} aria-hidden="true">
             Explore
           </span>
-          {[
-            { label: "Guides", href: "/category/diamond-buying-guides" },
-            { label: "Clarity", href: "/diamond-clarity-chart" },
-            { label: "Color", href: "/diamond-color-scale" },
-            { label: "Shapes", href: "/diamond-shapes-guide" },
-            { label: "Reviews", href: "/category/diamond-retailer-reviews" },
-            { label: "Prices", href: "/diamond-prices" },
-            { label: "Lab vs Natural", href: "/lab-grown-vs-natural-diamond-price" },
-            { label: "4Cs Guide", href: "/diamond-4cs" },
-          ].map((item) => (
-            <Link key={item.href} href={item.href}
-              style={{ fontSize: "0.78rem", color: "#555", padding: "0 14px", whiteSpace: "nowrap", textDecoration: "none", height: "100%", display: "flex", alignItems: "center", borderRight: "1px solid #ebebeb", flexShrink: 0 }}>
-              {item.label}
-            </Link>
-          ))}
+          <ul style={{ display: "contents", listStyle: "none", margin: 0, padding: 0 }}>
+            {[
+              { label: "Guides", href: "/category/diamond-buying-guides" },
+              { label: "Clarity", href: "/diamond-clarity-chart" },
+              { label: "Color", href: "/diamond-color-scale" },
+              { label: "Shapes", href: "/diamond-shapes-guide" },
+              { label: "Reviews", href: "/category/diamond-retailer-reviews" },
+              { label: "Prices", href: "/diamond-prices" },
+              { label: "Lab vs Natural", href: "/lab-grown-vs-natural-diamond-price" },
+              { label: "4Cs Guide", href: "/diamond-4cs" },
+            ].map((item) => (
+              <li key={item.href} style={{ display: "contents" }}>
+                <Link href={item.href}
+                  style={{ fontSize: "0.78rem", color: "#555", padding: "0 14px", whiteSpace: "nowrap", textDecoration: "none", height: "46px", display: "flex", alignItems: "center", borderRight: "1px solid #ebebeb", flexShrink: 0 }}>
+                  {item.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
         </div>
-      </div>
+      </nav>
 
       {/* ── James Allen Sale Banner ──────────────────────────── */}
       <div style={{ background: "#000" }}>
@@ -366,9 +370,9 @@ export default function HomePage() {
                   <p style={{ fontSize: "0.65rem", letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--gold)", marginBottom: "5px" }}>
                     {catLabel[p.category] ?? p.category}
                   </p>
-                  <p style={{ fontFamily: "var(--heading)", fontSize: "0.95rem", fontWeight: 300, color: "#111", lineHeight: 1.3 }}>
+                  <h3 style={{ fontFamily: "var(--heading)", fontSize: "0.95rem", fontWeight: 300, color: "#111", lineHeight: 1.3 }}>
                     {p.title}
-                  </p>
+                  </h3>
                 </Link>
               ))}
             </div>

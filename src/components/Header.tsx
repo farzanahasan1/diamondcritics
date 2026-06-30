@@ -558,7 +558,7 @@ export default function Header() {
 
       {/* ── Mobile menu ── */}
       {mobileOpen && (
-        <div style={{ borderTop: "1px solid #ebebeb", background: "#fff", maxHeight: "80vh", overflowY: "auto" }}>
+        <nav aria-label="Mobile navigation" style={{ borderTop: "1px solid #ebebeb", background: "#fff", maxHeight: "80vh", overflowY: "auto" }}>
           {nav.map((item) => (
             <div key={item.label} style={{ borderBottom: "1px solid #f5f5f5" }}>
               {item.mega ? (
@@ -614,7 +614,7 @@ export default function Header() {
               Community →
             </a>
           </div>
-        </div>
+        </nav>
       )}
     </header>
   );
