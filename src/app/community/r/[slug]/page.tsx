@@ -46,8 +46,9 @@ function communityMeta(slug: string, name: string, description: string | null, m
   return { title, desc, keywords }
 }
 
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+export async function generateMetadata({ params, searchParams }: { params: Promise<{ slug: string }>; searchParams: Promise<{ sort?: string }> }): Promise<Metadata> {
   const { slug } = await params
+  const { sort } = await searchParams
   const supabase = await createClient()
   const { data: c } = await supabase
     .from('communities')
@@ -63,6 +64,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     description: desc,
     keywords,
     alternates: { canonical: `${SITE_URL}/community/r/${slug}` },
+    ...(sort && { robots: { index: false, follow: true } }),
     openGraph: {
       title,
       description: desc,
