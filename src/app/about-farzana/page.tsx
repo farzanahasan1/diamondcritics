@@ -155,7 +155,7 @@ export default function AboutFarzana() {
                 color: "#fff",
                 marginBottom: "1.75rem",
               }}>
-                Farzana<br />Hasan
+                Farzana <br />Hasan
               </h1>
               <p style={{ fontSize: "0.8rem", fontWeight: 600, letterSpacing: "0.18em", textTransform: "uppercase", color: "rgba(255,255,255,0.35)", marginBottom: "2rem" }}>
                 GIA-Certified Diamond Expert
