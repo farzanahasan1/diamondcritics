@@ -344,7 +344,7 @@ export default function AdminClient() {
                 </div>
                 <p style={{ fontSize: '11px', color: '#9A8F87', fontFamily: 'monospace' }}>ID: {r.target_id}</p>
                 {r.target_type === 'post' && (
-                  <Link href={`/community/post/${r.target_id}`} target="_blank"
+                  <Link href={`/community/post/${r.target_id}`} target="_blank" rel="noopener noreferrer"
                     style={{ fontSize: '12px', color: '#C6973E', textDecoration: 'none', fontWeight: 500 }}>
                     View post ↗
                   </Link>
