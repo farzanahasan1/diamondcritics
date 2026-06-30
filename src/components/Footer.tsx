@@ -27,6 +27,8 @@ const explore = [
   { label: "All Guides", href: "/blog" },
   { label: "Retailer Reviews", href: "/category/diamond-retailer-reviews" },
   { label: "Diamond Guides", href: "/category/diamond-buying-guides" },
+  { label: "Blue Nile Reviews", href: "/category/blue-nile" },
+  { label: "Gemstone Guides", href: "/category/gemstone-guides" },
   { label: "Lab vs Natural", href: "/lab-grown-vs-natural-diamond-price" },
   { label: "Diamond Prices", href: "/diamond-prices" },
   { label: "Clarity Chart", href: "/diamond-clarity-chart" },

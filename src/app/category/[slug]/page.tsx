@@ -1,4 +1,4 @@
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getPostsByCategory, getPostsBySubcategory } from "@/lib/content";
@@ -16,7 +16,7 @@ const categoryLabels: Record<string, string> = {
 const categoryDescriptions: Record<string, string> = {
   "diamond-buying-guides": "Data-backed guides on the 4 Cs, certifications, and what to actually look for before you buy.",
   "diamond-retailer-reviews": "Independent audits of online diamond retailers — pricing, inventory, and customer experience.",
-  "blue-nile": "Farzana Hasan's independent audit of Blue Nile — rings, earrings, bracelets, men's jewelry, and lab-grown collections reviewed with real prices.",
+  "blue-nile": "Independent audits of Blue Nile rings, earrings, bracelets, men's jewelry, and lab-grown collections with real prices.",
   "gemstone-guides": "Expert analysis of sapphires, rubies, emeralds, and other precious stones.",
   "market-value-price-trends": "Real price data, resale trends, and what's happening in the diamond market right now.",
   "round-cut-diamond": "Farzana Hasan's complete round brilliant guide series — 1ct price audit, settings comparison, hearts & arrows verdict, lab-grown savings, and round vs oval analysis.",
@@ -63,7 +63,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function CategoryPage({ params }: Props) {
   const { slug } = await params;
   const label = categoryLabels[slug];
-  if (!label) redirect('/blog');
+  if (!label) notFound();
 
   const posts = SUBCATEGORY_SLUGS.has(slug)
     ? getPostsBySubcategory(slug)
