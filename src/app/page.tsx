@@ -24,6 +24,7 @@ const catLabel: Record<string, string> = {
   "market-value-price-trends": "Market & Price",
   "round-cut-diamond": "Round Diamond",
   "princess-cut-diamond": "Princess Diamond",
+  "oval-cut-diamond": "Oval Diamond",
 };
 
 const wrap: React.CSSProperties = {

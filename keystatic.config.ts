@@ -37,6 +37,7 @@ export default config({
             { label: "Market Value & Price Trends", value: "market-value-price-trends" },
             { label: "Round Cut Diamond", value: "round-cut-diamond" },
             { label: "Princess Cut Diamond", value: "princess-cut-diamond" },
+            { label: "Oval Cut Diamond", value: "oval-cut-diamond" },
           ],
           defaultValue: "diamond-buying-guides",
         }),

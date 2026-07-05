@@ -11,6 +11,7 @@ const categoryLabels: Record<string, string> = {
   "market-value-price-trends": "Market Value & Price Trends",
   "round-cut-diamond": "Round Cut Diamond",
   "princess-cut-diamond": "Princess Cut Diamond",
+  "oval-cut-diamond": "Oval Cut Diamond",
 };
 
 const categoryDescriptions: Record<string, string> = {
@@ -21,6 +22,7 @@ const categoryDescriptions: Record<string, string> = {
   "market-value-price-trends": "Real price data, resale trends, and what's happening in the diamond market right now.",
   "round-cut-diamond": "Farzana Hasan's complete round brilliant guide series — 1ct price audit, settings comparison, hearts & arrows verdict, lab-grown savings, and round vs oval analysis.",
   "princess-cut-diamond": "Farzana Hasan's complete princess cut diamond series — 1ct price audit, corner clarity trap, ideal proportions, settings guide, and princess vs round analysis.",
+  "oval-cut-diamond": "Farzana Hasan's complete oval cut diamond series — 1ct to 3ct price audits, the bow-tie effect explained, ideal L/W ratios, and real Blue Nile stone data.",
 };
 
 const SUBCATEGORY_SLUGS = new Set(["blue-nile"]);

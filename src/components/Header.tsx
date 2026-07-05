@@ -234,6 +234,15 @@ const nav: NavItem[] = [
             { label: "All Princess Guides", href: "/category/princess-cut-diamond" },
           ],
         },
+        {
+          heading: "Oval Diamond Deep Dive",
+          links: [
+            { label: "1ct Price Audit", href: "/1-carat-oval-diamond-price" },
+            { label: "2ct Price Guide", href: "/2-carat-oval-diamond-price" },
+            { label: "Oval vs Round", href: "/round-diamond-vs-oval-diamond" },
+            { label: "All Oval Guides", href: "/category/oval-cut-diamond" },
+          ],
+        },
       ],
       viewAll: { label: "All Round Cut Guides", href: "/category/round-cut-diamond" },
     },
@@ -266,6 +275,9 @@ const nav: NavItem[] = [
           heading: "Blue Nile",
           links: [
             { label: "Blue Nile Review", href: "/blue-nile-review" },
+            { label: "Near Me — Locations", href: "/blue-nile-near-me" },
+            { label: "Promo Code", href: "/blue-nile-promo-code" },
+            { label: "Is Blue Nile Legit?", href: "/is-blue-nile-legit" },
             { label: "Bracelets", href: "/blue-nile-bracelets-review" },
             { label: "Earrings", href: "/blue-nile-earrings-review" },
             { label: "Men's Rings", href: "/blue-nile-mens-rings-review" },
