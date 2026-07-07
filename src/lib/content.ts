@@ -98,6 +98,16 @@ function rewriteContentImages(html: string): string {
   );
 }
 
+// Convert {% image src="..." alt="..." width=N height=N /%} into <img> tags
+// before passing to marked, since marked doesn't know Markdoc syntax.
+function processMarkdocImages(content: string): string {
+  return content.replace(
+    /\{%\s*image\s+src="([^"]+)"\s+alt="([^"]+)"\s+width=(\d+)\s+height=(\d+)\s*\/?%\}/g,
+    (_, src, alt, width, height) =>
+      `<img src="${src}" alt="${alt}" width="${width}" height="${height}" loading="lazy" style="max-width:100%;height:auto;display:block;margin:2rem auto;" />`
+  );
+}
+
 // Opens every link in a new tab — required for all post links (affiliate + internal).
 function addTargetBlank(html: string): string {
   return html.replace(/<a /gi, '<a target="_blank" rel="noopener noreferrer" ');
@@ -136,8 +146,8 @@ function readFile(
     if (SHORTCODE_RE.test(content)) {
       SHORTCODE_RE.lastIndex = 0;
     }
-    // Apply shortcodes, then ensure blank line before headings
-    const processed = applyShortcodes(content).replace(/([^\n])\n(#{1,6} )/g, "$1\n\n$2");
+    // Apply shortcodes, convert {% image %} tags, then ensure blank line before headings
+    const processed = processMarkdocImages(applyShortcodes(content)).replace(/([^\n])\n(#{1,6} )/g, "$1\n\n$2");
     // Apply shortcodes to frontmatter text fields too
     for (const key of ["title", "description", "excerpt", "seoTitle", "seoDescription"]) {
       if (typeof data[key] === "string") data[key] = applyShortcodes(data[key]);
