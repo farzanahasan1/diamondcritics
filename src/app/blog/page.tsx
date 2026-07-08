@@ -20,15 +20,21 @@ export const metadata: Metadata = {
   twitter: { card: "summary_large_image" },
 };
 
-const categoryLabels: Record<string, string> = {
-  "round-cut-diamond": "Round Cut Diamond",
-  "oval-cut-diamond": "Oval Cut Diamond",
-  "princess-cut-diamond": "Princess Cut Diamond",
-  "diamond-buying-guides": "Diamond Buying Guides",
+function slugToLabel(slug: string): string {
+  return slug
+    .split("-")
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(" ");
+}
+
+const categoryLabelOverrides: Record<string, string> = {
   "diamond-retailer-reviews": "Retailer Reviews",
   "market-value-price-trends": "Market Value & Price Trends",
-  "gemstone-guides": "Gemstone Guides",
 };
+
+function getCategoryLabel(slug: string): string {
+  return categoryLabelOverrides[slug] ?? slugToLabel(slug);
+}
 
 const categoryDescriptions: Record<string, string> = {
   "round-cut-diamond":
@@ -124,7 +130,7 @@ export default function BlogPage() {
                 paddingBottom: "1px",
               }}
             >
-              {categoryLabels[cat] ?? cat} ({grouped[cat].length})
+              {getCategoryLabel(cat)} ({grouped[cat].length})
             </a>
           ))}
         </div>
@@ -135,7 +141,7 @@ export default function BlogPage() {
         <div style={wrap}>
           {sortedCategories.map((cat, i) => {
             const posts = grouped[cat];
-            const label = categoryLabels[cat] ?? cat;
+            const label = getCategoryLabel(cat);
             const desc = categoryDescriptions[cat];
 
             return (
