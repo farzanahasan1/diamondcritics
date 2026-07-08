@@ -294,6 +294,7 @@ const nav: NavItem[] = [
       viewAll: { label: "All Reviews", href: "/category/diamond-retailer-reviews" },
     },
   },
+  { label: "All Guides", href: "/blog" },
   { label: "Calculators", href: "/diamond-price-calculator" },
   { label: "About", href: "/about-farzana" },
 ];
