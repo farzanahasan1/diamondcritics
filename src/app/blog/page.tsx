@@ -3,15 +3,14 @@ import Link from "next/link";
 import { getAllPosts } from "@/lib/content";
 
 export const metadata: Metadata = {
-  title: "All Diamond Guides",
+  title: "Diamond Buying Guide: All Guides & Reviews | DiamondCritics",
   description:
-    "Every guide, review, and analysis by Farzana Hasan — GIA-certified diamond gemologist. Browse by category: round diamond, buying guides, retailer reviews, and more.",
+    "Every diamond buying guide by Farzana Hasan, GIA-certified gemologist. Round, oval, princess cut, 4Cs, retailer reviews — 238 expert guides in one place.",
   alternates: { canonical: "https://diamondcritics.com/blog" },
   openGraph: {
-    title: "All Diamond Guides — Diamond Critics",
-
+    title: "Diamond Buying Guide: All Guides & Reviews | DiamondCritics",
     description:
-      "Every guide, review, and analysis by Farzana Hasan — GIA-certified diamond gemologist. Browse by category.",
+      "Every diamond buying guide by Farzana Hasan, GIA-certified gemologist. Round, oval, princess cut, 4Cs, retailer reviews — 238 expert guides.",
     url: "https://diamondcritics.com/blog",
     type: "website",
     siteName: "Diamond Critics",
@@ -76,16 +75,30 @@ export default function BlogPage() {
     (a, b) => grouped[b].length - grouped[a].length
   );
 
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://diamondcritics.com" },
+      { "@type": "ListItem", "position": 2, "name": "Diamond Buying Guide", "item": "https://diamondcritics.com/blog" },
+    ],
+  };
+
   return (
     <div style={{ fontFamily: "var(--body)" }}>
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
 
       {/* ── Dark hero ── */}
       <div style={{ background: "#141414", padding: "4rem 0 3.5rem" }}>
         <div style={wrap}>
-          <nav style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "0.72rem", color: "rgba(255,255,255,0.35)", marginBottom: "2rem" }}>
+          <nav aria-label="Breadcrumb" style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "0.72rem", color: "rgba(255,255,255,0.35)", marginBottom: "2rem" }}>
             <Link href="/" style={{ color: "rgba(255,255,255,0.35)", textDecoration: "none" }}>Home</Link>
             <span>/</span>
-            <span style={{ color: "rgba(255,255,255,0.55)" }}>All Guides</span>
+            <span style={{ color: "rgba(255,255,255,0.55)" }}>Diamond Buying Guide</span>
           </nav>
 
           <p style={{ fontSize: "0.68rem", fontWeight: 600, letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--gold)", marginBottom: "1rem" }}>
@@ -102,7 +115,7 @@ export default function BlogPage() {
             maxWidth: "800px",
             marginBottom: "1.5rem",
           }}>
-            All Guides & Reviews
+            Diamond Buying Guide: All Guides & Reviews
           </h1>
 
           <p style={{ fontFamily: "var(--body)", fontSize: "1rem", color: "rgba(255,255,255,0.5)", maxWidth: "560px", lineHeight: 1.75 }}>
