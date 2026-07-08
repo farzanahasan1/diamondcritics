@@ -22,6 +22,8 @@ export const metadata: Metadata = {
 
 const categoryLabels: Record<string, string> = {
   "round-cut-diamond": "Round Cut Diamond",
+  "oval-cut-diamond": "Oval Cut Diamond",
+  "princess-cut-diamond": "Princess Cut Diamond",
   "diamond-buying-guides": "Diamond Buying Guides",
   "diamond-retailer-reviews": "Retailer Reviews",
   "market-value-price-trends": "Market Value & Price Trends",
@@ -31,6 +33,10 @@ const categoryLabels: Record<string, string> = {
 const categoryDescriptions: Record<string, string> = {
   "round-cut-diamond":
     "The complete round brilliant series — price audits, color grades, clarity grades, settings, and lab vs natural comparisons.",
+  "oval-cut-diamond":
+    "The complete oval diamond series — price guides by carat weight, all settings and metal options, lab vs natural comparisons, and the Bow-Tie Audit.",
+  "princess-cut-diamond":
+    "The complete princess cut series — price guides, clarity and color rules, setting requirements, and lab vs natural comparisons.",
   "diamond-buying-guides":
     "Data-backed guides on the 4 Cs, certifications, and what to actually check before you buy.",
   "diamond-retailer-reviews":
