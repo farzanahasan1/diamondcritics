@@ -40,7 +40,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         publishedTime: post.publishedAt,
         modifiedTime: post.updatedAt || post.publishedAt,
         images: post.featuredImage
-          ? [{ url: `https://diamondcritics.com${post.featuredImage}`, width: 1500, height: 1000 }]
+          ? [{
+              url: `https://diamondcritics.com/images/og/${post.featuredImage.split("/").pop()?.replace(/\.[^.]+$/, ".jpg") ?? "og.jpg"}`,
+              width: 1200,
+              height: 630,
+            }]
           : [{ url: "https://diamondcritics.com/images/diamondcritics-og.png", width: 1200, height: 630 }],
       }),
     },
@@ -170,12 +174,20 @@ export default async function SlugPage({ params }: Props) {
         },
       },
       ...(post.featuredImage && {
-        "image": {
-          "@type": "ImageObject",
-          "url": `https://diamondcritics.com${post.featuredImage}`,
-          "width": 1500,
-          "height": 1000,
-        },
+        "image": [
+          {
+            "@type": "ImageObject",
+            "url": `https://diamondcritics.com${post.featuredImage}`,
+            "width": 1500,
+            "height": 1000,
+          },
+          {
+            "@type": "ImageObject",
+            "url": `https://diamondcritics.com/images/og/${post.featuredImage.split("/").pop()?.replace(/\.[^.]+$/, ".jpg") ?? "og.jpg"}`,
+            "width": 1200,
+            "height": 630,
+          },
+        ],
       }),
       "url": `https://diamondcritics.com/${slug}`,
       "mainEntityOfPage": `https://diamondcritics.com/${slug}`,

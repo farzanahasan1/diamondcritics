@@ -1,17 +1,19 @@
-// Submits all site URLs to Bing + IndexNow after every production build.
+// Submits only NEW URLs to Bing + IndexNow after every production build.
+// Detects new content by comparing current commit to previous deployment commit.
 // Also pings Google's sitemap endpoint.
 // Runs automatically via the "postbuild" npm script.
 import { readdirSync, existsSync } from "fs";
+import { execSync } from "child_process";
 import path from "path";
 import { fileURLToPath } from "url";
 import { createClient } from "@supabase/supabase-js";
 
-const BING_API_KEY    = "fa17f601ccff4ea1a88c549b35bdd5c3";
-const INDEXNOW_KEY    = "b89c5aec023543896a6873dc1041da27";
-const HOST            = "diamondcritics.com";
-const BASE            = `https://${HOST}`;
+const BING_API_KEY = "fa17f601ccff4ea1a88c549b35bdd5c3";
+const INDEXNOW_KEY = "82f504b8c52848a3b4101f9c43a262c6";
+const HOST         = "diamondcritics.com";
+const BASE         = `https://${HOST}`;
 
-// Only run on Vercel production builds — skip previews and local
+// Skip preview/development deployments only — always run on production (both git push and CLI deploys)
 const env = process.env.VERCEL_ENV;
 if (env && env !== "production") {
   console.log(`Index submit: skipping (VERCEL_ENV=${env})`);
@@ -28,109 +30,107 @@ function slugsFromDir(dir) {
     .map((f) => f.replace(/\.(mdoc|mdx|md)$/, ""));
 }
 
-const postSlugs = slugsFromDir(path.join(root, "content/posts"));
-const pageSlugs = slugsFromDir(path.join(root, "content/pages"));
+// ── Detect only new content files via git diff ────────────────────────────────
+const prevSha = process.env.VERCEL_GIT_PREVIOUS_SHA;
+const currSha = process.env.VERCEL_GIT_COMMIT_SHA || "HEAD";
 
-// ── Fetch community post URLs from Supabase ───────────────────────────────────
-let communityPostUrls = [];
-let communityPageUrls = [];
-try {
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
-    { auth: { persistSession: false } }
-  );
+let newPostSlugs = [];
+let newPageSlugs = [];
+let isFirstDeploy = false;
 
-  const { data: posts } = await supabase
-    .from("posts")
-    .select("id")
-    .eq("is_deleted", false)
-    .eq("is_draft", false)
-    .order("created_at", { ascending: false })
-    .limit(500);
+if (prevSha) {
+  try {
+    const diffOutput = execSync(
+      `git diff --name-only --diff-filter=A ${prevSha} ${currSha} -- content/posts/ content/pages/`,
+      { encoding: "utf8", cwd: root }
+    ).trim();
 
-  if (posts?.length) {
-    communityPostUrls = posts.map(p => `${BASE}/community/post/${p.id}`);
-    console.log(`✓ Fetched ${communityPostUrls.length} community post URLs from Supabase`);
+    if (diffOutput) {
+      const newFiles = diffOutput.split("\n").filter(Boolean);
+      newPostSlugs = newFiles
+        .filter((f) => f.startsWith("content/posts/"))
+        .map((f) => path.basename(f).replace(/\.(mdoc|mdx|md)$/, ""));
+      newPageSlugs = newFiles
+        .filter((f) => f.startsWith("content/pages/"))
+        .map((f) => path.basename(f).replace(/\.(mdoc|mdx|md)$/, ""));
+    }
+
+    console.log(`✓ Git diff vs ${prevSha.slice(0, 7)}: ${newPostSlugs.length} new post(s), ${newPageSlugs.length} new page(s)`);
+  } catch (err) {
+    console.warn("⚠ Git diff failed, falling back to all posts:", err.message);
+    newPostSlugs = slugsFromDir(path.join(root, "content/posts"));
+    newPageSlugs = slugsFromDir(path.join(root, "content/pages"));
   }
-
-  const { data: communities } = await supabase
-    .from("communities")
-    .select("slug");
-  if (communities?.length) {
-    communityPageUrls = communities.map(c => `${BASE}/community/r/${c.slug}`);
-  }
-} catch (err) {
-  console.warn("⚠ Could not fetch community URLs:", err.message);
+} else {
+  // No previous SHA = CLI deploy or first deployment — submit all current URLs
+  isFirstDeploy = true;
+  console.log("✓ No previous deployment SHA — submitting all current URLs");
+  newPostSlugs = slugsFromDir(path.join(root, "content/posts"));
+  newPageSlugs = slugsFromDir(path.join(root, "content/pages"));
 }
 
+if (!isFirstDeploy && newPostSlugs.length === 0 && newPageSlugs.length === 0) {
+  console.log("✓ No new content files — skipping URL submission");
+  // Still ping Google sitemap
+  try {
+    const sitemapUrl = encodeURIComponent(`${BASE}/sitemap.xml`);
+    const res = await fetch(`https://www.google.com/ping?sitemap=${sitemapUrl}`);
+    console.log(`✓ Google sitemap ping: ${res.status}`);
+  } catch (err) {
+    console.warn("⚠ Google ping failed (non-fatal):", err.message);
+  }
+  process.exit(0);
+}
+
+// ── Build URL list (new content only) ────────────────────────────────────────
 const urlList = [
-  `${BASE}/`,
-  `${BASE}/about-farzana`,
-  `${BASE}/diamond-price-calculator`,
-  `${BASE}/diamond-resale-value-calculator`,
-  `${BASE}/community`,
-  `${BASE}/community/saved`,
-  `${BASE}/category/diamond-buying-guides`,
-  `${BASE}/category/diamond-retailer-reviews`,
-  `${BASE}/category/gemstone-guides`,
-  `${BASE}/category/market-value-price-trends`,
-  `${BASE}/category/round-cut-diamond`,
-  `${BASE}/category/princess-cut-diamond`,
-  ...postSlugs.map((s) => `${BASE}/${s}`),
-  ...pageSlugs.map((s) => `${BASE}/${s}`),
-  ...communityPageUrls,
-  ...communityPostUrls,
+  ...newPostSlugs.map((s) => `${BASE}/${s}`),
+  ...newPageSlugs.map((s) => `${BASE}/${s}`),
 ];
 
-// IndexNow allows max 10,000 URLs per submission
-const chunks = [];
-for (let i = 0; i < urlList.length; i += 10000) chunks.push(urlList.slice(i, i + 10000));
+console.log(`\nSubmitting ${urlList.length} new URL(s):`);
+urlList.forEach((u) => console.log(`  ${u}`));
 
 // ── 1. Bing Webmaster API ─────────────────────────────────────────────────────
-for (const chunk of chunks) {
-  try {
-    const res = await fetch(
-      `https://ssl.bing.com/webmaster/api.svc/json/SubmitUrlbatch?apikey=${BING_API_KEY}`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json; charset=utf-8" },
-        body: JSON.stringify({ siteUrl: BASE, urlList: chunk }),
-      }
-    );
-    if (res.ok) {
-      console.log(`✓ Bing: ${chunk.length} URLs submitted (${res.status})`);
-    } else {
-      const body = await res.text();
-      console.warn(`⚠ Bing submit failed: ${res.status} — ${body}`);
-    }
-  } catch (err) {
-    console.warn("⚠ Bing submit failed (non-fatal):", err.message);
-  }
-}
-
-// ── 2. IndexNow (notifies Bing, Yandex, and other IndexNow partners) ──────────
-for (const chunk of chunks) {
-  try {
-    const res = await fetch("https://api.indexnow.org/indexnow", {
+try {
+  const res = await fetch(
+    `https://ssl.bing.com/webmaster/api.svc/json/SubmitUrlbatch?apikey=${BING_API_KEY}`,
+    {
       method: "POST",
       headers: { "Content-Type": "application/json; charset=utf-8" },
-      body: JSON.stringify({
-        host: HOST,
-        key: INDEXNOW_KEY,
-        keyLocation: `${BASE}/${INDEXNOW_KEY}.txt`,
-        urlList: chunk,
-      }),
-    });
-    if (res.ok || res.status === 202) {
-      console.log(`✓ IndexNow: ${chunk.length} URLs submitted (${res.status})`);
-    } else {
-      const body = await res.text();
-      console.warn(`⚠ IndexNow failed: ${res.status} — ${body}`);
+      body: JSON.stringify({ siteUrl: BASE, urlList }),
     }
-  } catch (err) {
-    console.warn("⚠ IndexNow failed (non-fatal):", err.message);
+  );
+  if (res.ok) {
+    console.log(`\n✓ Bing: ${urlList.length} URL(s) submitted (${res.status})`);
+  } else {
+    const body = await res.text();
+    console.warn(`⚠ Bing submit failed: ${res.status} — ${body}`);
   }
+} catch (err) {
+  console.warn("⚠ Bing submit failed (non-fatal):", err.message);
+}
+
+// ── 2. IndexNow ───────────────────────────────────────────────────────────────
+try {
+  const res = await fetch("https://api.indexnow.org/indexnow", {
+    method: "POST",
+    headers: { "Content-Type": "application/json; charset=utf-8" },
+    body: JSON.stringify({
+      host: HOST,
+      key: INDEXNOW_KEY,
+      keyLocation: `${BASE}/${INDEXNOW_KEY}.txt`,
+      urlList,
+    }),
+  });
+  if (res.ok || res.status === 202) {
+    console.log(`✓ IndexNow: ${urlList.length} URL(s) submitted (${res.status})`);
+  } else {
+    const body = await res.text();
+    console.warn(`⚠ IndexNow failed: ${res.status} — ${body}`);
+  }
+} catch (err) {
+  console.warn("⚠ IndexNow failed (non-fatal):", err.message);
 }
 
 // ── 3. Ping Google sitemap ────────────────────────────────────────────────────
@@ -142,4 +142,4 @@ try {
   console.warn("⚠ Google ping failed (non-fatal):", err.message);
 }
 
-console.log(`\n✅ Index submission complete: ${urlList.length} total URLs`);
+console.log(`\n✅ Done: ${urlList.length} URL(s) submitted to Bing + IndexNow`);

@@ -36,6 +36,15 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "jfknkkemecwvohxaeqpl.supabase.co" },
     ],
   },
+  async redirects() {
+    return [
+      {
+        source: '/category/blue-nile',
+        destination: '/category/diamond-retailer-reviews/blue-nile',
+        permanent: true,
+      },
+    ];
+  },
   async headers() {
     return [{ source: '/(.*)', headers: securityHeaders }]
   },

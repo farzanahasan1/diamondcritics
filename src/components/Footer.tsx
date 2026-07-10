@@ -28,6 +28,8 @@ const explore = [
   { label: "Retailer Reviews", href: "/category/diamond-retailer-reviews" },
   { label: "Diamond Guides", href: "/category/diamond-buying-guides" },
   { label: "Blue Nile Reviews", href: "/category/blue-nile" },
+  { label: "Blue Nile Promo Code", href: "/blue-nile-promo-code" },
+  { label: "Blue Nile Near Me", href: "/blue-nile-near-me" },
   { label: "Gemstone Guides", href: "/category/gemstone-guides" },
   { label: "Lab vs Natural", href: "/lab-grown-vs-natural-diamond-price" },
   { label: "Diamond Prices", href: "/diamond-prices" },
