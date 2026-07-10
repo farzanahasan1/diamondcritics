@@ -25,6 +25,7 @@ const catLabel: Record<string, string> = {
   "round-cut-diamond": "Round Diamond",
   "princess-cut-diamond": "Princess Diamond",
   "oval-cut-diamond": "Oval Diamond",
+  "pear-cut-diamond": "Pear Diamond",
 };
 
 const wrap: React.CSSProperties = {

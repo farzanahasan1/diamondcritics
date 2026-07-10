@@ -243,6 +243,15 @@ const nav: NavItem[] = [
             { label: "All Oval Guides", href: "/category/oval-cut-diamond" },
           ],
         },
+        {
+          heading: "Pear Diamond Deep Dive",
+          links: [
+            { label: "Pear Cut Guide", href: "/pear-cut-diamond" },
+            { label: "Pear vs Oval", href: "/oval-vs-pear-diamond" },
+            { label: "Pear vs Round", href: "/round-diamond-vs-pear-shape" },
+            { label: "All Pear Guides", href: "/category/pear-cut-diamond" },
+          ],
+        },
       ],
       viewAll: { label: "All Round Cut Guides", href: "/category/round-cut-diamond" },
     },

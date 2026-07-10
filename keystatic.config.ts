@@ -38,6 +38,7 @@ export default config({
             { label: "Round Cut Diamond", value: "round-cut-diamond" },
             { label: "Princess Cut Diamond", value: "princess-cut-diamond" },
             { label: "Oval Cut Diamond", value: "oval-cut-diamond" },
+            { label: "Pear Cut Diamond", value: "pear-cut-diamond" },
           ],
           defaultValue: "diamond-buying-guides",
         }),
