@@ -1,16 +1,40 @@
 import type { MetadataRoute } from "next";
 import { getAllPosts } from "@/lib/content";
 import { createClient } from "@supabase/supabase-js";
+import fs from "fs";
+import path from "path";
 
 const BASE = "https://diamondcritics.com";
 
+function extractInlineImages(slug: string): string[] {
+  const postsDir = path.join(process.cwd(), "content/posts");
+  const exts = [".mdoc", ".mdx", ".md"];
+  for (const ext of exts) {
+    const filePath = path.join(postsDir, `${slug}${ext}`);
+    if (!fs.existsSync(filePath)) continue;
+    const raw = fs.readFileSync(filePath, "utf-8");
+    const matches = [...raw.matchAll(/!\[[^\]]*\]\(([^)]+)\)/g)];
+    return matches
+      .map((m) => m[1])
+      .filter((src) => src.startsWith("/images/"))
+      .map((src) => `${BASE}${src}`);
+  }
+  return [];
+}
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const posts = getAllPosts().map((p) => ({
-    url: `${BASE}/${p.slug}`,
-    lastModified: p.updatedAt ?? p.publishedAt ?? new Date().toISOString(),
-    changeFrequency: "monthly" as const,
-    priority: 0.8,
-  }));
+  const posts = getAllPosts().map((p) => {
+    const images: string[] = [];
+    if (p.featuredImage) images.push(`${BASE}${p.featuredImage}`);
+    images.push(...extractInlineImages(p.slug));
+    return {
+      url: `${BASE}/${p.slug}`,
+      lastModified: p.updatedAt ?? p.publishedAt ?? new Date().toISOString(),
+      changeFrequency: "monthly" as const,
+      priority: 0.8,
+      ...(images.length > 0 && { images }),
+    };
+  });
 
   const staticPages: MetadataRoute.Sitemap = [
     { url: BASE, lastModified: new Date(), changeFrequency: "weekly", priority: 1.0 },
@@ -25,6 +49,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "oval-cut-diamond",
     "round-cut-diamond",
     "princess-cut-diamond",
+    "pear-cut-diamond",
     "diamond-buying-guides",
     "diamond-retailer-reviews",
     "blue-nile",
