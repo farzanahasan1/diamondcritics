@@ -24,7 +24,11 @@ const categoryDescriptions: Record<string, string> = {
   "round-cut-diamond": "Farzana Hasan's complete round brilliant guide series — 1ct price audit, settings comparison, hearts & arrows verdict, lab-grown savings, and round vs oval analysis.",
   "princess-cut-diamond": "Farzana Hasan's complete princess cut diamond series — 1ct price audit, corner clarity trap, ideal proportions, settings guide, and princess vs round analysis.",
   "oval-cut-diamond": "Farzana Hasan's complete oval cut diamond series — 1ct to 3ct price audits, the bow-tie effect explained, ideal L/W ratios, and real Blue Nile stone data.",
-  "pear-cut-diamond": "Farzana Hasan's complete pear cut diamond series — price guides, the teardrop compromise explained, ideal L/W ratios, settings, and real Blue Nile stone data.",
+  "pear-cut-diamond": "Pear diamond buying guides by Farzana Hasan: solitaire settings from $1,255, three-stone rings from $1,820, ideal L/W ratios, bow-tie audit, and real Blue Nile prices by carat.",
+};
+
+const categorySeoTitles: Record<string, string> = {
+  "pear-cut-diamond": "Pear Cut Diamond: Buying Guides, Settings & Prices",
 };
 
 const SUBCATEGORY_SLUGS = new Set(["blue-nile"]);
@@ -48,21 +52,31 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const label = categoryLabels[slug];
   if (!label) return {};
   const description = categoryDescriptions[slug] ?? `Expert guides on ${label.toLowerCase()} by Farzana Hasan, GIA Expert.`;
+  const seoTitle = categorySeoTitles[slug] ?? label;
+  const ogImage =
+    slug === "pear-cut-diamond"
+      ? { url: "https://diamondcritics.com/images/pear-shaped-diamond-ring.avif", width: 1500, height: 1000 }
+      : { url: "https://diamondcritics.com/images/diamondcritics-og.png", width: 1200, height: 630 };
+
   return {
-    title: `${label}`,
+    title: seoTitle,
     description,
     alternates: { canonical: `https://diamondcritics.com/category/${slug}` },
     openGraph: {
-      title: `${label}`,
+      title: `${seoTitle} | Diamond Critics`,
       description,
       url: `https://diamondcritics.com/category/${slug}`,
       type: "website",
       siteName: "Diamond Critics",
-      images: [{ url: "/images/diamondcritics-og.png", width: 1200, height: 630 }],
+      images: [ogImage],
     },
-    twitter: { card: "summary_large_image" },
+    twitter: { card: "summary_large_image", title: seoTitle, description },
   };
 }
+
+const categoryH1s: Record<string, string> = {
+  "pear-cut-diamond": "Pear Cut Diamond Rings: Complete Buying Guides",
+};
 
 export default async function CategoryPage({ params }: Props) {
   const { slug } = await params;
@@ -73,13 +87,28 @@ export default async function CategoryPage({ params }: Props) {
     ? getPostsBySubcategory(slug)
     : getPostsByCategory(slug);
 
+  const h1 = categoryH1s[slug] ?? label;
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: "https://diamondcritics.com" },
+      { "@type": "ListItem", position: 2, name: label, item: `https://diamondcritics.com/category/${slug}` },
+    ],
+  };
+
   return (
     <div style={{ fontFamily: "var(--body)" }}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
 
       {/* ── Dark hero ── */}
       <div style={{ background: "#141414", padding: "4rem 0 3.5rem" }}>
         <div style={wrap}>
-          <nav style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "0.72rem", color: "rgba(255,255,255,0.35)", marginBottom: "2rem" }}>
+          <nav aria-label="Breadcrumb" style={{ display: "flex", alignItems: "center", gap: "8px", fontSize: "0.72rem", color: "rgba(255,255,255,0.35)", marginBottom: "2rem" }}>
             <Link href="/" style={{ color: "rgba(255,255,255,0.35)", textDecoration: "none" }}>Home</Link>
             <span>/</span>
             <span style={{ color: "rgba(255,255,255,0.55)" }}>{label}</span>
@@ -99,7 +128,7 @@ export default async function CategoryPage({ params }: Props) {
             maxWidth: "800px",
             marginBottom: "1.5rem",
           }}>
-            {label}
+            {h1}
           </h1>
 
           <p style={{ fontFamily: "var(--body)", fontSize: "1rem", color: "rgba(255,255,255,0.5)", maxWidth: "560px", lineHeight: 1.75 }}>
