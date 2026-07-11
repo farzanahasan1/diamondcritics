@@ -15,19 +15,19 @@ const SITE_URL = 'https://diamondcritics.com'
 // Per-community SEO config — title, description, and keywords tailored to each community
 const COMMUNITY_SEO: Record<string, { title: string; description: (m: number, p: number) => string; keywords: string[] }> = {
   diamonds: {
-    title: 'r/diamonds — Diamond Advice, Prices & GIA Reviews | DiamondCritics',
+    title: 'r/diamonds — Diamond Advice, Prices & GIA Reviews',
     description: (m, p) =>
       `${m.toLocaleString()} members · ${p.toLocaleString()} posts. The go-to diamond community for GIA-certified advice, engagement ring prices, cut grades, and honest reviews. Ask an expert before you buy.`,
     keywords: ['diamond community', 'diamond advice', 'GIA diamond', 'diamond prices', 'engagement ring forum', 'diamond cut grade', 'buy diamond online'],
   },
   'lab-diamonds': {
-    title: 'r/lab-diamonds — Lab Grown Diamond Community | DiamondCritics',
+    title: 'r/lab-diamonds — Lab Grown Diamond Community',
     description: (m, p) =>
       `${m.toLocaleString()} members · ${p.toLocaleString()} posts. Lab grown diamond advice, IGI vs GIA comparison, CVD vs HPHT discussion, and price comparisons from real buyers.`,
     keywords: ['lab grown diamond', 'lab diamond forum', 'CVD diamond', 'HPHT diamond', 'IGI diamond', 'lab diamond price'],
   },
   'engagement-rings': {
-    title: 'r/engagement-rings — Ring Advice & Show & Tell | DiamondCritics',
+    title: 'r/engagement-rings — Ring Advice & Show & Tell',
     description: (m, p) =>
       `${m.toLocaleString()} members · ${p.toLocaleString()} posts. Engagement ring advice, show & tell, setting styles, and metal choices. Get feedback before you propose.`,
     keywords: ['engagement ring forum', 'engagement ring advice', 'ring setting', 'solitaire ring', 'halo ring', 'proposal ideas'],
@@ -38,7 +38,7 @@ function communityMeta(slug: string, name: string, description: string | null, m
   const custom = COMMUNITY_SEO[slug]
   const m = memberCount ?? 0
   const p = postCount ?? 0
-  const title = custom?.title ?? `r/${slug} — ${name} | DiamondCritics Diamond Community`
+  const title = custom?.title ?? `r/${slug} — ${name} Diamond Community`
   const desc  = custom
     ? custom.description(m, p)
     : `${m.toLocaleString()} members · ${p.toLocaleString()} posts. ${description ?? `Discuss ${name} with diamond enthusiasts and experts on DiamondCritics.`}`
@@ -66,14 +66,14 @@ export async function generateMetadata({ params, searchParams }: { params: Promi
     alternates: { canonical: `${SITE_URL}/community/r/${slug}` },
     ...(sort && { robots: { index: false, follow: true } }),
     openGraph: {
-      title,
+      title: `${title} | Diamond Critics`,
       description: desc,
       url: `${SITE_URL}/community/r/${slug}`,
       type: 'website',
-      siteName: 'DiamondCritics',
-      images: [{ url: '/images/diamondcritics-og.png', width: 1200, height: 630, alt: `${c.name} — DiamondCritics Community` }],
+      siteName: 'Diamond Critics',
+      images: [{ url: `${SITE_URL}/images/diamondcritics-og.png`, width: 1200, height: 630, alt: `${c.name} — Diamond Critics Community` }],
     },
-    twitter: { card: 'summary_large_image', title, description: desc },
+    twitter: { card: 'summary_large_image', title: `${title} | Diamond Critics`, description: desc },
   }
 }
 

@@ -54,23 +54,24 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
     : `Diamond community discussion: ${post.title}. Join DiamondCritics to share your knowledge and get expert answers.`
 
   const communityLabel = communitySlug ? `r/${communitySlug}` : 'Diamond Community'
-  const title = `${post.title} — ${communityLabel} | DiamondCritics`
-  const ogImage = post.image_url ?? '/images/diamondcritics-og.png'
+  const title = `${post.title} — ${communityLabel}`
+  const ogTitle = `${post.title} — ${communityLabel} | Diamond Critics`
+  const ogImage = post.image_url ?? `${SITE_URL}/images/diamondcritics-og.png`
 
   return {
     title,
     description,
     alternates: { canonical: `${SITE_URL}/community/post/${id}` },
     openGraph: {
-      title: post.title,
+      title: ogTitle,
       description,
       url: `${SITE_URL}/community/post/${id}`,
       type: 'article',
-      siteName: 'DiamondCritics',
+      siteName: 'Diamond Critics',
       publishedTime: post.created_at,
       images: [{ url: ogImage, width: 1200, height: 630, alt: post.title }],
     },
-    twitter: { card: 'summary_large_image', title: post.title, description },
+    twitter: { card: 'summary_large_image', title: ogTitle, description },
   }
 }
 

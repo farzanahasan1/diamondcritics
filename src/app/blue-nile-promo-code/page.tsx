@@ -2,18 +2,18 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Blue Nile Promo Code July 2026 — Coupon Codes, Discounts & Active Deals",
+  title: "Blue Nile Promo Code 2026 — Active Coupon Codes & Discounts",
   description:
-    "Blue Nile promo codes July 2026: up to 70% off clearance, 50% off James Allen collection, 30% off select styles. No coupon code needed — Blue Nile discounts apply automatically at checkout.",
+    "Blue Nile promo codes 2026: up to 70% off clearance, 50% off James Allen collection, 30% off select styles. No coupon code needed — Blue Nile discounts apply automatically at checkout.",
   alternates: { canonical: "https://diamondcritics.com/blue-nile-promo-code" },
   openGraph: {
-    title: "Blue Nile Promo Code 2026 — All Active Coupon Codes & Discounts",
+    title: "Blue Nile Promo Code 2026 — Active Coupon Codes & Discounts | Diamond Critics",
     description:
       "Every active Blue Nile discount code & deal in one place. Up to 70% off clearance fine jewelry, 50% off James Allen, 30% off select styles. No promo code required.",
     url: "https://diamondcritics.com/blue-nile-promo-code",
     type: "website",
     siteName: "Diamond Critics",
-    images: [{ url: "/images/blue-nile-promo-code-og.jpg", width: 1200, height: 630 }],
+    images: [{ url: "https://diamondcritics.com/images/blue-nile-promo-code-og.jpg", width: 1200, height: 630 }],
   },
   keywords: [
     "blue nile promo code",

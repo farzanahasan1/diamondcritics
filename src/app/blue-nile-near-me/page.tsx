@@ -7,13 +7,13 @@ export const metadata: Metadata = {
     "Blue Nile has 22 showrooms across 14 US states. Find the Blue Nile jewelry store near you — full addresses, hours, and what to expect vs buying online. Tysons Corner, Boca Raton, Newport Beach, and more.",
   alternates: { canonical: "https://diamondcritics.com/blue-nile-near-me" },
   openGraph: {
-    title: "Blue Nile Near Me: All 22 Showroom Locations & Addresses (2026)",
+    title: "Blue Nile Near Me: All 22 Showroom Locations (2026) | Diamond Critics",
     description:
       "Find a Blue Nile jewelry store near you. 22 showrooms in 14 states — Tysons Corner VA, Boca Raton FL, Newport Beach CA, Garden State Plaza NJ, Roosevelt Field NY, and more.",
     url: "https://diamondcritics.com/blue-nile-near-me",
     type: "website",
     siteName: "Diamond Critics",
-    images: [{ url: "/images/blue-nile-near-me-og.jpg", width: 1200, height: 630 }],
+    images: [{ url: "https://diamondcritics.com/images/blue-nile-near-me-og.jpg", width: 1200, height: 630 }],
   },
   keywords: [
     "blue nile near me",
