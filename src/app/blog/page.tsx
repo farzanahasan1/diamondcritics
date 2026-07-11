@@ -3,20 +3,20 @@ import Link from "next/link";
 import { getAllPosts } from "@/lib/content";
 
 export const metadata: Metadata = {
-  title: "Diamond Buying Guide: All Guides & Reviews | DiamondCritics",
+  title: "Diamond Buying Guides & Reviews",
   description:
-    "Every diamond buying guide by Farzana Hasan, GIA-certified gemologist. Round, oval, princess cut, 4Cs, retailer reviews — 238 expert guides in one place.",
+    "Every diamond buying guide by Farzana Hasan, GIA-certified gemologist. Round, oval, princess cut, 4Cs, retailer reviews — expert guides in one place.",
   alternates: { canonical: "https://diamondcritics.com/blog" },
   openGraph: {
-    title: "Diamond Buying Guide: All Guides & Reviews | DiamondCritics",
+    title: "Diamond Buying Guides & Reviews | Diamond Critics",
     description:
-      "Every diamond buying guide by Farzana Hasan, GIA-certified gemologist. Round, oval, princess cut, 4Cs, retailer reviews — 238 expert guides.",
+      "Every diamond buying guide by Farzana Hasan, GIA-certified gemologist. Round, oval, princess cut, 4Cs, retailer reviews — expert guides in one place.",
     url: "https://diamondcritics.com/blog",
     type: "website",
     siteName: "Diamond Critics",
-    images: [{ url: "/images/diamondcritics-og.png", width: 1200, height: 630 }],
+    images: [{ url: "https://diamondcritics.com/images/diamondcritics-og.png", width: 1200, height: 630 }],
   },
-  twitter: { card: "summary_large_image" },
+  twitter: { card: "summary_large_image", title: "Diamond Buying Guides & Reviews | Diamond Critics", description: "Every diamond buying guide by Farzana Hasan, GIA-certified gemologist. Round, oval, princess cut, 4Cs, retailer reviews — expert guides in one place." },
 };
 
 function slugToLabel(slug: string): string {

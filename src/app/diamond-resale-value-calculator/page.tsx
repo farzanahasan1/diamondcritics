@@ -1,16 +1,22 @@
 import type { Metadata } from "next";
 import ResaleCalculator from "@/components/ResaleCalculator";
 
+const resaleTitle = "Diamond Resale Value Calculator — ROI & Resale Projections";
+const resaleDesc = "Estimate your diamond's 5-year and 10-year resale value and ROI. Compare natural vs lab-grown resale retention. Free tool by Farzana Hasan, GIA Expert.";
+
 export const metadata: Metadata = {
-  title: "Diamond Resale Value Calculator 2026 — ROI & Resale Projections",
-  description: "Estimate your diamond's 5-year and 10-year resale value and ROI. Compare natural vs lab-grown resale retention. Free tool by Farzana Hasan, GIA Expert.",
+  title: resaleTitle,
+  description: resaleDesc,
   alternates: { canonical: "https://diamondcritics.com/diamond-resale-value-calculator" },
   openGraph: {
-    title: "Diamond Resale Value Calculator 2026",
-    description: "Get 5-year and 10-year resale projections for any diamond. Free tool by Farzana Hasan, GIA Expert.",
+    title: `${resaleTitle} | Diamond Critics`,
+    description: resaleDesc,
     url: "https://diamondcritics.com/diamond-resale-value-calculator",
     type: "website",
+    siteName: "Diamond Critics",
+    images: [{ url: "https://diamondcritics.com/images/diamondcritics-og.png", width: 1200, height: 630 }],
   },
+  twitter: { card: "summary_large_image", title: resaleTitle, description: resaleDesc },
 };
 
 export default function DiamondResaleCalculatorPage() {

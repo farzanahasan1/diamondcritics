@@ -1,15 +1,21 @@
 import type { Metadata } from "next";
 
+const contactTitle = "Contact Farzana Hasan — GIA Expert Diamond Audits";
+const contactDesc = "Get an independent diamond audit from GIA expert Farzana Hasan. Technical guidance on eye-clean diamonds, GIA report analysis, and light performance.";
+
 export const metadata: Metadata = {
-  title: "Contact Farzana Hasan — GIA Expert Diamond Audits",
-  description:
-    "Get an independent diamond audit from GIA expert Farzana Hasan. Technical guidance on eye-clean diamonds, GIA report analysis, and light performance.",
+  title: contactTitle,
+  description: contactDesc,
   alternates: { canonical: "https://diamondcritics.com/contact" },
   openGraph: {
-    title: "Contact Farzana Hasan — GIA Expert Diamond Audits",
-    description: "Independent, GIA-backed analysis before you spend. Purchase reviews, GIA report audits, lab vs natural comparisons.",
+    title: `${contactTitle} | Diamond Critics`,
+    description: contactDesc,
     url: "https://diamondcritics.com/contact",
+    type: "website",
+    siteName: "Diamond Critics",
+    images: [{ url: "https://diamondcritics.com/images/diamondcritics-og.png", width: 1200, height: 630 }],
   },
+  twitter: { card: "summary_large_image", title: contactTitle, description: contactDesc },
 };
 
 const schema = {

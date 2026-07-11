@@ -1,16 +1,22 @@
 import type { Metadata } from "next";
 import DiamondCalculator from "@/components/DiamondCalculator";
 
+const calcTitle = "Diamond Price Calculator — Instant Market Value Estimate";
+const calcDesc = "Calculate the fair market value of any diamond by shape, carat, cut, color, and clarity. GIA-backed methodology by Farzana Hasan, Diamond Critics.";
+
 export const metadata: Metadata = {
-  title: "Diamond Price Calculator 2026 — Instant Market Value Estimate",
-  description: "Calculate the fair market value of any diamond by shape, carat, cut, color, and clarity. GIA-backed methodology by Farzana Hasan, Diamond Critics.",
+  title: calcTitle,
+  description: calcDesc,
   alternates: { canonical: "https://diamondcritics.com/diamond-price-calculator" },
   openGraph: {
-    title: "Diamond Price Calculator 2026",
-    description: "Get an instant fair market estimate for any diamond. Free tool by Farzana Hasan, GIA Expert.",
+    title: `${calcTitle} | Diamond Critics`,
+    description: calcDesc,
     url: "https://diamondcritics.com/diamond-price-calculator",
     type: "website",
+    siteName: "Diamond Critics",
+    images: [{ url: "https://diamondcritics.com/images/diamondcritics-og.png", width: 1200, height: 630 }],
   },
+  twitter: { card: "summary_large_image", title: calcTitle, description: calcDesc },
 };
 
 export default function DiamondPriceCalculatorPage() {

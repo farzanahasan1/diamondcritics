@@ -22,18 +22,18 @@ const wrap: React.CSSProperties = {
 };
 
 export const metadata: Metadata = {
-  title: label,
+  title: "Diamond Retailer Reviews: Independent Audits & Ratings",
   description,
   alternates: { canonical: "https://diamondcritics.com/category/diamond-retailer-reviews" },
   openGraph: {
-    title: label,
+    title: "Diamond Retailer Reviews: Independent Audits & Ratings | Diamond Critics",
     description,
     url: "https://diamondcritics.com/category/diamond-retailer-reviews",
     type: "website",
     siteName: "Diamond Critics",
-    images: [{ url: "/images/diamondcritics-og.png", width: 1200, height: 630 }],
+    images: [{ url: "https://diamondcritics.com/images/diamondcritics-og.png", width: 1200, height: 630 }],
   },
-  twitter: { card: "summary_large_image" },
+  twitter: { card: "summary_large_image", title: "Diamond Retailer Reviews: Independent Audits & Ratings", description },
 };
 
 export default function DiamondRetailerReviewsPage() {

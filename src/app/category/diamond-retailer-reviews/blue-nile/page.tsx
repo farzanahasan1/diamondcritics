@@ -13,18 +13,18 @@ const wrap: React.CSSProperties = {
 };
 
 export const metadata: Metadata = {
-  title: label,
+  title: "Blue Nile Reviews: Rings, Diamonds & Lab-Grown Prices",
   description,
   alternates: { canonical: "https://diamondcritics.com/category/diamond-retailer-reviews/blue-nile" },
   openGraph: {
-    title: label,
+    title: "Blue Nile Reviews: Rings, Diamonds & Lab-Grown Prices | Diamond Critics",
     description,
     url: "https://diamondcritics.com/category/diamond-retailer-reviews/blue-nile",
     type: "website",
     siteName: "Diamond Critics",
-    images: [{ url: "/images/diamondcritics-og.png", width: 1200, height: 630 }],
+    images: [{ url: "https://diamondcritics.com/images/diamondcritics-og.png", width: 1200, height: 630 }],
   },
-  twitter: { card: "summary_large_image" },
+  twitter: { card: "summary_large_image", title: "Blue Nile Reviews: Rings, Diamonds & Lab-Grown Prices", description },
 };
 
 export default function BlueNileSubcategoryPage() {
