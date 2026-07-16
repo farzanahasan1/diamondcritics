@@ -13,6 +13,7 @@ const categoryLabels: Record<string, string> = {
   "princess-cut-diamond": "Princess Cut Diamond",
   "oval-cut-diamond": "Oval Cut Diamond",
   "pear-cut-diamond": "Pear Cut Diamond",
+  "cushion-cut-diamond": "Cushion Cut Diamond",
 };
 
 const categoryDescriptions: Record<string, string> = {
@@ -25,10 +26,12 @@ const categoryDescriptions: Record<string, string> = {
   "princess-cut-diamond": "Farzana Hasan's complete princess cut diamond series — 1ct price audit, corner clarity trap, ideal proportions, settings guide, and princess vs round analysis.",
   "oval-cut-diamond": "Farzana Hasan's complete oval cut diamond series — 1ct to 3ct price audits, the bow-tie effect explained, ideal L/W ratios, and real Blue Nile stone data.",
   "pear-cut-diamond": "Pear diamond buying guides by Farzana Hasan: solitaire settings from $1,255, three-stone rings from $1,820, ideal L/W ratios, bow-tie audit, and real Blue Nile prices by carat.",
+  "cushion-cut-diamond": "Cushion cut diamond buying guides by Farzana Hasan: elongated vs standard cushion explained, real Blue Nile prices from $1,891 natural and $1,422 lab-grown, halo and solitaire settings, and carat-by-carat price audits.",
 };
 
 const categorySeoTitles: Record<string, string> = {
   "pear-cut-diamond": "Pear Cut Diamond: Buying Guides, Settings & Prices",
+  "cushion-cut-diamond": "Cushion Cut Diamond: Buying Guides, Prices & Settings",
 };
 
 const SUBCATEGORY_SLUGS = new Set(["blue-nile"]);
@@ -56,6 +59,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const ogImage =
     slug === "pear-cut-diamond"
       ? { url: "https://diamondcritics.com/images/pear-shaped-diamond-ring.avif", width: 1500, height: 1000 }
+      : slug === "cushion-cut-diamond"
+      ? { url: "https://diamondcritics.com/images/og/elongated-cushion-cut-diamond-featured.jpg", width: 1200, height: 630 }
       : { url: "https://diamondcritics.com/images/diamondcritics-og.png", width: 1200, height: 630 };
 
   return {
@@ -76,6 +81,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 const categoryH1s: Record<string, string> = {
   "pear-cut-diamond": "Pear Cut Diamond Rings: Complete Buying Guides",
+  "cushion-cut-diamond": "Cushion Cut Diamond: Complete Buying Guides",
 };
 
 export default async function CategoryPage({ params }: Props) {

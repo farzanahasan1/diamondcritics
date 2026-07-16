@@ -58,6 +58,9 @@ const categoryLabelsSchema: Record<string, string> = {
   "market-value-price-trends": "Market & Price Trends",
   "round-cut-diamond": "Round Cut Diamond",
   "princess-cut-diamond": "Princess Cut Diamond",
+  "oval-cut-diamond": "Oval Cut Diamond",
+  "pear-cut-diamond": "Pear Cut Diamond",
+  "cushion-cut-diamond": "Cushion Cut Diamond",
 };
 
 function extractFAQSchema(html: string): object | null {
