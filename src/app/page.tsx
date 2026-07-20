@@ -409,7 +409,7 @@ export default function HomePage() {
             <div style={{ textAlign: "center" }}>
               <p style={{ fontFamily: "var(--heading)", fontSize: "3.5rem", fontWeight: 300, color: "rgba(255,255,255,0.06)", lineHeight: 1, letterSpacing: "-0.02em" }}>EXCLUSIVE</p>
               <p style={{ fontFamily: "var(--heading)", fontSize: "4.5rem", fontWeight: 300, color: "rgba(255,255,255,0.06)", lineHeight: 1, letterSpacing: "-0.02em" }}>SAVINGS</p>
-              <a href="https://www.bluenile.com/diamond-search?a_aid=69d7c31a91b8d&a_cid=55e51e63&chan=homepage-cta"
+              <a href="https://www.bluenile.com/diamond-search?a_aid=69d7c31a91b8d&a_cid=55e51e63&chan=blog-informational"
                 target="_blank" rel="noopener noreferrer"
                 style={{ display: "inline-block", fontFamily: "var(--body)", fontSize: "0.72rem", letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--gold)", marginTop: "1rem", textDecoration: "none" }}>
                 Blue Nile — Up to 40% Off →

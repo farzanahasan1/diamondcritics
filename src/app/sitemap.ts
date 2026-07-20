@@ -51,6 +51,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "round-cut-diamond",
     "princess-cut-diamond",
     "pear-cut-diamond",
+    "emerald-cut-diamond",
     "diamond-buying-guides",
     "diamond-retailer-reviews",
     "blue-nile",
