@@ -46,6 +46,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ];
 
   const categoryPages: MetadataRoute.Sitemap = [
+    "cushion-cut-diamond",
     "oval-cut-diamond",
     "round-cut-diamond",
     "princess-cut-diamond",
