@@ -16,15 +16,29 @@ function escapeXml(str: string): string {
 
 function extractInlineImages(content: string): Array<{ loc: string; title: string }> {
   const images: Array<{ loc: string; title: string }> = [];
-  // Matches ![alt text](/images/filename.avif) — any path under /images/
-  const re = /!\[([^\]]*)\]\((\/images\/[^)\s]+)\)/g;
-  let match;
-  while ((match = re.exec(content)) !== null) {
-    images.push({
-      loc: `${BASE}${match[2]}`,
-      title: match[1].trim(),
-    });
+  const seen = new Set<string>();
+
+  // 1. Markdown syntax: ![alt text](/images/filename.avif)
+  const mdRe = /!\[([^\]]*)\]\((\/images\/[^)\s]+)\)/g;
+  let match: RegExpExecArray | null;
+  while ((match = mdRe.exec(content)) !== null) {
+    const loc = `${BASE}${match[2]}`;
+    if (!seen.has(loc)) {
+      seen.add(loc);
+      images.push({ loc, title: match[1].trim() });
+    }
   }
+
+  // 2. HTML img tags: <img src="/images/..." alt="..." ...>
+  const htmlRe = /<img[^>]+src="(\/images\/[^"]+)"[^>]*(?:alt="([^"]*)")?[^>]*>/gi;
+  while ((match = htmlRe.exec(content)) !== null) {
+    const loc = `${BASE}${match[1]}`;
+    if (!seen.has(loc)) {
+      seen.add(loc);
+      images.push({ loc, title: (match[2] ?? "").trim() });
+    }
+  }
+
   return images;
 }
 

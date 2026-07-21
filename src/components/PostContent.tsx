@@ -297,6 +297,21 @@ export default function PostContent({ type, data, related }: Props) {
 
             {/* Main article */}
             <article>
+              {/* Featured image — rendered as <img> for Google Images indexing */}
+              {type === "post" && post.featuredImage && (
+                <div style={{ marginBottom: "2.5rem", borderRadius: "4px", overflow: "hidden" }}>
+                  <img
+                    src={post.featuredImage}
+                    alt={post.title}
+                    title={post.title}
+                    width={1200}
+                    height={800}
+                    loading="eager"
+                    decoding="async"
+                    style={{ width: "100%", height: "auto", display: "block" }}
+                  />
+                </div>
+              )}
               {(() => {
                 const firstH2 = contentHtml.indexOf("<h2");
                 // Split at the second H2 so DiamondQuiz appears after the TL;DR section
