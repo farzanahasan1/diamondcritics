@@ -39,6 +39,26 @@ function extractInlineImages(content: string): Array<{ loc: string; title: strin
     }
   }
 
+  // 3. External product images — Markdown linked: [![alt](https://ion.bluenile.com/...)](link)
+  const extMdRe = /!\[([^\]]*)\]\((https:\/\/ion\.bluenile\.com[^)\s]+)\)/g;
+  while ((match = extMdRe.exec(content)) !== null) {
+    const loc = match[2];
+    if (!seen.has(loc)) {
+      seen.add(loc);
+      images.push({ loc, title: match[1].trim() });
+    }
+  }
+
+  // 4. External product images in HTML img tags
+  const extHtmlRe = /<img[^>]+src="(https:\/\/ion\.bluenile\.com[^"]+)"[^>]*(?:alt="([^"]*)")?[^>]*>/gi;
+  while ((match = extHtmlRe.exec(content)) !== null) {
+    const loc = match[1];
+    if (!seen.has(loc)) {
+      seen.add(loc);
+      images.push({ loc, title: (match[2] ?? "").trim() });
+    }
+  }
+
   return images;
 }
 
