@@ -15,6 +15,7 @@ const categoryLabels: Record<string, string> = {
   "pear-cut-diamond": "Pear Cut Diamond",
   "cushion-cut-diamond": "Cushion Cut Diamond",
   "emerald-cut-diamond": "Emerald Cut Diamond",
+  "radiant-cut-diamond": "Radiant Cut Diamond",
 };
 
 const categoryDescriptions: Record<string, string> = {
@@ -29,12 +30,14 @@ const categoryDescriptions: Record<string, string> = {
   "pear-cut-diamond": "Pear diamond buying guides by Farzana Hasan: solitaire settings from $1,255, three-stone rings from $1,820, ideal L/W ratios, bow-tie audit, and real Blue Nile prices by carat.",
   "cushion-cut-diamond": "Cushion cut diamond buying guides by Farzana Hasan: elongated vs standard cushion explained, real Blue Nile prices from $1,891 natural and $1,422 lab-grown, halo and solitaire settings, and carat-by-carat price audits.",
   "emerald-cut-diamond": "Emerald cut diamond buying guides by Farzana Hasan: the hall-of-mirrors effect explained, VS1 clarity rule, ideal L/W ratios, real certified market prices from 1ct to 5ct, settings, lab-grown savings, and every style covered.",
+  "radiant-cut-diamond": "Radiant cut diamond buying guides by Farzana Hasan: 70-facet brilliance explained, VS2 clarity floor, elongated vs square radiant, real certified market prices from 1ct to 5ct natural and lab-grown, halo and solitaire settings, and every comparison covered.",
 };
 
 const categorySeoTitles: Record<string, string> = {
   "pear-cut-diamond": "Pear Cut Diamond: Buying Guides, Settings & Prices",
   "cushion-cut-diamond": "Cushion Cut Diamond: Buying Guides, Prices & Settings",
   "emerald-cut-diamond": "Emerald Cut Diamond: Buying Guides, Prices & Settings",
+  "radiant-cut-diamond": "Radiant Cut Diamond: Buying Guides, Prices & Settings",
 };
 
 const SUBCATEGORY_SLUGS = new Set(["blue-nile"]);
@@ -66,6 +69,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       ? { url: "https://diamondcritics.com/images/og/elongated-cushion-cut-diamond-featured.jpg", width: 1200, height: 630 }
       : slug === "emerald-cut-diamond"
       ? { url: "https://diamondcritics.com/images/Emerald-Cut-Diamond-The-Complete-2026-Buying-Guide-Hall-of-Mirrors-Prices-Clarity-Rules.avif", width: 1500, height: 1000 }
+      : slug === "radiant-cut-diamond"
+      ? { url: "https://diamondcritics.com/images/Radiant-Cut-Diamond-The-Complete-Buying-Guide.avif", width: 1500, height: 1000 }
       : { url: "https://diamondcritics.com/images/diamondcritics-og.png", width: 1200, height: 630 };
 
   return {
@@ -88,6 +93,7 @@ const categoryH1s: Record<string, string> = {
   "pear-cut-diamond": "Pear Cut Diamond Rings: Complete Buying Guides",
   "cushion-cut-diamond": "Cushion Cut Diamond: Complete Buying Guides",
   "emerald-cut-diamond": "Emerald Cut Diamond: Complete Buying Guides",
+  "radiant-cut-diamond": "Radiant Cut Diamond: Complete Buying Guides",
 };
 
 export default async function CategoryPage({ params }: Props) {
