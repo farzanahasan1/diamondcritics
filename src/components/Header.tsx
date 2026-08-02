@@ -252,6 +252,26 @@ const nav: NavItem[] = [
             { label: "All Pear Guides", href: "/category/pear-cut-diamond" },
           ],
         },
+        {
+          heading: "Emerald Diamond Deep Dive",
+          links: [
+            { label: "Emerald Cut Guide", href: "/emerald-cut-diamond" },
+            { label: "Emerald vs Cushion", href: "/cushion-cut-vs-emerald-cut-diamond" },
+            { label: "Emerald vs Pear", href: "/pear-cut-vs-emerald-cut-diamond" },
+            { label: "Emerald vs Marquise", href: "/marquise-cut-vs-emerald-cut-diamond" },
+            { label: "All Emerald Guides", href: "/category/emerald-cut-diamond" },
+          ],
+        },
+        {
+          heading: "Radiant Diamond Deep Dive",
+          links: [
+            { label: "Radiant Cut Guide", href: "/radiant-cut-diamond" },
+            { label: "Radiant vs Cushion", href: "/cushion-cut-vs-radiant-cut-diamond" },
+            { label: "Radiant vs Princess", href: "/princess-cut-vs-radiant-cut-diamond" },
+            { label: "Radiant vs Emerald", href: "/radiant-cut-vs-emerald-cut-diamond" },
+            { label: "All Radiant Guides", href: "/category/radiant-cut-diamond" },
+          ],
+        },
       ],
       viewAll: { label: "All Round Cut Guides", href: "/category/round-cut-diamond" },
     },

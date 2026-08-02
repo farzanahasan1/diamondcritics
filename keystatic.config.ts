@@ -40,6 +40,8 @@ export default config({
             { label: "Oval Cut Diamond", value: "oval-cut-diamond" },
             { label: "Pear Cut Diamond", value: "pear-cut-diamond" },
             { label: "Cushion Cut Diamond", value: "cushion-cut-diamond" },
+            { label: "Emerald Cut Diamond", value: "emerald-cut-diamond" },
+            { label: "Radiant Cut Diamond", value: "radiant-cut-diamond" },
           ],
           defaultValue: "diamond-buying-guides",
         }),
