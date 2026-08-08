@@ -3,6 +3,7 @@ import Link from "next/link";
 import { getAllPosts } from "@/lib/content";
 import JamesAllenBanner from "@/components/JamesAllenBanner";
 import RapaportTicker from "@/components/RapaportTicker";
+import DiamondPriceChart from "@/components/DiamondPriceChart";
 
 export const metadata: Metadata = {
   title: { absolute: "Diamond Critics — Expert Diamond Buying Advice by Farzana Hasan" },
@@ -109,6 +110,9 @@ export default function HomePage() {
       {/* ── Rapaport Price Ticker ────────────────────────────── */}
       <RapaportTicker />
 
+      {/* ── Diamond Price Chart ──────────────────────────────── */}
+      <DiamondPriceChart />
+
       {/* ── Filter nav ───────────────────────────────────────── */}
       <nav aria-label="Content categories" style={{ borderBottom: "1px solid #ebebeb", background: "#fafafa" }}>
         <ul style={{ ...wrap, display: "flex", alignItems: "center", height: "46px", overflowX: "auto", listStyle: "none", margin: "0 auto", padding: "0 2rem", gap: 0 }}>
@@ -134,11 +138,6 @@ export default function HomePage() {
           ))}
         </ul>
       </nav>
-
-      {/* ── James Allen Sale Banner ──────────────────────────── */}
-      <div style={{ background: "#000" }}>
-        <JamesAllenBanner />
-      </div>
 
       {/* ── Trusted Retailer ─────────────────────────────────── */}
       <section style={{ borderBottom: "1px solid #ebebeb", padding: "3rem 0" }}>
@@ -349,6 +348,11 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* ── James Allen Sale Banner ──────────────────────────── */}
+      <div style={{ background: "#000" }}>
+        <JamesAllenBanner />
+      </div>
 
       {/* ── Browse All Guides ────────────────────────────────── */}
       {guides.length > 0 && (
