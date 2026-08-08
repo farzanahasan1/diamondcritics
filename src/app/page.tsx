@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { getAllPosts } from "@/lib/content";
 import JamesAllenBanner from "@/components/JamesAllenBanner";
+import RapaportTicker from "@/components/RapaportTicker";
 
 export const metadata: Metadata = {
   title: { absolute: "Diamond Critics — Expert Diamond Buying Advice by Farzana Hasan" },
@@ -104,6 +105,9 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* ── Rapaport Price Ticker ────────────────────────────── */}
+      <RapaportTicker />
 
       {/* ── Filter nav ───────────────────────────────────────── */}
       <nav aria-label="Content categories" style={{ borderBottom: "1px solid #ebebeb", background: "#fafafa" }}>
