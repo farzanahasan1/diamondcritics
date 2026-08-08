@@ -333,7 +333,7 @@ export default function RapaportPriceIndexPage() {
             </p>
 
             {/* Tools CTA */}
-            <div style={{ background: "#fafafa", border: "1px solid #ebebeb", padding: "1.75rem 2rem", margin: "2.5rem 0", display: "flex", gap: "1.5rem", alignItems: "center", flexWrap: "wrap" }}>
+            <div style={{ background: "#fafafa", border: "1px solid #ebebeb", padding: "1.75rem 2rem", margin: "2.5rem 0", display: "flex", gap: "1.5rem", alignItems: "center", flexWrap: "wrap" }} className="rapi-cta-box">
               <div style={{ flex: 1, minWidth: "200px" }}>
                 <p style={{ fontFamily: "var(--body)", fontSize: "0.68rem", letterSpacing: "0.14em", textTransform: "uppercase", color: "#aaa", marginBottom: "6px" }}>Free Tool</p>
                 <p style={{ fontFamily: "var(--heading)", fontSize: "1.1rem", fontWeight: 300, color: "#111", marginBottom: "6px" }}>Diamond Price Calculator</p>
@@ -342,6 +342,7 @@ export default function RapaportPriceIndexPage() {
               <Link
                 href="/diamond-price-calculator"
                 style={{ background: "#111", color: "#fff", fontFamily: "var(--body)", fontSize: "0.75rem", fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", padding: "13px 28px", textDecoration: "none", whiteSpace: "nowrap" }}
+                className="rapi-cta-btn"
               >
                 Use Calculator →
               </Link>
@@ -400,6 +401,8 @@ export default function RapaportPriceIndexPage() {
         @media (max-width: 600px) {
           .rapi-weight-grid { grid-template-columns: 1fr !important; }
           .see-also-grid { grid-template-columns: 1fr !important; }
+          .rapi-cta-box { flex-direction: column !important; }
+          .rapi-cta-btn { width: 100% !important; text-align: center !important; box-sizing: border-box !important; }
         }
       `}</style>
     </>
