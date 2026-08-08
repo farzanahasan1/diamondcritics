@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import DiamondPriceChart from "@/components/DiamondPriceChart";
 
-const PAGE_TITLE = "Rapaport Diamond Price Index (RAPI™) Explained — What Buyers Need to Know";
+const PAGE_TITLE = "What Is the Rapaport Diamond Price Index? A Buyer's Guide";
 const PAGE_DESC =
-  "What is the Rapaport Diamond Price Index? Learn how the RAPI™ benchmark works, what price changes mean for buyers, and how to use market data to avoid overpaying.";
+  "What is the Rapaport Diamond Price Index (RAPI™)? Learn how it works, what price changes mean for buyers, and how to avoid overpaying on a diamond.";
 
 export const metadata: Metadata = {
   title: PAGE_TITLE,
