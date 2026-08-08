@@ -107,7 +107,7 @@ export default async function CategoryPage({ params }: Props) {
 
   const h1 = categoryH1s[slug] ?? label;
 
-  const jsonLd = {
+  const breadcrumbLd = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
@@ -116,11 +116,30 @@ export default async function CategoryPage({ params }: Props) {
     ],
   };
 
+  const itemListLd = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: `${label} — Complete Buying Guides`,
+    description: categoryDescriptions[slug],
+    url: `https://diamondcritics.com/category/${slug}`,
+    numberOfItems: posts.length,
+    itemListElement: posts.map((post, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      url: `https://diamondcritics.com/${post.slug}`,
+      name: post.title,
+    })),
+  };
+
   return (
     <div style={{ fontFamily: "var(--body)" }}>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListLd) }}
       />
 
       {/* ── Dark hero ── */}
