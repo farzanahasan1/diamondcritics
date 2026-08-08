@@ -5,6 +5,7 @@ import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import SearchModal from "@/components/SearchModal";
+import RapaportTicker from "@/components/RapaportTicker";
 import { getAllPosts } from "@/lib/content";
 import Script from "next/script";
 
@@ -83,6 +84,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }} />
       </head>
       <body className="bg-white text-gray-900 antialiased min-h-full flex flex-col">
+        <RapaportTicker />
         <Header />
         <main className="flex-1">{children}</main>
         <Footer />

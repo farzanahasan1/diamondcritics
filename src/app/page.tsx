@@ -107,7 +107,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── Rapaport Price Ticker ────────────────────────────── */}
+      {/* ── Rapaport Price Ticker (after hero) ──────────────── */}
       <RapaportTicker />
 
       {/* ── Diamond Price Chart ──────────────────────────────── */}
