@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { getAllPosts } from "@/lib/content";
 import JamesAllenBanner from "@/components/JamesAllenBanner";
-import RapaportTicker from "@/components/RapaportTicker";
 import DiamondPriceChart from "@/components/DiamondPriceChart";
 
 export const metadata: Metadata = {
@@ -106,9 +105,6 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-
-      {/* ── Rapaport Price Ticker (after hero) ──────────────── */}
-      <RapaportTicker />
 
       {/* ── Diamond Price Chart ──────────────────────────────── */}
       <DiamondPriceChart />
