@@ -46,6 +46,7 @@ const company = [
 
 const tools = [
   { label: "Diamond Price Calculator", href: "/diamond-price-calculator" },
+  { label: "Rapaport Price Index", href: "/rapaport-diamond-price-index" },
   { label: "Resale Value Calculator", href: "/diamond-resale-value-calculator" },
   { label: "4Cs Explained", href: "/diamond-4cs" },
   { label: "Shapes Guide", href: "/diamond-shapes-guide" },
