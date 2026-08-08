@@ -240,7 +240,7 @@ export default function DiamondPriceChart() {
             className="dc-chart-inner"
           >
             {/* Size / change mini-table */}
-            <div style={{ flexShrink: 0 }}>
+            <div style={{ flexShrink: 0 }} className="dc-mini-table">
               <div style={{
                 display: 'grid',
                 gridTemplateColumns: 'auto auto',
@@ -445,6 +445,12 @@ export default function DiamondPriceChart() {
           }
           .dc-chart-inner {
             flex-direction: column !important;
+          }
+          .dc-mini-table {
+            width: 100% !important;
+          }
+          .dc-mini-table > div {
+            grid-template-columns: 1fr 1fr !important;
           }
         }
         @media (max-width: 480px) {

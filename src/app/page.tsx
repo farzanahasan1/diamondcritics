@@ -50,7 +50,7 @@ export default function HomePage() {
         <div style={{ ...wrap, display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "3rem", flexWrap: "wrap" }}>
 
           {/* Left */}
-          <div style={{ flex: "1 1 400px", maxWidth: "580px" }}>
+          <div style={{ flex: "1 1 400px", maxWidth: "580px" }} className="home-hero-left">
             <p style={{ fontSize: "0.72rem", letterSpacing: "0.14em", textTransform: "uppercase", color: "#888", marginBottom: "1rem" }}>
               Expert Guides · GIA-Backed · Free Analysis
             </p>
@@ -65,7 +65,7 @@ export default function HomePage() {
             <p style={{ fontSize: "0.95rem", lineHeight: 1.75, color: "#555", margin: "1.25rem 0 2rem", maxWidth: "480px" }}>
               Expert diamond reviews, clarity guides, color grading, and price comparisons. GIA-backed analysis by Farzana Hasan — trusted by buyers in the US, UK, Canada, and Australia.
             </p>
-            <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
+            <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }} className="home-hero-btns">
               <Link href="/diamond-4cs"
                 style={{ display: "inline-flex", alignItems: "center", background: "#111", color: "#fff", fontFamily: "var(--body)", fontSize: "0.8rem", fontWeight: 600, padding: "11px 22px", textDecoration: "none" }}>
                 Diamond Buying Guide →
@@ -78,7 +78,7 @@ export default function HomePage() {
           </div>
 
           {/* Right */}
-          <div style={{ flex: "0 0 260px" }}>
+          <div style={{ flex: "0 0 260px" }} className="home-hero-right">
             <p style={{ fontSize: "0.68rem", letterSpacing: "0.14em", textTransform: "uppercase", color: "#bbb", marginBottom: "0.75rem" }}>
               As Seen In
             </p>
@@ -110,8 +110,8 @@ export default function HomePage() {
       <DiamondPriceChart />
 
       {/* ── Filter nav ───────────────────────────────────────── */}
-      <nav aria-label="Content categories" style={{ borderBottom: "1px solid #ebebeb", background: "#fafafa" }}>
-        <ul style={{ ...wrap, display: "flex", alignItems: "center", height: "46px", overflowX: "auto", listStyle: "none", margin: "0 auto", padding: "0 2rem", gap: 0 }}>
+      <nav aria-label="Content categories" style={{ borderBottom: "1px solid #ebebeb", background: "#fafafa", overflowX: "auto" }}>
+        <ul style={{ ...wrap, display: "flex", alignItems: "center", height: "46px", overflowX: "visible", listStyle: "none", margin: "0 auto", padding: "0 2rem", gap: 0 }} className="home-filter-nav">
           <li style={{ fontSize: "0.68rem", letterSpacing: "0.14em", textTransform: "uppercase", color: "#aaa", marginRight: "16px", whiteSpace: "nowrap", flexShrink: 0 }} aria-hidden="true">
             Explore
           </li>

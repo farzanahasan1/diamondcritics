@@ -570,6 +570,28 @@ body {
   .home-cta-grid { grid-template-columns: 1fr !important; }
   .home-grid-3 { grid-template-columns: repeat(2, 1fr) !important; }
   .home-grid-4 { grid-template-columns: repeat(2, 1fr) !important; }
+
+  /* Hero */
+  .home-hero-right {
+    flex: 1 1 100% !important;
+    width: 100% !important;
+  }
+  .home-hero-btns {
+    flex-direction: column !important;
+  }
+  .home-hero-btns a {
+    display: block !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    text-align: center !important;
+  }
+
+  /* Filter nav — move scroll to the nav wrapper, let ul overflow naturally */
+  .home-filter-nav {
+    width: max-content !important;
+    min-width: 100% !important;
+    padding-right: 2rem !important;
+  }
 }
 @media (max-width: 480px) {
   .home-grid-3 { grid-template-columns: 1fr !important; }
