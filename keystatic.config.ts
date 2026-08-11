@@ -42,6 +42,7 @@ export default config({
             { label: "Cushion Cut Diamond", value: "cushion-cut-diamond" },
             { label: "Emerald Cut Diamond", value: "emerald-cut-diamond" },
             { label: "Radiant Cut Diamond", value: "radiant-cut-diamond" },
+            { label: "Asscher Cut Diamond", value: "asscher-cut-diamond" },
           ],
           defaultValue: "diamond-buying-guides",
         }),

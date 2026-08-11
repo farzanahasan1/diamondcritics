@@ -33,6 +33,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "blue-nile",
     "gemstone-guides",
     "market-value-price-trends",
+    "radiant-cut-diamond",
+    "asscher-cut-diamond",
   ].map((slug) => ({
     url: `${BASE}/category/${slug}`,
     lastModified: new Date(),
