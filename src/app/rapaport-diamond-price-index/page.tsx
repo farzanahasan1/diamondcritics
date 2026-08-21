@@ -165,7 +165,7 @@ export default function RapaportPriceIndexPage() {
               TL;DR
             </span>
             <p style={{ fontFamily: "var(--body)", fontSize: "0.88rem", color: "#555", lineHeight: 1.7, margin: 0, maxWidth: "800px" }}>
-              The Rapaport Diamond Price Index (RAPI™) tracks wholesale diamond price movements for 0.30, 0.50, 1.00, and 3.00 ct stones. Over the past 12 months (Aug 2025 – Aug 2026): small stones rose +1.80–2.06%, 1ct was nearly flat at −0.14%, and 3ct edged up +0.37%. For buyers, this means the market has stabilised after the 2022–2024 correction — still a better time to buy than 2021.
+              The Rapaport Diamond Price Index (RAPI™) tracks wholesale diamond price movements for 0.30, 0.50, 1.00, and 3.00 ct stones. Over the past 12 months (Aug 2025 – Aug 2026): small stones rose +1.67–1.89%, 1ct edged up +0.25%, and 3ct dipped −0.12%. For buyers, this means the market has stabilised after the 2022–2024 correction — small stones are recovering, 1ct is turning positive, and 3ct natural remains under mild pressure.
             </p>
           </div>
         </div>
@@ -212,10 +212,10 @@ export default function RapaportPriceIndexPage() {
                 </thead>
                 <tbody>
                   {[
-                    { wt: "0.30 ct", change: "+1.80%", up: true, verdict: "Small stones are recovering. Buy now before another upward move." },
-                    { wt: "0.50 ct", change: "+2.06%", up: true, verdict: "Fastest-rising segment. Half-carat prices have bottomed and are climbing." },
-                    { wt: "1.00 ct", change: "−0.14%", up: false, verdict: "Essentially flat. The 1ct market is stable — ideal time to buy without urgency pressure." },
-                    { wt: "3.00 ct", change: "+0.37%", up: true, verdict: "3ct has held value well. Lab alternatives remain the best way to get this size affordably." },
+                    { wt: "0.30 ct", change: "+1.67%", up: true, verdict: "Small stones continue recovering. Prices up 1.67% — buy ahead of continued upward momentum." },
+                    { wt: "0.50 ct", change: "+1.89%", up: true, verdict: "Strong recovery segment. Half-carat prices up 1.89% — the floor is in, prices are climbing." },
+                    { wt: "1.00 ct", change: "+0.25%", up: true, verdict: "Turned positive. The 1ct market is recovering — slight urgency returning after a flat year." },
+                    { wt: "3.00 ct", change: "−0.12%", up: false, verdict: "3ct dipped slightly. Mild natural price pressure — lab alternatives dominate value at this size." },
                   ].map((row, i) => (
                     <tr key={row.wt} style={{ background: i % 2 === 0 ? "#fff" : "#fafafa", borderBottom: "1px solid #ebebeb" }}>
                       <td style={{ padding: "12px 16px", fontWeight: 600, color: "#111" }}>{row.wt}</td>
@@ -226,7 +226,7 @@ export default function RapaportPriceIndexPage() {
                 </tbody>
               </table>
               <p style={{ fontFamily: "var(--body)", fontSize: "0.72rem", color: "#bbb", marginTop: "8px" }}>
-                Aug 7, 2025 – Aug 7, 2026. Based on Rapaport benchmark methodology. RAPI™ is a trademark of Rapaport Group Inc.
+                Aug 20, 2025 – Aug 20, 2026. Based on Rapaport benchmark methodology. RAPI™ is a trademark of Rapaport Group Inc.
               </p>
             </div>
 

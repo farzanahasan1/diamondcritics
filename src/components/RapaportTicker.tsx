@@ -3,13 +3,13 @@
 const CALC_URL = '/diamond-price-calculator';
 
 const items = [
-  { label: '0.30 ct', price: '899',    change: '+1.80%', up: true  },
-  { label: '0.50 ct', price: '1,230',  change: '+2.06%', up: true  },
+  { label: '0.30 ct', price: '899',    change: '+1.67%', up: true  },
+  { label: '0.50 ct', price: '1,230',  change: '+1.89%', up: true  },
   { label: '0.70 ct', price: '1,580',  change: '+0.95%', up: true  },
-  { label: '1.00 ct', price: '3,881',  change: '−0.14%', up: false },
+  { label: '1.00 ct', price: '3,881',  change: '+0.25%', up: true  },
   { label: '1.50 ct', price: '8,200',  change: '+0.43%', up: true  },
   { label: '2.00 ct', price: '14,500', change: '+0.28%', up: true  },
-  { label: '3.00 ct', price: '17,779', change: '+0.37%', up: true  },
+  { label: '3.00 ct', price: '17,779', change: '−0.12%', up: false },
   { label: '4.00 ct', price: '22,400', change: '−0.52%', up: false },
   { label: '5.00 ct', price: '28,100', change: '+0.19%', up: true  },
 ];

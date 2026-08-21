@@ -19,25 +19,25 @@ const DATASETS: Record<WeightKey, {
     raw: [565, 548, 530, 516, 505, 496, 490, 488, 492, 498, 507, 516, 526],
     yMin: 460, yMax: 590,
     yTicks: [580, 540, 500],
-    change: '+1.80%', up: true,
+    change: '+1.67%', up: true,
   },
   '0.50': {
     raw: [720, 700, 678, 660, 648, 636, 630, 627, 632, 642, 655, 668, 682],
     yMin: 600, yMax: 750,
     yTicks: [740, 700, 660, 620],
-    change: '+2.06%', up: true,
+    change: '+1.89%', up: true,
   },
   '1.00': {
-    raw: [1185, 1095, 1020, 972, 940, 898, 875, 862, 870, 892, 928, 965, 1012],
+    raw: [1185, 1095, 1020, 972, 940, 898, 875, 862, 870, 892, 928, 1060, 1188],
     yMin: 780, yMax: 1220,
     yTicks: [1200, 1100, 1000, 900],
-    change: '−0.14%', up: false,
+    change: '+0.25%', up: true,
   },
   '3.00': {
-    raw: [1780, 1812, 1820, 1800, 1775, 1748, 1718, 1692, 1672, 1678, 1692, 1708, 1722],
+    raw: [1780, 1812, 1820, 1800, 1775, 1748, 1718, 1692, 1672, 1678, 1692, 1705, 1778],
     yMin: 1640, yMax: 1860,
     yTicks: [1850, 1800, 1750, 1700],
-    change: '+0.37%', up: true,
+    change: '−0.12%', up: false,
   },
 };
 
@@ -48,7 +48,7 @@ const TABLE_ROWS: { key: WeightKey; size: string }[] = [
   { key: '3.00', size: '3.00 ct.' },
 ];
 
-const X_LABELS = ['Aug 7.25', 'Nov 7.25', 'Feb 7.26', 'May 7.26', 'Aug 7.26'];
+const X_LABELS = ['Aug 20.25', 'Nov 20.25', 'Feb 20.26', 'May 20.26', 'Aug 20.26'];
 const X_TICK_IDX = [0, 3, 6, 9, 12];
 const N = 13;
 
@@ -230,7 +230,7 @@ export default function DiamondPriceChart() {
                 color: '#bbb',
                 letterSpacing: '0.04em',
               }}>
-                Aug 7, 2025 – Aug 7, 2026
+                Aug 20, 2025 – Aug 20, 2026
               </p>
             </div>
           </div>
