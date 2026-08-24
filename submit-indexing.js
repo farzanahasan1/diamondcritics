@@ -15,7 +15,9 @@ const fs = require('fs');
 const path = require('path');
 
 const SERVICE_ACCOUNT_FILE = '/Users/mehedihasan/Projects/diamondcritics-8df8059f6989.json';
-const URLS_FILE = path.join(__dirname, 'indexing-urls.txt');
+// Pass 'retry' as argument to submit failed URLs only: node submit-indexing.js retry
+const retryMode = process.argv[2] === 'retry';
+const URLS_FILE = path.join(__dirname, retryMode ? 'indexing-retry-tomorrow.txt' : 'indexing-urls.txt');
 const DELAY_MS = 500; // 0.5s between requests to stay under rate limit
 
 async function submitUrls() {
