@@ -14,7 +14,7 @@ const { google } = require('googleapis');
 const fs = require('fs');
 const path = require('path');
 
-const SERVICE_ACCOUNT_FILE = path.join(__dirname, 'service-account.json');
+const SERVICE_ACCOUNT_FILE = '/Users/mehedihasan/Projects/diamondcritics-8df8059f6989.json';
 const URLS_FILE = path.join(__dirname, 'indexing-urls.txt');
 const DELAY_MS = 500; // 0.5s between requests to stay under rate limit
 

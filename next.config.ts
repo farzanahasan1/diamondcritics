@@ -27,7 +27,7 @@ const nextConfig: NextConfig = {
     "/**": ["./public/**/*"],
   },
   images: {
-    formats: ["image/avif", "image/webp"],
+    formats: ["image/webp"],
     minimumCacheTTL: 86400,
     remotePatterns: [
       { protocol: "https", hostname: "diamondcritics.com" },
