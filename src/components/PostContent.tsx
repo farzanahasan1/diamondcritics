@@ -135,7 +135,7 @@ function BlueNileSidebar({ toc }: { toc: TocItem[] }) {
       {/* Author */}
       <div itemScope itemType="https://schema.org/Person" style={{ padding: "1.5rem", background: "var(--cream)" }}>
         <meta itemProp="url" content="https://diamondcritics.com/about-farzana" />
-        <meta itemProp="image" content="https://diamondcritics.com/images/farzana-hasan-headshot-imagee.avif" />
+        <meta itemProp="image" content="https://diamondcritics.com/images/farzana-hasan-headshot-imagee.jpg" />
         <p style={{ fontFamily: "var(--body)", fontSize: "0.68rem", letterSpacing: "0.14em", textTransform: "uppercase", color: "#aaa", marginBottom: "0.75rem" }}>
           Written by
         </p>

@@ -198,7 +198,7 @@ const schema = {
       "author": { "@type": "Person", "name": "Farzana Hasan", "url": "https://diamondcritics.com/about-farzana" },
       "image": {
         "@type": "ImageObject",
-        "url": "https://diamondcritics.com/images/blue-nile-near-me.avif",
+        "url": "https://diamondcritics.com/images/blue-nile-near-me.jpg",
         "width": 1200,
         "height": 800,
       },
@@ -297,7 +297,7 @@ export default function BlueNileNearMe() {
         {/* ── Featured image ── */}
         <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "3rem 2rem 0" }}>
           <img
-            src="/images/blue-nile-near-me.avif"
+            src="/images/blue-nile-near-me.jpg"
             alt="Blue Nile showroom interior — Blue Nile jewelry store near me guide 2026, Diamond Critics"
             width={1200} height={800}
             style={{ width: "100%", height: "auto", display: "block" }}
@@ -329,7 +329,7 @@ export default function BlueNileNearMe() {
             Blue Nile Jewelry Store Locations Map
           </h2>
           <img
-            src="/images/blue-nile-showroom-locations-map.avif"
+            src="/images/blue-nile-showroom-locations-map.jpg"
             alt="Map of all Blue Nile jewelry store locations and showrooms across the United States — 22 locations in 14 states"
             width={1200} height={800}
             style={{ width: "100%", height: "auto", display: "block", border: "1px solid #e8e8e8" }}
@@ -431,9 +431,9 @@ export default function BlueNileNearMe() {
             </p>
             <div className="gallery-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1rem" }}>
               {[
-                { src: "blue-nile-showroom-century-city.avif", alt: "Blue Nile showroom at Century City, Los Angeles CA — interior view of ring settings display", caption: "Century City — Los Angeles, CA" },
-                { src: "blue-nile-showroom-fashion-island.avif", alt: "Blue Nile Fashion Island showroom in Newport Beach CA — Blue Nile near me Newport Beach", caption: "Fashion Island — Newport Beach, CA" },
-                { src: "blue-nile-showroom-roseville-galleria.avif", alt: "Blue Nile showroom at Roseville Galleria — Blue Nile store near me Northern California", caption: "Roseville Galleria — Roseville, CA" },
+                { src: "blue-nile-showroom-century-city.jpg", alt: "Blue Nile showroom at Century City, Los Angeles CA — interior view of ring settings display", caption: "Century City — Los Angeles, CA" },
+                { src: "blue-nile-showroom-fashion-island.jpg", alt: "Blue Nile Fashion Island showroom in Newport Beach CA — Blue Nile near me Newport Beach", caption: "Fashion Island — Newport Beach, CA" },
+                { src: "blue-nile-showroom-roseville-galleria.jpg", alt: "Blue Nile showroom at Roseville Galleria — Blue Nile store near me Northern California", caption: "Roseville Galleria — Roseville, CA" },
               ].map((img) => (
                 <div key={img.src}>
                   <img

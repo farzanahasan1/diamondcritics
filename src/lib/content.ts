@@ -71,8 +71,6 @@ export function getAllPageSlugs(): string[] {
   return readDir(pagesDir).map((f) => f.replace(/\.(mdoc|mdx|md)$/, ""));
 }
 
-const publicImagesDir = path.join(/*turbopackIgnore: true*/ process.cwd(), "public/images");
-
 function decodeEntities(str: string): string {
   return str
     .replace(/&amp;/g, "&")
@@ -83,19 +81,8 @@ function decodeEntities(str: string): string {
     .replace(/&apos;/g, "'");
 }
 
-function toAvif(src: string): string {
-  if (!src) return src;
-  const avifPath = src.replace(/\.(jpe?g|png|webp)$/i, ".avif");
-  const filename = path.basename(avifPath);
-  if (fs.existsSync(path.join(publicImagesDir, filename))) return avifPath;
-  return src;
-}
-
 function rewriteContentImages(html: string): string {
-  return html.replace(
-    /(<img[^>]+src=")([^"]+)"/gi,
-    (_match, prefix, src) => `${prefix}${toAvif(src)}"`
-  );
+  return html;
 }
 
 // Convert {% image src="..." alt="..." width=N height=N /%} into <img> tags
@@ -177,7 +164,7 @@ export function getPostBySlug(slug: string): Post | null {
     subcategory: data.subcategory ?? "",
     seoTitle: decodeEntities(data.seoTitle ?? data.title ?? slug),
     seoDescription: decodeEntities(data.seoDescription ?? data.description ?? data.excerpt ?? ""),
-    featuredImage: toAvif(data.featuredImage ?? ""),
+    featuredImage: data.featuredImage ?? "",
     contentHtml,
   };
 }

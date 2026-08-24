@@ -298,7 +298,7 @@ export default async function PostDetailPage({ params }: { params: Promise<{ id:
                 const slug = !post.link_preview_image && post.url.startsWith('https://diamondcritics.com/')
                   ? post.url.replace('https://diamondcritics.com/', '').split('?')[0].replace(/\/$/, '')
                   : null
-                const imgUrl = post.link_preview_image ?? (slug ? `https://diamondcritics.com/images/${slug}.avif` : null)
+                const imgUrl = post.link_preview_image ?? (slug ? `https://diamondcritics.com/images/${slug}.jpg` : null)
                 const hostname = (() => { try { return new URL(post.url).hostname.replace(/^www\./, '') } catch { return post.url } })()
                 return (
                   <a

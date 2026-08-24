@@ -161,7 +161,6 @@ export default function HomePage() {
             <div style={{ background: "#141414", padding: "2.5rem", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
               <div>
                 <picture>
-                  <source srcSet="/images/BLUE-NILE-JEWELRY-PNG-LOGO.avif" type="image/avif" />
                   <img src="/images/BLUE-NILE-JEWELRY-PNG-LOGO.png" alt="Blue Nile"
                     style={{ height: "36px", width: "auto", display: "block", filter: "brightness(0) invert(1)", marginBottom: "1.5rem" }}
                     loading="lazy" decoding="async" />

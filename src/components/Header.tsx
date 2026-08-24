@@ -13,9 +13,9 @@ function pinTitle(filename: string) {
     .replace(/\b\w/g, (c) => c.toUpperCase());
 }
 
-// Pinterest uses PNG — AVIF may not be supported by their image crawler
+// Build Pinterest URL — images are now JPG
 function buildPinUrl(src: string, pageHref: string, alt: string) {
-  const imgUrl = SITE + "/images/" + src.replace(/\.avif$/, ".png").replace(/\.jpg$/, ".jpg");
+  const imgUrl = SITE + "/images/" + src;
   return (
     "https://pinterest.com/pin/create/button/" +
     "?url=" + encodeURIComponent(SITE + pageHref) +
@@ -26,7 +26,7 @@ function buildPinUrl(src: string, pageHref: string, alt: string) {
 
 // ─── TYPES ────────────────────────────────────────────────────────────────────
 type Img = {
-  src: string;   // filename in /public/images/  (AVIF)
+  src: string;   // filename in /public/images/ (JPG)
   alt: string;   // ← EDIT THIS — alt text = Pinterest pin description
   href: string;  // page this image links to
   label: string; // text shown below the image
@@ -52,19 +52,19 @@ const nav: NavItem[] = [
     mega: {
       featured: [
         {
-          src: "infographic-for-diamond-4c-clarity.avif",
+          src: "infographic-for-diamond-4c-clarity.jpg",
           alt: "Complete infographic explaining diamond 4Cs — cut, color, clarity, and carat weight",
           href: "/diamond-4cs",
           label: "Diamond 4Cs Explained",
         },
         {
-          src: "lab-grown-vs-natural-diamond-price-2026-resale-value.avif",
+          src: "lab-grown-vs-natural-diamond-price-2026-resale-value.jpg",
           alt: "Lab-grown vs natural diamond price comparison and 2026 resale value analysis",
           href: "/lab-grown-vs-natural-diamond-price",
           label: "Lab vs Natural",
         },
         {
-          src: "round-brilliant-diamond-benchmark.avif",
+          src: "round-brilliant-diamond-benchmark.jpg",
           alt: "Round brilliant diamond benchmark — what a perfectly cut stone actually looks like",
           href: "/diamond-prices",
           label: "Diamond Prices 2026",
@@ -100,19 +100,19 @@ const nav: NavItem[] = [
     mega: {
       featured: [
         {
-          src: "vvs1-diamond-inclusions-pinpoints-needles-vs-si1-crystals.avif",
+          src: "vvs1-diamond-inclusions-pinpoints-needles-vs-si1-crystals.jpg",
           alt: "VVS1 diamond inclusions — pinpoints and needles vs SI1 crystals under magnification",
           href: "/vvs1-diamond-clarity",
           label: "VVS1 Clarity",
         },
         {
-          src: "vs1-diamond-inclusions-glossary.avif",
+          src: "vs1-diamond-inclusions-glossary.jpg",
           alt: "VS1 diamond inclusions glossary — types and visual examples for buyers",
           href: "/vs1-clarity-diamonds",
           label: "VS1 Clarity",
         },
         {
-          src: "si-clarity-diamond-definition.avif",
+          src: "si-clarity-diamond-definition.jpg",
           alt: "SI clarity diamond definition with eye-clean test results and complete buying guide",
           href: "/si-clarity-diamond",
           label: "SI Clarity",
@@ -144,19 +144,19 @@ const nav: NavItem[] = [
     mega: {
       featured: [
         {
-          src: "round-brilliant-diamond-color-clarity-guide-what-grade-you-actually-need.avif",
+          src: "round-brilliant-diamond-color-clarity-guide-what-grade-you-actually-need.jpg",
           alt: "Round brilliant diamond color and clarity guide — what grade you actually need for your budget",
           href: "/diamond-color-scale",
           label: "Color Scale Guide",
         },
         {
-          src: "f-color-diamond-colorless-premium-g-grade-solution.avif",
+          src: "f-color-diamond-colorless-premium-g-grade-solution.jpg",
           alt: "F color diamond — colorless premium vs G grade value comparison for smart buyers",
           href: "/f-color-diamond",
           label: "F Color Diamond",
         },
         {
-          src: "g-color-diamond-price-crash-2026-market-floor-solution.avif",
+          src: "g-color-diamond-price-crash-2026-market-floor-solution.jpg",
           alt: "G color diamond 2026 price crash — market floor analysis and smart buying strategy",
           href: "/g-color-diamond",
           label: "G Color Diamond",
@@ -187,19 +187,19 @@ const nav: NavItem[] = [
     mega: {
       featured: [
         {
-          src: "what-is-a-round-brilliant-cut-diamond-editorial-guide.avif",
+          src: "what-is-a-round-brilliant-cut-diamond-editorial-guide.jpg",
           alt: "What is a round brilliant cut diamond — editorial guide to the world's most popular shape",
           href: "/round-cut-diamond",
           label: "Round Brilliant",
         },
         {
-          src: "oval-cut-diamond-guide-feature-image.avif",
+          src: "oval-cut-diamond-guide-feature-image.jpg",
           alt: "Oval cut diamond guide — ideal proportions, the bow-tie effect, and 2026 price trends",
           href: "/oval-cut-diamond",
           label: "Oval Cut",
         },
         {
-          src: "what-is-an-emerald-cut-diamond-editorial-infographic.avif",
+          src: "what-is-an-emerald-cut-diamond-editorial-infographic.jpg",
           alt: "What is an emerald cut diamond — step-cut facets and hall of mirrors effect explained",
           href: "/emerald-cut-diamond",
           label: "Emerald Cut",
@@ -281,19 +281,19 @@ const nav: NavItem[] = [
     mega: {
       featured: [
         {
-          src: "Blue-Nile-Review-2026-Why-Most-Buyers-Overpay-And-How-to-Save-Thousands.avif",
+          src: "Blue-Nile-Review-2026-Why-Most-Buyers-Overpay-And-How-to-Save-Thousands.jpg",
           alt: "Blue Nile Review 2026 — why most buyers overpay and how to save thousands on diamonds",
           href: "/blue-nile-review",
           label: "Blue Nile Review",
         },
         {
-          src: "Blue-Nile-Bracelets-Review-The-5-Point-Checklist-Before-You-Checkout.avif",
+          src: "Blue-Nile-Bracelets-Review-The-5-Point-Checklist-Before-You-Checkout.jpg",
           alt: "Blue Nile bracelets review — Farzana's 5-point checklist before you checkout",
           href: "/blue-nile-bracelets-review",
           label: "Bracelets Review",
         },
         {
-          src: "Blue-Nile-Lab-Grown-Diamond-Rings-Review-I-Audited-40-Stones-So-You-Dont-Waste-2930–21540.avif",
+          src: "Blue-Nile-Lab-Grown-Diamond-Rings-Review-I-Audited-40-Stones-So-You-Dont-Waste-2930–21540.jpg",
           alt: "Blue Nile lab-grown diamond rings review — I audited 40 stones so you don't waste money",
           href: "/blue-nile-lab-grown-diamond-rings-review",
           label: "Lab-Grown Rings",
@@ -383,13 +383,11 @@ export default function Header() {
           {/* Logo */}
           <Link href="/" style={{ flexShrink: 0, textDecoration: "none" }} onClick={closeAll}>
             <picture style={{ display: "block" }} className="header-logo-full">
-              <source srcSet="/images/diamond-critics-main-logo-small.avif" type="image/avif" />
               <img src="/images/diamond-critics-main-logo-small.png" alt="Diamond Critics"
                 style={{ height: "38px", width: "auto", display: "block" }}
                 fetchPriority="high" decoding="async" />
             </picture>
             <picture style={{ display: "none" }} className="header-logo-icon">
-              <source srcSet="/images/diamond-critics-icon-logo-small.avif" type="image/avif" />
               <img src="/images/diamond-critics-icon-logo-small.png" alt="Diamond Critics"
                 style={{ height: "38px", width: "auto", display: "block" }}
                 fetchPriority="high" decoding="async" />

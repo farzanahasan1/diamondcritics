@@ -175,7 +175,7 @@ const schema = {
   },
   "image": {
     "@type": "ImageObject",
-    "url": "https://diamondcritics.com/images/blue-nile-promo-code.avif",
+    "url": "https://diamondcritics.com/images/blue-nile-promo-code.jpg",
     "width": 1200,
     "height": 800,
     "name": "Blue Nile Promo Code 2026 — Up to 70% Off Diamond Rings",
@@ -256,7 +256,7 @@ export default function BlueNilePromoCode() {
         {/* ── Featured Image ── */}
         <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "3rem 2rem 0" }}>
           <img
-            src="/images/blue-nile-promo-code.avif"
+            src="/images/blue-nile-promo-code.jpg"
             alt="Blue Nile Promo Code 2026 — Up to 70% Off Diamond Rings. Three diamond rings (pear, emerald, oval cut) on a gray fabric display. Diamond Critics review."
             width={1200}
             height={800}

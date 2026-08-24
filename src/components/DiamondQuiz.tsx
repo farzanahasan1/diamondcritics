@@ -4,7 +4,6 @@ import { useState } from "react";
 interface QuizDiamond {
   id: string;
   image: string;
-  imageAvif: string;
   alt: string;
   link: string;
   type: "natural" | "lab";
@@ -20,7 +19,6 @@ const DEFAULT_DIAMONDS: QuizDiamond[] = [
   {
     id: "a",
     image: "/images/1.51-ct-d-color-vvs1-clarity-excellent-cut-lab-diamond.png",
-    imageAvif: "/images/1.51-ct-d-color-vvs1-clarity-excellent-cut-lab-diamond.avif",
     alt: "1.51 ct D color VVS1 clarity Excellent cut diamond — Diamond A",
     link: "https://www.bluenile.com/diamond-details/26648713?a_aid=69d7c31a91b8d&a_cid=55e51e63&chan=blog-informational",
     type: "lab",
@@ -29,7 +27,6 @@ const DEFAULT_DIAMONDS: QuizDiamond[] = [
   {
     id: "b",
     image: "/images/1.51-ct-d-color-vvs1-clarity-excellent-cut-natural-diamond.png",
-    imageAvif: "/images/1.51-ct-d-color-vvs1-clarity-excellent-cut-natural-diamond.avif",
     alt: "1.51 ct D color VVS1 clarity Excellent cut diamond — Diamond B",
     link: "https://www.bluenile.com/diamond-details/28847414?a_aid=69d7c31a91b8d&a_cid=55e51e63&chan=blog-informational",
     type: "natural",
@@ -85,11 +82,8 @@ export default function DiamondQuiz({ diamonds = DEFAULT_DIAMONDS, specs = "GIA 
               }}
                 onClick={() => !revealed && setPicked(d.id)}
               >
-                <picture>
-                  <source srcSet={d.imageAvif} type="image/avif" />
-                  <img src={d.image} alt={d.alt}
+                <img src={d.image} alt={d.alt}
                     style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
-                </picture>
               </div>
 
               {/* Before reveal: just a button */}

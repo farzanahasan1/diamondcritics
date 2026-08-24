@@ -8,7 +8,7 @@ export default function JamesAllenBanner() {
       aria-label="Up to 50% off the James Allen Collection at Blue Nile — Shop Sale"
     >
       <img
-        src="/images/blue-nile-james-allen-sale-banner.avif"
+        src="/images/blue-nile-james-allen-sale-banner.jpg"
         alt="Blue Nile — James Allen Collection: Up to 50% off select styles. Shop Sale. Exclusions apply."
         width={1456}
         height={180}

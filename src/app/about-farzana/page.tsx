@@ -14,7 +14,7 @@ export const metadata: Metadata = {
     url: "https://diamondcritics.com/about-farzana",
     type: "profile",
     siteName: "Diamond Critics",
-    images: [{ url: "/images/farzana-hasan-headshot-imagee.avif", width: 1200, height: 630 }],
+    images: [{ url: "/images/farzana-hasan-headshot-imagee.jpg", width: 1200, height: 630 }],
   },
 };
 
@@ -37,7 +37,7 @@ const schema = {
     "url": "https://diamondcritics.com/about-farzana",
     "image": {
       "@type": "ImageObject",
-      "url": "https://diamondcritics.com/images/farzana-hasan-headshot-imagee.avif",
+      "url": "https://diamondcritics.com/images/farzana-hasan-headshot-imagee.jpg",
       "width": 450,
       "height": 563,
     },
@@ -196,7 +196,7 @@ export default function AboutFarzana() {
             {/* Right: Image */}
             <div style={{ position: "relative", overflow: "hidden", minHeight: "500px" }} className="about-hero-image-wrap">
               <img
-                src="/images/farzana-hasan-headshot-imagee.avif"
+                src="/images/farzana-hasan-headshot-imagee.jpg"
                 alt="Farzana Hasan — GIA Expert and Diamond Critic"
                 fetchPriority="high"
                 style={{

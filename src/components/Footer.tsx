@@ -64,7 +64,6 @@ export default function Footer() {
           <div>
             <div style={{ marginBottom: "1.25rem" }}>
               <picture>
-                <source srcSet="/images/diamond-critics-icon-logo-small.avif" type="image/avif" />
                 <img
                   src="/images/diamond-critics-icon-logo-small.png"
                   alt="Diamond Critics"

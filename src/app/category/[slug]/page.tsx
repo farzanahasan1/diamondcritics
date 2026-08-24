@@ -67,15 +67,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const seoTitle = categorySeoTitles[slug] ?? label;
   const ogImage =
     slug === "pear-cut-diamond"
-      ? { url: "https://diamondcritics.com/images/pear-shaped-diamond-ring.avif", width: 1500, height: 1000 }
+      ? { url: "https://diamondcritics.com/images/pear-shaped-diamond-ring.jpg", width: 1500, height: 1000 }
       : slug === "cushion-cut-diamond"
       ? { url: "https://diamondcritics.com/images/og/elongated-cushion-cut-diamond-featured.jpg", width: 1200, height: 630 }
       : slug === "emerald-cut-diamond"
-      ? { url: "https://diamondcritics.com/images/Emerald-Cut-Diamond-The-Complete-2026-Buying-Guide-Hall-of-Mirrors-Prices-Clarity-Rules.avif", width: 1500, height: 1000 }
+      ? { url: "https://diamondcritics.com/images/Emerald-Cut-Diamond-The-Complete-2026-Buying-Guide-Hall-of-Mirrors-Prices-Clarity-Rules.jpg", width: 1500, height: 1000 }
       : slug === "radiant-cut-diamond"
-      ? { url: "https://diamondcritics.com/images/Radiant-Cut-Diamond-The-Complete-Buying-Guide.avif", width: 1500, height: 1000 }
+      ? { url: "https://diamondcritics.com/images/Radiant-Cut-Diamond-The-Complete-Buying-Guide.jpg", width: 1500, height: 1000 }
       : slug === "asscher-cut-diamond"
-      ? { url: "https://diamondcritics.com/images/asscher-diamond-buying-guide.avif", width: 1500, height: 1000 }
+      ? { url: "https://diamondcritics.com/images/asscher-diamond-buying-guide.jpg", width: 1500, height: 1000 }
       : { url: "https://diamondcritics.com/images/diamondcritics-og.png", width: 1200, height: 630 };
 
   return {
