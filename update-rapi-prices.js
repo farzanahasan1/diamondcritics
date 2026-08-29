@@ -19,7 +19,9 @@
 // CRON (6am daily — add via: crontab -e):
 //   0 6 * * * cd /Users/mehedihasan/Projects/diamondcritics && node update-rapi-prices.js >> /tmp/rapi-update.log 2>&1
 
-const puppeteer  = require('puppeteer');
+const puppeteer        = require('puppeteer-extra');
+const StealthPlugin    = require('puppeteer-extra-plugin-stealth');
+puppeteer.use(StealthPlugin());
 const { createClient } = require('@supabase/supabase-js');
 const path = require('path');
 
@@ -42,6 +44,7 @@ async function scrapeRapaport() {
   console.log('Launching browser…');
   const browser = await puppeteer.launch({
     headless: true,
+    executablePath: '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
     args: ['--no-sandbox', '--disable-setuid-sandbox'],
   });
   const page = await browser.newPage();
@@ -50,8 +53,10 @@ async function scrapeRapaport() {
   );
 
   console.log('Loading rapaport.com…');
-  await page.goto(RAPI_URL, { waitUntil: 'networkidle2', timeout: 60000 });
-  await new Promise(r => setTimeout(r, 8000)); // wait for ticker JS to render
+  try {
+    await page.goto(RAPI_URL, { waitUntil: 'domcontentloaded', timeout: 60000 });
+  } catch (e) { /* ignore frame detach on redirect */ }
+  await new Promise(r => setTimeout(r, 10000)); // wait for ticker JS to render
 
   // Extract RAPI ticker prices from rendered DOM text
   const domPrices = await page.evaluate(() => {
