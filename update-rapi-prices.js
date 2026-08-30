@@ -23,6 +23,7 @@ const puppeteer        = require('puppeteer-extra');
 const StealthPlugin    = require('puppeteer-extra-plugin-stealth');
 puppeteer.use(StealthPlugin());
 const { createClient } = require('@supabase/supabase-js');
+const nodemailer       = require('nodemailer');
 const path = require('path');
 
 // Load env from .env.local
@@ -36,6 +37,28 @@ require('fs').readFileSync(path.join(__dirname, '.env.local'), 'utf8')
 const SUPABASE_URL      = process.env.NEXT_PUBLIC_SUPABASE_URL;
 const SUPABASE_SVCKEY   = process.env.SUPABASE_SERVICE_ROLE_KEY;
 const RAPI_URL          = 'https://rapaport.com/';
+const ALERT_EMAIL       = 'mh6222135@gmail.com';
+
+async function sendAlert(subject, body) {
+  const user = process.env.GMAIL_USER;
+  const pass = process.env.GMAIL_APP_PASSWORD;
+  if (!user || !pass) return; // silently skip if not configured
+  try {
+    const transport = nodemailer.createTransport({
+      service: 'gmail',
+      auth: { user, pass },
+    });
+    await transport.sendMail({
+      from: user,
+      to: ALERT_EMAIL,
+      subject: `[DiamondCritics] ${subject}`,
+      text: body,
+    });
+    console.log('Alert email sent.');
+  } catch (e) {
+    console.error('Email send failed:', e.message);
+  }
+}
 
 // Sizes NOT in Rapaport public ticker — we interpolate from nearest RAPI % change
 const INTERPOLATED_KEYS = ['0.70', '1.50', '2.00', '4.00', '5.00'];
@@ -128,6 +151,7 @@ async function run() {
   } catch (err) {
     console.error('Scrape failed:', err.message);
     console.log('Keeping existing prices, updating date only.');
+    await sendAlert('Scrape failed — prices NOT updated', `Date: ${today}\nError: ${err.message}\n\nRapaport may have changed their site layout. Check rapaport.com manually.`);
     await supabase.from('rapi_prices').update({ updated_at: today }).eq('id', 1);
     return;
   }
@@ -214,6 +238,7 @@ async function run() {
   if (updatedCount === 0) {
     console.warn('WARNING: No prices scraped. Rapaport may have changed their markup.');
     console.warn('Check rapaport.com manually and update via Supabase dashboard if needed.');
+    await sendAlert('WARNING — 0 prices scraped today', `Date: ${today}\n\nThe script ran but found no prices on rapaport.com. Their site layout may have changed.\n\nCheck: https://rapaport.com/\nLog: tail -30 /tmp/rapi-update.log`);
   }
 }
 
