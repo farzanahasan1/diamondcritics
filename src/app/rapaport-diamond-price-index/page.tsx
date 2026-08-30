@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import DiamondPriceChart from "@/components/DiamondPriceChart";
+import RapaportIndexTable from "@/components/RapaportIndexTable";
 
 const PAGE_TITLE = "What Is the Rapaport Diamond Price Index? A Buyer's Guide";
 const PAGE_DESC =
@@ -200,35 +201,8 @@ export default function RapaportPriceIndexPage() {
               The index measures round brilliant diamonds in D–H color and IF–VS2 clarity — the grades that dominate the global wholesale market. Fancy shapes (ovals, cushions, radiants) and fancy colors are not separately indexed but tend to follow similar directional trends with a lag of 3–6 months.
             </p>
 
-            {/* Price movement table */}
-            <div style={{ overflowX: "auto", margin: "1.75rem 0 2rem" }}>
-              <table style={{ width: "100%", borderCollapse: "collapse", fontFamily: "var(--body)", fontSize: "0.85rem" }}>
-                <thead>
-                  <tr style={{ background: "#111", color: "#fff" }}>
-                    <th style={{ padding: "10px 16px", textAlign: "left", fontWeight: 600, fontSize: "0.72rem", letterSpacing: "0.08em", textTransform: "uppercase" }}>Carat Weight</th>
-                    <th style={{ padding: "10px 16px", textAlign: "right", fontWeight: 600, fontSize: "0.72rem", letterSpacing: "0.08em", textTransform: "uppercase" }}>12-Month Change</th>
-                    <th style={{ padding: "10px 16px", textAlign: "left", fontWeight: 600, fontSize: "0.72rem", letterSpacing: "0.08em", textTransform: "uppercase" }}>What This Means for Buyers</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {[
-                    { wt: "0.30 ct", change: "+1.67%", up: true, verdict: "Small stones continue recovering. Prices up 1.67% — buy ahead of continued upward momentum." },
-                    { wt: "0.50 ct", change: "+1.89%", up: true, verdict: "Strong recovery segment. Half-carat prices up 1.89% — the floor is in, prices are climbing." },
-                    { wt: "1.00 ct", change: "+0.25%", up: true, verdict: "Turned positive. The 1ct market is recovering — slight urgency returning after a flat year." },
-                    { wt: "3.00 ct", change: "−0.12%", up: false, verdict: "3ct dipped slightly. Mild natural price pressure — lab alternatives dominate value at this size." },
-                  ].map((row, i) => (
-                    <tr key={row.wt} style={{ background: i % 2 === 0 ? "#fff" : "#fafafa", borderBottom: "1px solid #ebebeb" }}>
-                      <td style={{ padding: "12px 16px", fontWeight: 600, color: "#111" }}>{row.wt}</td>
-                      <td style={{ padding: "12px 16px", textAlign: "right", fontWeight: 700, color: row.up ? "#16a34a" : "#dc2626" }}>{row.change}</td>
-                      <td style={{ padding: "12px 16px", color: "#555" }}>{row.verdict}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-              <p style={{ fontFamily: "var(--body)", fontSize: "0.72rem", color: "#bbb", marginTop: "8px" }}>
-                Aug 20, 2025 – Aug 20, 2026. Based on Rapaport benchmark methodology. RAPI™ is a trademark of Rapaport Group Inc.
-              </p>
-            </div>
+            {/* Price movement table — live from Supabase */}
+            <RapaportIndexTable />
 
             {/* Section 3 */}
             <h2 style={h2Style}>What the Numbers Mean for Diamond Buyers</h2>

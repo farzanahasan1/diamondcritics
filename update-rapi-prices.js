@@ -135,6 +135,22 @@ async function run() {
   const proxy = scraped['1.00'] || scraped['1.0']; // fallback for interpolation
   let updatedCount = 0;
 
+  // --- Initialize ticker if empty (first run or reset) ---
+  const ALL_SIZES = ['0.30', '0.50', '0.70', '1.00', '1.50', '2.00', '3.00', '4.00', '5.00'];
+  if (ticker.length === 0 && Object.keys(scraped).length > 0) {
+    console.log('Ticker is empty — initializing from scraped data…');
+    for (const key of ALL_SIZES) {
+      const src = scraped[key];
+      if (src) {
+        ticker.push({ label: `${parseFloat(key)} ct`, price: fmtPrice(src.price), change: src.change, up: src.up });
+      } else if (INTERPOLATED_KEYS.includes(key) && proxy) {
+        // Use proxy change on a baseline price (0 means it will stay at 0 until next real scrape)
+        ticker.push({ label: `${parseFloat(key)} ct`, price: '0', change: proxy.change, up: proxy.up });
+      }
+    }
+    console.log(`  Initialized ${ticker.length} ticker items.`);
+  }
+
   // Update scraped prices in ticker array
   for (const item of ticker) {
     const key = parseFloat(item.label).toFixed(2);
@@ -146,12 +162,25 @@ async function run() {
       console.log(`  ✓ ${item.label}: $${item.price} ${item.change}`);
     } else if (INTERPOLATED_KEYS.includes(key) && proxy) {
       // Interpolate from 1ct change as proxy
-      const old = parseInt(item.price.replace(/,/g, ''), 10);
-      const neu = applyChangePct(old, proxy.change);
-      item.price  = fmtPrice(neu);
+      const old = parseInt(item.price.replace(/,/g, ''), 10) || 0;
+      const neu = old > 0 ? applyChangePct(old, proxy.change) : 0;
+      item.price  = neu > 0 ? fmtPrice(neu) : item.price;
       item.change = proxy.change;
       item.up     = proxy.up;
       console.log(`  ~ ${item.label}: $${item.price} ${item.change} (interpolated)`);
+    }
+  }
+
+  // --- Initialize chart keys if missing ---
+  for (const key of ['0.30', '0.50', '1.00', '3.00']) {
+    if (!chart[key] && scraped[key]) {
+      chart[key] = {
+        current: scraped[key].price,
+        change:  scraped[key].change,
+        up:      scraped[key].up,
+        history: Array(13).fill(scraped[key].price),
+      };
+      console.log(`  + Initialized chart[${key}] at $${scraped[key].price}`);
     }
   }
 
