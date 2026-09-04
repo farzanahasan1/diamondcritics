@@ -43,12 +43,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }));
 
   // ── Community pages ──────────────────────────────────────────────────────
+  // Individual /community/post/UUID URLs are excluded from sitemap intentionally.
+  // UUID post URLs waste crawl budget and return redirects in GSC.
+  // Google discovers the community through /community and r/[slug] pages only.
   const communityStatic: MetadataRoute.Sitemap = [
     { url: `${BASE}/community`, lastModified: new Date(), changeFrequency: "hourly", priority: 0.9 },
   ];
 
   let communitySubPages: MetadataRoute.Sitemap = [];
-  let communityPosts: MetadataRoute.Sitemap = [];
 
   try {
     const supabase = createClient(
@@ -56,7 +58,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
     );
 
-    // Subcommunities (r/[slug])
+    // Subcommunities (r/[slug]) — real content pages, keep in sitemap
     const { data: communities } = await supabase
       .from("communities")
       .select("slug, updated_at")
@@ -70,34 +72,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         priority: 0.7,
       }));
     }
-
-    // Public posts (not deleted, not draft)
-    const { data: dbPosts } = await supabase
-      .from("posts")
-      .select("id, updated_at, created_at")
-      .eq("is_deleted", false)
-      .eq("is_draft", false)
-      .order("created_at", { ascending: false })
-      .limit(1000);
-
-    if (dbPosts) {
-      const now = Date.now()
-      communityPosts = dbPosts.map((p) => {
-        const ageMs = now - new Date(p.created_at ?? 0).getTime()
-        const ageDays = ageMs / 86_400_000
-        const changeFrequency =
-          ageDays < 2   ? 'hourly'  as const :
-          ageDays < 14  ? 'daily'   as const :
-          ageDays < 90  ? 'weekly'  as const :
-                          'monthly' as const
-        return {
-          url: `${BASE}/community/post/${p.id}`,
-          lastModified: p.updated_at ?? p.created_at ?? new Date(),
-          changeFrequency,
-          priority: ageDays < 7 ? 0.8 : 0.6,
-        }
-      })
-    }
   } catch {
     // Supabase unavailable at build time — community URLs omitted gracefully
   }
@@ -108,6 +82,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...posts,
     ...communityStatic,
     ...communitySubPages,
-    ...communityPosts,
   ];
 }

@@ -1,0 +1,8 @@
+User-agent: *
+Disallow: /community/post/
+Disallow: /api/
+Disallow: /keystatic/
+Disallow: /category/*/feed/
+Disallow: /category/*/page/
+
+Sitemap: https://diamondcritics.com/sitemap.xml
