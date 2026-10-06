@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import type { Post, Page, PostMeta } from "@/lib/content";
 import DiamondQuiz from "@/components/DiamondQuiz";
 import BluenileDealsCTA from "@/components/BluenileDealsCTA";
@@ -297,17 +298,19 @@ export default function PostContent({ type, data, related }: Props) {
 
             {/* Main article */}
             <article>
-              {/* Featured image — rendered as <img> for Google Images indexing */}
+              {/* Featured image — overrideSrc keeps original URL for Google Images */}
               {type === "post" && post.featuredImage && (
                 <div style={{ marginBottom: "2.5rem", borderRadius: "4px", overflow: "hidden" }}>
-                  <img
+                  <Image
                     src={post.featuredImage}
                     alt={post.title}
                     title={post.title}
                     width={1200}
                     height={800}
-                    loading="eager"
-                    decoding="async"
+                    sizes="(max-width: 768px) 100vw, 800px"
+                    quality={80}
+                    preload
+                    overrideSrc={post.featuredImage}
                     style={{ width: "100%", height: "auto", display: "block" }}
                   />
                 </div>
@@ -396,10 +399,14 @@ export default function PostContent({ type, data, related }: Props) {
                 {related.map((p) => (
                   <Link key={p.slug} href={`/${p.slug}`} style={{ textDecoration: "none", display: "block" }}>
                     {p.featuredImage && (
-                      <div style={{ aspectRatio: "3/2", overflow: "hidden", marginBottom: "1rem", background: "#f0f0f0" }}>
-                        <img src={p.featuredImage} alt={p.title}
-                          style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
-                          loading="lazy" decoding="async" />
+                      <div style={{ aspectRatio: "3/2", overflow: "hidden", marginBottom: "1rem", background: "#f0f0f0", position: "relative" }}>
+                        <Image src={p.featuredImage} alt={p.title}
+                          fill
+                          sizes="(max-width: 768px) 100vw, 33vw"
+                          style={{ objectFit: "cover" }}
+                          loading="lazy"
+                          quality={75}
+                        />
                       </div>
                     )}
                     <p style={{ fontFamily: "var(--body)", fontSize: "0.68rem", letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--gold)", marginBottom: "8px" }}>

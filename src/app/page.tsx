@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { getAllPosts } from "@/lib/content";
 import JamesAllenBanner from "@/components/JamesAllenBanner";
 import DiamondPriceChart from "@/components/DiamondPriceChart";
@@ -243,11 +244,15 @@ export default function HomePage() {
           {/* Featured post — entire card is clickable */}
           {featured && (
             <Link href={`/${featured.slug}`} className="home-featured-card" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", border: "1px solid #ebebeb", marginBottom: "2rem", textDecoration: "none", color: "inherit" }}>
-              <div style={{ overflow: "hidden", aspectRatio: "3/2" }}>
+              <div style={{ overflow: "hidden", aspectRatio: "3/2", position: "relative" }}>
                 {featured.featuredImage ? (
-                  <img src={featured.featuredImage} alt={featured.title}
-                    style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
-                    fetchPriority="high" decoding="async" />
+                  <Image src={featured.featuredImage} alt={featured.title}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    style={{ objectFit: "cover" }}
+                    preload
+                    quality={80}
+                  />
                 ) : (
                   <div style={{ width: "100%", height: "100%", background: "#f0f0f0" }} />
                 )}
@@ -282,11 +287,15 @@ export default function HomePage() {
           <div className="home-grid-3" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1.5rem" }}>
             {grid1.map((p) => (
               <Link key={p.slug} href={`/${p.slug}`} style={{ textDecoration: "none", display: "block" }}>
-                <div style={{ overflow: "hidden", aspectRatio: "3/2", background: "#f0f0f0", marginBottom: "0.75rem" }}>
+                <div style={{ overflow: "hidden", aspectRatio: "3/2", background: "#f0f0f0", marginBottom: "0.75rem", position: "relative" }}>
                   {p.featuredImage && (
-                    <img src={p.featuredImage} alt={p.title}
-                      style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
-                      loading="lazy" decoding="async" />
+                    <Image src={p.featuredImage} alt={p.title}
+                      fill
+                      sizes="(max-width: 768px) 100vw, 33vw"
+                      style={{ objectFit: "cover" }}
+                      loading="lazy"
+                      quality={75}
+                    />
                   )}
                 </div>
                 <p style={{ fontSize: "0.68rem", letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--gold)", marginBottom: "6px" }}>
@@ -316,11 +325,15 @@ export default function HomePage() {
           <div className="home-grid-3" style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1.5rem" }}>
             {grid2.map((p) => (
               <Link key={p.slug} href={`/${p.slug}`} style={{ textDecoration: "none", display: "block" }}>
-                <div style={{ overflow: "hidden", aspectRatio: "3/2", background: "#f0f0f0", marginBottom: "0.75rem" }}>
+                <div style={{ overflow: "hidden", aspectRatio: "3/2", background: "#f0f0f0", marginBottom: "0.75rem", position: "relative" }}>
                   {p.featuredImage && (
-                    <img src={p.featuredImage} alt={p.title}
-                      style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
-                      loading="lazy" decoding="async" />
+                    <Image src={p.featuredImage} alt={p.title}
+                      fill
+                      sizes="(max-width: 768px) 100vw, 33vw"
+                      style={{ objectFit: "cover" }}
+                      loading="lazy"
+                      quality={75}
+                    />
                   )}
                 </div>
                 <p style={{ fontSize: "0.68rem", letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--gold)", marginBottom: "6px" }}>
@@ -363,11 +376,15 @@ export default function HomePage() {
             <div className="home-grid-4" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "1.25rem" }}>
               {guides.map((p) => (
                 <Link key={p.slug} href={`/${p.slug}`} style={{ textDecoration: "none", display: "block" }}>
-                  <div style={{ overflow: "hidden", aspectRatio: "3/2", background: "#f0f0f0", marginBottom: "0.6rem" }}>
+                  <div style={{ overflow: "hidden", aspectRatio: "3/2", background: "#f0f0f0", marginBottom: "0.6rem", position: "relative" }}>
                     {p.featuredImage && (
-                      <img src={p.featuredImage} alt={p.title}
-                        style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
-                        loading="lazy" decoding="async" />
+                      <Image src={p.featuredImage} alt={p.title}
+                        fill
+                        sizes="(max-width: 768px) 50vw, 25vw"
+                        style={{ objectFit: "cover" }}
+                        loading="lazy"
+                        quality={75}
+                      />
                     )}
                   </div>
                   <p style={{ fontSize: "0.65rem", letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--gold)", marginBottom: "5px" }}>

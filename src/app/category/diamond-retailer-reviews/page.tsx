@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { getPostsByCategory, getPostsBySubcategory } from "@/lib/content";
 
 const label = "Diamond Retailer Reviews";
@@ -114,13 +115,15 @@ export default function DiamondRetailerReviewsPage() {
               {posts.map((post) => (
                 <Link key={post.slug} href={`/${post.slug}`} style={{ textDecoration: "none", display: "block" }}>
                   {post.featuredImage ? (
-                    <div style={{ aspectRatio: "3/2", overflow: "hidden", marginBottom: "1.25rem", background: "#f5f5f5" }}>
-                      <img
+                    <div style={{ aspectRatio: "3/2", overflow: "hidden", marginBottom: "1.25rem", background: "#f5f5f5", position: "relative" }}>
+                      <Image
                         src={post.featuredImage}
                         alt={post.title}
-                        style={{ width: "100%", height: "100%", objectFit: "cover", display: "block", transition: "transform 0.4s ease" }}
+                        fill
+                        sizes="(max-width: 768px) 100vw, 33vw"
+                        style={{ objectFit: "cover", transition: "transform 0.4s ease" }}
                         loading="lazy"
-                        decoding="async"
+                        quality={75}
                       />
                     </div>
                   ) : (

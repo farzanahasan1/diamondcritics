@@ -14,7 +14,7 @@ const ivyPresto = localFont({
   variable: "--font-ivy",
   weight: "300",
   style: "normal",
-  display: "swap",
+  display: "optional",
   preload: true,
 });
 
@@ -22,7 +22,7 @@ const dmSans = DM_Sans({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600"],
   variable: "--font-dm",
-  display: "swap",
+  display: "optional",
 });
 
 export const metadata: Metadata = {
@@ -91,9 +91,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <SearchModal posts={searchPosts} />
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=G-76MCD0Y7G9"
-          strategy="afterInteractive"
+          strategy="lazyOnload"
         />
-        <Script id="gtag-init" strategy="afterInteractive">
+        <Script id="gtag-init" strategy="lazyOnload">
           {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-76MCD0Y7G9');`}
         </Script>
       </body>
