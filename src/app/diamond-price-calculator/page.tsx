@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import DiamondCalculator from "@/components/DiamondCalculator";
 
-const calcTitle = "Diamond Price Calculator — Instant Market Value Estimate";
+const calcTitle = "Diamond Price Calculator — Free Market Value Tool";
 const calcDesc = "Calculate the fair market value of any diamond by shape, carat, cut, color, and clarity. GIA-backed methodology by Farzana Hasan, Diamond Critics.";
 
 export const metadata: Metadata = {
-  title: calcTitle,
+  title: { absolute: calcTitle },
   description: calcDesc,
   alternates: { canonical: "https://diamondcritics.com/diamond-price-calculator" },
   openGraph: {

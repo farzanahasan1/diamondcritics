@@ -3,12 +3,12 @@ import Link from "next/link";
 import DiamondPriceChart from "@/components/DiamondPriceChart";
 import RapaportIndexTable from "@/components/RapaportIndexTable";
 
-const PAGE_TITLE = "What Is the Rapaport Diamond Price Index? A Buyer's Guide";
+const PAGE_TITLE = "Rapaport Diamond Price Index Explained";
 const PAGE_DESC =
   "What is the Rapaport Diamond Price Index (RAPI™)? Learn how it works, what price changes mean for buyers, and how to avoid overpaying on a diamond.";
 
 export const metadata: Metadata = {
-  title: PAGE_TITLE,
+  title: { absolute: PAGE_TITLE },
   description: PAGE_DESC,
   alternates: { canonical: "https://diamondcritics.com/rapaport-diamond-price-index" },
   openGraph: {

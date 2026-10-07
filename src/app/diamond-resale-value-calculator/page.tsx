@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import ResaleCalculator from "@/components/ResaleCalculator";
 
-const resaleTitle = "Diamond Resale Value Calculator — ROI & Resale Projections";
+const resaleTitle = "Diamond Resale Value Calculator — Free ROI Tool";
 const resaleDesc = "Estimate your diamond's 5-year and 10-year resale value and ROI. Compare natural vs lab-grown resale retention. Free tool by Farzana Hasan, GIA Expert.";
 
 export const metadata: Metadata = {
-  title: resaleTitle,
+  title: { absolute: resaleTitle },
   description: resaleDesc,
   alternates: { canonical: "https://diamondcritics.com/diamond-resale-value-calculator" },
   openGraph: {
