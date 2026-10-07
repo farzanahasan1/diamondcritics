@@ -213,6 +213,7 @@ const nav: NavItem[] = [
             { label: "Princess Cut", href: "/princess-cut-diamond" },
             { label: "Cushion Cut", href: "/cushion-cut-diamond" },
             { label: "Oval Cut", href: "/oval-cut-diamond" },
+            { label: "Marquise Cut", href: "/marquise-cut-diamond" },
           ],
         },
         {

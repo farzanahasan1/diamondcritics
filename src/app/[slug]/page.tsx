@@ -61,6 +61,10 @@ const categoryLabelsSchema: Record<string, string> = {
   "oval-cut-diamond": "Oval Cut Diamond",
   "pear-cut-diamond": "Pear Cut Diamond",
   "cushion-cut-diamond": "Cushion Cut Diamond",
+  "emerald-cut-diamond": "Emerald Cut Diamond",
+  "radiant-cut-diamond": "Radiant Cut Diamond",
+  "asscher-cut-diamond": "Asscher Cut Diamond",
+  "marquise-cut-diamond": "Marquise Cut Diamond",
 };
 
 function extractFAQSchema(html: string): object | null {
