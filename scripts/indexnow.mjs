@@ -9,7 +9,8 @@ import { fileURLToPath } from "url";
 import { createClient } from "@supabase/supabase-js";
 
 const BING_API_KEY = "fa17f601ccff4ea1a88c549b35bdd5c3";
-const INDEXNOW_KEY = "82f504b8c52848a3b4101f9c43a262c6";
+// Active IndexNow key (verified 2026-10-09). Previous key 82f504b8... retired by Bing — returns 403.
+const INDEXNOW_KEY = "ca9f3443391a4119817123f54f6b214a";
 const HOST         = "diamondcritics.com";
 const BASE         = `https://${HOST}`;
 
