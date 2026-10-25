@@ -35,7 +35,7 @@ const categoryDescriptions: Record<string, string> = {
   "emerald-cut-diamond": "Emerald cut diamond buying guides by Farzana Hasan: the hall-of-mirrors effect explained, VS1 clarity rule, ideal L/W ratios, real certified market prices from 1ct to 5ct, settings, lab-grown savings, and every style covered.",
   "radiant-cut-diamond": "Radiant cut diamond buying guides by Farzana Hasan: 70-facet brilliance explained, VS2 clarity floor, elongated vs square radiant, real certified market prices from 1ct to 5ct natural and lab-grown, halo and solitaire settings, and every comparison covered.",
   "asscher-cut-diamond": "Asscher cut diamond buying guides by Farzana Hasan: Hall of Mirrors effect explained, VVS2 clarity rule, real certified prices from $2,464 at 1ct natural to $9,776 at 4ct lab-grown, step-cut settings, carat weight guide, and every shape comparison covered.",
-  "marquise-cut-diamond": "Marquise cut diamond buying guides by Farzana Hasan: the 5 proportion mistakes that hurt fire, bow-tie detection on HD video, length-to-width ratio decoded, real Blue Nile prices from $1,900 at 1ct natural to $12,500 at 3ct lab-grown, settings that protect pointed tips, and every comparison covered.",
+  "marquise-cut-diamond": "53 marquise diamond buying guides by Farzana Hasan: bow-tie video check, L:W ratio sweet spot, color-metal lock, real certified prices from $2,084 under $3K to $4,909 under $5K, settings that protect pointed tips, lab vs natural comparison, and every shape covered.",
 };
 
 const categorySeoTitles: Record<string, string> = {
