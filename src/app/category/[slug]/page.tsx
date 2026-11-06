@@ -19,6 +19,7 @@ const categoryLabels: Record<string, string> = {
   "radiant-cut-diamond": "Radiant Cut Diamond",
   "asscher-cut-diamond": "Asscher Cut Diamond",
   "marquise-cut-diamond": "Marquise Cut Diamond",
+  "mens-diamond-rings": "Men's Diamond Rings",
 };
 
 const categoryDescriptions: Record<string, string> = {
@@ -36,6 +37,7 @@ const categoryDescriptions: Record<string, string> = {
   "radiant-cut-diamond": "Radiant cut diamond buying guides by Farzana Hasan: 70-facet brilliance explained, VS2 clarity floor, elongated vs square radiant, real certified market prices from 1ct to 5ct natural and lab-grown, halo and solitaire settings, and every comparison covered.",
   "asscher-cut-diamond": "Asscher cut diamond buying guides by Farzana Hasan: Hall of Mirrors effect explained, VVS2 clarity rule, real certified prices from $2,464 at 1ct natural to $9,776 at 4ct lab-grown, step-cut settings, carat weight guide, and every shape comparison covered.",
   "marquise-cut-diamond": "53 marquise diamond buying guides by Farzana Hasan: bow-tie video check, L:W ratio sweet spot, color-metal lock, real certified prices from $2,084 under $3K to $4,909 under $5K, settings that protect pointed tips, lab vs natural comparison, and every shape covered.",
+  "mens-diamond-rings": "Men's diamond ring buying guides by Farzana Hasan — 23 certified settings from $1,000 to $3,660, the Round Ratio for stone-to-band sizing, real GIA/IGI stone data, 4 taste signals, and channel vs solitaire compared.",
 };
 
 const categorySeoTitles: Record<string, string> = {
@@ -45,6 +47,7 @@ const categorySeoTitles: Record<string, string> = {
   "radiant-cut-diamond": "Radiant Cut Diamond: Buying Guides, Prices & Settings",
   "asscher-cut-diamond": "Asscher Cut Diamond: Buying Guides, Prices & Settings",
   "marquise-cut-diamond": "Marquise Cut Diamond: Proportions, Prices & Settings",
+  "mens-diamond-rings": "Men's Diamond Ring Guide: Settings, Stones & Real Prices",
 };
 
 const SUBCATEGORY_SLUGS = new Set(["blue-nile"]);
@@ -107,6 +110,7 @@ const categoryH1s: Record<string, string> = {
   "radiant-cut-diamond": "Radiant Cut Diamond: Complete Buying Guides",
   "asscher-cut-diamond": "Asscher Cut Diamond: Complete Buying Guides",
   "marquise-cut-diamond": "Marquise Cut Diamond: Complete Buying Guides",
+  "mens-diamond-rings": "Men's Diamond Rings: Complete Buying Guides",
 };
 
 export default async function CategoryPage({ params }: Props) {

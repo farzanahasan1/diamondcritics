@@ -44,6 +44,7 @@ export default config({
             { label: "Radiant Cut Diamond", value: "radiant-cut-diamond" },
             { label: "Asscher Cut Diamond", value: "asscher-cut-diamond" },
             { label: "Marquise Cut Diamond", value: "marquise-cut-diamond" },
+            { label: "Men's Diamond Rings", value: "mens-diamond-rings" },
           ],
           defaultValue: "diamond-buying-guides",
         }),
