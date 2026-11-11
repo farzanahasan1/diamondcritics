@@ -5,7 +5,6 @@ import { useState, useRef, useCallback } from "react";
 // ─── CONFIG ───────────────────────────────────────────────────────────────────
 const SITE = "https://diamondcritics.com";
 
-// Pinterest pin title = image filename with hyphens removed (auto-generated)
 function pinTitle(filename: string) {
   return filename
     .replace(/\.[^.]+$/, "")
@@ -13,7 +12,6 @@ function pinTitle(filename: string) {
     .replace(/\b\w/g, (c) => c.toUpperCase());
 }
 
-// Build Pinterest URL — images are now JPG
 function buildPinUrl(src: string, pageHref: string, alt: string) {
   const imgUrl = SITE + "/images/" + src;
   return (
@@ -26,10 +24,10 @@ function buildPinUrl(src: string, pageHref: string, alt: string) {
 
 // ─── TYPES ────────────────────────────────────────────────────────────────────
 type Img = {
-  src: string;   // filename in /public/images/ (JPG)
-  alt: string;   // ← EDIT THIS — alt text = Pinterest pin description
-  href: string;  // page this image links to
-  label: string; // text shown below the image
+  src: string;
+  alt: string;
+  href: string;
+  label: string;
 };
 type Section = { heading: string; links: { label: string; href: string }[] };
 type NavItem = {
@@ -39,13 +37,6 @@ type NavItem = {
 };
 
 // ─── NAV DATA ─────────────────────────────────────────────────────────────────
-// HOW TO EDIT:
-//   alt   → change any alt text below; it becomes the Pinterest pin description
-//   href  → change where the image links to
-//   src   → change the image filename (must exist in /public/images/)
-//   label → change the caption below the image
-// Pinterest pin TITLE is auto-generated from the filename (hyphens → spaces).
-// ─────────────────────────────────────────────────────────────────────────────
 const nav: NavItem[] = [
   {
     label: "Guides",
@@ -67,7 +58,7 @@ const nav: NavItem[] = [
           src: "round-brilliant-diamond-benchmark.jpg",
           alt: "Round brilliant diamond benchmark — what a perfectly cut stone actually looks like",
           href: "/diamond-prices",
-          label: "Diamond Prices 2026",
+          label: "Diamond Prices",
         },
       ],
       sections: [
@@ -92,7 +83,161 @@ const nav: NavItem[] = [
           ],
         },
       ],
-      viewAll: { label: "All Guides", href: "/blog" },
+      viewAll: { label: "All Guides & Articles", href: "/blog" },
+    },
+  },
+  {
+    label: "Shapes",
+    mega: {
+      featured: [
+        {
+          src: "what-is-a-round-brilliant-cut-diamond-editorial-guide.jpg",
+          alt: "What is a round brilliant cut diamond — editorial guide to the world's most popular shape",
+          href: "/round-cut-diamond",
+          label: "Round Brilliant",
+        },
+        {
+          src: "oval-cut-diamond-guide-feature-image.jpg",
+          alt: "Oval cut diamond guide — ideal proportions, the bow-tie effect, and 2026 price trends",
+          href: "/oval-cut-diamond",
+          label: "Oval Cut",
+        },
+        {
+          src: "what-is-an-emerald-cut-diamond-editorial-infographic.jpg",
+          alt: "What is an emerald cut diamond — step-cut facets and hall of mirrors effect explained",
+          href: "/emerald-cut-diamond",
+          label: "Emerald Cut",
+        },
+      ],
+      sections: [
+        {
+          heading: "Brilliant Cuts",
+          links: [
+            { label: "Round Cut", href: "/round-cut-diamond" },
+            { label: "Oval Cut", href: "/oval-cut-diamond" },
+            { label: "Cushion Cut", href: "/cushion-cut-diamond" },
+            { label: "Marquise Cut", href: "/marquise-cut-diamond" },
+            { label: "Pear Cut", href: "/pear-cut-diamond" },
+            { label: "Princess Cut", href: "/princess-cut-diamond" },
+          ],
+        },
+        {
+          heading: "Step & Mixed Cuts",
+          links: [
+            { label: "Emerald Cut", href: "/emerald-cut-diamond" },
+            { label: "Asscher Cut", href: "/asscher-cut-diamond" },
+            { label: "Radiant Cut", href: "/radiant-cut-diamond" },
+          ],
+        },
+        {
+          heading: "Round Diamond Deep Dive",
+          links: [
+            { label: "1ct Price Audit", href: "/1-carat-round-diamond-price" },
+            { label: "Round vs Oval", href: "/round-diamond-vs-oval-diamond" },
+            { label: "Hearts & Arrows", href: "/hearts-and-arrows-diamond" },
+            { label: "Ring Settings", href: "/round-diamond-engagement-ring-settings" },
+            { label: "Lab Grown Round", href: "/lab-grown-round-diamond" },
+            { label: "All Round Guides", href: "/category/round-cut-diamond" },
+          ],
+        },
+        {
+          heading: "Oval Diamond Deep Dive",
+          links: [
+            { label: "1ct Price Audit", href: "/1-carat-oval-diamond-price" },
+            { label: "2ct Price Guide", href: "/2-carat-oval-diamond-price" },
+            { label: "Oval vs Round", href: "/round-diamond-vs-oval-diamond" },
+            { label: "Oval vs Pear", href: "/oval-vs-pear-diamond" },
+            { label: "All Oval Guides", href: "/category/oval-cut-diamond" },
+          ],
+        },
+        {
+          heading: "Emerald Cut Deep Dive",
+          links: [
+            { label: "Emerald Cut Guide", href: "/emerald-cut-diamond" },
+            { label: "Emerald vs Cushion", href: "/cushion-cut-vs-emerald-cut-diamond" },
+            { label: "Emerald vs Pear", href: "/pear-cut-vs-emerald-cut-diamond" },
+            { label: "Emerald vs Marquise", href: "/marquise-cut-vs-emerald-cut-diamond" },
+            { label: "All Emerald Guides", href: "/category/emerald-cut-diamond" },
+          ],
+        },
+        {
+          heading: "Cushion Cut Deep Dive",
+          links: [
+            { label: "Cushion Cut Guide", href: "/cushion-cut-diamond" },
+            { label: "Cushion vs Emerald", href: "/cushion-cut-vs-emerald-cut-diamond" },
+            { label: "Cushion vs Radiant", href: "/cushion-cut-vs-radiant-cut-diamond" },
+            { label: "All Cushion Guides", href: "/category/cushion-cut-diamond" },
+          ],
+        },
+        {
+          heading: "Marquise Deep Dive",
+          links: [
+            { label: "Marquise Cut Guide", href: "/marquise-cut-diamond" },
+            { label: "Marquise vs Emerald", href: "/marquise-cut-vs-emerald-cut-diamond" },
+            { label: "All Marquise Guides", href: "/category/marquise-cut-diamond" },
+          ],
+        },
+        {
+          heading: "Princess & Radiant",
+          links: [
+            { label: "Princess Cut Guide", href: "/princess-cut-diamond" },
+            { label: "1ct Princess Price", href: "/1-carat-princess-cut-diamond-price" },
+            { label: "Princess vs Round", href: "/round-diamond-vs-princess-cut" },
+            { label: "All Princess Guides", href: "/category/princess-cut-diamond" },
+            { label: "Radiant Cut Guide", href: "/radiant-cut-diamond" },
+            { label: "All Radiant Guides", href: "/category/radiant-cut-diamond" },
+          ],
+        },
+      ],
+      viewAll: { label: "All Shape Guides", href: "/diamond-shapes-guide" },
+    },
+  },
+  {
+    label: "Men's Rings",
+    mega: {
+      featured: [
+        {
+          src: "mens-diamond-signet-ring-featured.jpg",
+          alt: "Men's diamond signet ring guide — 3 classic settings from $756, marquise, initial letter, pavé cluster",
+          href: "/mens-diamond-signet-ring",
+          label: "Men's Signet Ring",
+        },
+        {
+          src: "mens-diamond-eternity-band-featured.jpg",
+          alt: "Men's diamond eternity band — 4 prong issues that fail at year 5 and how to avoid them",
+          href: "/mens-diamond-eternity-band",
+          label: "Men's Eternity Band",
+        },
+        {
+          src: "mens-lab-grown-diamond-ring-featured.jpg",
+          alt: "Men's lab grown diamond ring guide — 5 IGI grades under $2,000 with certified stone data",
+          href: "/mens-lab-grown-diamond-ring",
+          label: "Lab Diamond Rings",
+        },
+      ],
+      sections: [
+        {
+          heading: "Men's Ring Styles",
+          links: [
+            { label: "Men's Diamond Engagement Ring", href: "/mens-diamond-engagement-ring" },
+            { label: "Men's Diamond Wedding Band", href: "/mens-diamond-wedding-band" },
+            { label: "Men's Diamond Eternity Band", href: "/mens-diamond-eternity-band" },
+            { label: "Men's Diamond Signet Ring", href: "/mens-diamond-signet-ring" },
+            { label: "Men's Lab Grown Diamond Ring", href: "/mens-lab-grown-diamond-ring" },
+          ],
+        },
+        {
+          heading: "Men's Rings by Shape",
+          links: [
+            { label: "Men's Round Diamond Ring", href: "/mens-round-diamond-ring" },
+            { label: "Men's Emerald Cut Ring", href: "/mens-emerald-cut-ring" },
+            { label: "Men's Cushion Cut Ring", href: "/mens-cushion-cut-ring" },
+            { label: "Men's Princess Cut Ring", href: "/mens-princess-cut-ring" },
+            { label: "Men's Asscher Cut Ring", href: "/mens-asscher-cut-ring" },
+          ],
+        },
+      ],
+      viewAll: { label: "All Men's Diamond Rings", href: "/category/mens-diamond-rings" },
     },
   },
   {
@@ -183,101 +328,6 @@ const nav: NavItem[] = [
     },
   },
   {
-    label: "Shapes",
-    mega: {
-      featured: [
-        {
-          src: "what-is-a-round-brilliant-cut-diamond-editorial-guide.jpg",
-          alt: "What is a round brilliant cut diamond — editorial guide to the world's most popular shape",
-          href: "/round-cut-diamond",
-          label: "Round Brilliant",
-        },
-        {
-          src: "oval-cut-diamond-guide-feature-image.jpg",
-          alt: "Oval cut diamond guide — ideal proportions, the bow-tie effect, and 2026 price trends",
-          href: "/oval-cut-diamond",
-          label: "Oval Cut",
-        },
-        {
-          src: "what-is-an-emerald-cut-diamond-editorial-infographic.jpg",
-          alt: "What is an emerald cut diamond — step-cut facets and hall of mirrors effect explained",
-          href: "/emerald-cut-diamond",
-          label: "Emerald Cut",
-        },
-      ],
-      sections: [
-        {
-          heading: "Brilliant Cuts",
-          links: [
-            { label: "Round Cut", href: "/round-cut-diamond" },
-            { label: "Princess Cut", href: "/princess-cut-diamond" },
-            { label: "Cushion Cut", href: "/cushion-cut-diamond" },
-            { label: "Oval Cut", href: "/oval-cut-diamond" },
-            { label: "Marquise Cut", href: "/marquise-cut-diamond" },
-          ],
-        },
-        {
-          heading: "Round Diamond Deep Dive",
-          links: [
-            { label: "1ct Price Audit", href: "/1-carat-round-diamond-price" },
-            { label: "Round vs Oval", href: "/round-diamond-vs-oval-diamond" },
-            { label: "Hearts & Arrows", href: "/hearts-and-arrows-diamond" },
-            { label: "Ring Settings Guide", href: "/round-diamond-engagement-ring-settings" },
-            { label: "Lab Grown Round", href: "/lab-grown-round-diamond" },
-          ],
-        },
-        {
-          heading: "Princess Diamond Deep Dive",
-          links: [
-            { label: "1ct Price Audit", href: "/1-carat-princess-cut-diamond-price" },
-            { label: "2ct Price Guide", href: "/2-carat-princess-cut-diamond-price" },
-            { label: "Princess vs Round", href: "/round-diamond-vs-princess-cut" },
-            { label: "All Princess Guides", href: "/category/princess-cut-diamond" },
-          ],
-        },
-        {
-          heading: "Oval Diamond Deep Dive",
-          links: [
-            { label: "1ct Price Audit", href: "/1-carat-oval-diamond-price" },
-            { label: "2ct Price Guide", href: "/2-carat-oval-diamond-price" },
-            { label: "Oval vs Round", href: "/round-diamond-vs-oval-diamond" },
-            { label: "All Oval Guides", href: "/category/oval-cut-diamond" },
-          ],
-        },
-        {
-          heading: "Pear Diamond Deep Dive",
-          links: [
-            { label: "Pear Cut Guide", href: "/pear-cut-diamond" },
-            { label: "Pear vs Oval", href: "/oval-vs-pear-diamond" },
-            { label: "Pear vs Round", href: "/round-diamond-vs-pear-shape" },
-            { label: "All Pear Guides", href: "/category/pear-cut-diamond" },
-          ],
-        },
-        {
-          heading: "Emerald Diamond Deep Dive",
-          links: [
-            { label: "Emerald Cut Guide", href: "/emerald-cut-diamond" },
-            { label: "Emerald vs Cushion", href: "/cushion-cut-vs-emerald-cut-diamond" },
-            { label: "Emerald vs Pear", href: "/pear-cut-vs-emerald-cut-diamond" },
-            { label: "Emerald vs Marquise", href: "/marquise-cut-vs-emerald-cut-diamond" },
-            { label: "All Emerald Guides", href: "/category/emerald-cut-diamond" },
-          ],
-        },
-        {
-          heading: "Radiant Diamond Deep Dive",
-          links: [
-            { label: "Radiant Cut Guide", href: "/radiant-cut-diamond" },
-            { label: "Radiant vs Cushion", href: "/cushion-cut-vs-radiant-cut-diamond" },
-            { label: "Radiant vs Princess", href: "/princess-cut-vs-radiant-cut-diamond" },
-            { label: "Radiant vs Emerald", href: "/radiant-cut-vs-emerald-cut-diamond" },
-            { label: "All Radiant Guides", href: "/category/radiant-cut-diamond" },
-          ],
-        },
-      ],
-      viewAll: { label: "All Round Cut Guides", href: "/category/round-cut-diamond" },
-    },
-  },
-  {
     label: "Reviews",
     mega: {
       featured: [
@@ -324,8 +374,8 @@ const nav: NavItem[] = [
       viewAll: { label: "All Reviews", href: "/category/diamond-retailer-reviews" },
     },
   },
+  { label: "Blog", href: "/blog" },
   { label: "Calculators", href: "/diamond-price-calculator" },
-  { label: "About", href: "/about-farzana" },
 ];
 
 // ─── ICONS ────────────────────────────────────────────────────────────────────
@@ -341,10 +391,20 @@ const ChevronDown = () => (
   </svg>
 );
 
+const ChevronRight = ({ open }: { open: boolean }) => (
+  <svg
+    width="10" height="6" viewBox="0 0 10 6" fill="none"
+    style={{ opacity: 0.4, flexShrink: 0, transition: "transform 0.2s", transform: open ? "rotate(180deg)" : "rotate(0deg)" }}
+  >
+    <path d="M1 1l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+
 // ─── COMPONENT ────────────────────────────────────────────────────────────────
 export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const [mobileExpanded, setMobileExpanded] = useState<string | null>(null);
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const openMenu = useCallback((label: string) => {
@@ -363,6 +423,10 @@ export default function Header() {
   const closeAll = useCallback(() => {
     if (closeTimer.current) clearTimeout(closeTimer.current);
     setOpenDropdown(null);
+  }, []);
+
+  const toggleMobileSection = useCallback((label: string) => {
+    setMobileExpanded((prev) => (prev === label ? null : label));
   }, []);
 
   const activeMega = openDropdown
@@ -421,7 +485,6 @@ export default function Header() {
                     {item.label}
                     <ChevronDown />
                   </button>
-                  {/* Gold underline when active */}
                   {openDropdown === item.label && (
                     <div style={{
                       position: "absolute", bottom: 0, left: "12px", right: "12px",
@@ -462,12 +525,23 @@ export default function Header() {
             <button
               className="header-hamburger"
               onClick={() => { setMobileOpen(!mobileOpen); closeAll(); }}
-              aria-label="Menu"
+              aria-label={mobileOpen ? "Close menu" : "Open menu"}
+              aria-expanded={mobileOpen}
               style={{ background: "none", border: "none", cursor: "pointer", padding: "8px", display: "none" }}
             >
-              <div style={{ width: "22px", height: "1.5px", background: "#111", marginBottom: "5px" }} />
-              <div style={{ width: "22px", height: "1.5px", background: "#111", marginBottom: "5px" }} />
-              <div style={{ width: "22px", height: "1.5px", background: "#111" }} />
+              {mobileOpen ? (
+                /* X icon when open */
+                <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+                  <path d="M2 2l18 18M20 2L2 20" stroke="#111" strokeWidth="1.8" strokeLinecap="round" />
+                </svg>
+              ) : (
+                /* Hamburger icon */
+                <>
+                  <div style={{ width: "22px", height: "1.5px", background: "#111", marginBottom: "5px" }} />
+                  <div style={{ width: "22px", height: "1.5px", background: "#111", marginBottom: "5px" }} />
+                  <div style={{ width: "22px", height: "1.5px", background: "#111" }} />
+                </>
+              )}
             </button>
           </div>
         </div>
@@ -497,7 +571,6 @@ export default function Header() {
               <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1.5rem" }}>
                 {activeMega.featured.map((img) => (
                   <div key={img.href}>
-                    {/* Image wrapper — hover zooms image, shows Pinterest button */}
                     <div className="mega-img-wrap">
                       <Link href={img.href} style={{ display: "block" }} onClick={closeAll}>
                         <img
@@ -508,7 +581,6 @@ export default function Header() {
                           decoding="async"
                         />
                       </Link>
-                      {/* Pinterest pin button (appears on image hover) */}
                       <a
                         href={buildPinUrl(img.src, img.href, img.alt)}
                         target="_blank"
@@ -520,8 +592,6 @@ export default function Header() {
                         <PinIcon />
                       </a>
                     </div>
-
-                    {/* Card label */}
                     <Link href={img.href} style={{ textDecoration: "none" }} onClick={closeAll}>
                       <p style={{
                         fontFamily: "var(--body)", fontSize: "0.85rem", fontWeight: 600,
@@ -530,8 +600,6 @@ export default function Header() {
                         {img.label}
                       </p>
                     </Link>
-
-                    {/* Alt text preview — this is what Pinterest uses as pin description */}
                     <p style={{
                       fontSize: "0.71rem", color: "#aaa", marginTop: "4px", lineHeight: 1.45,
                       display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical",
@@ -548,12 +616,19 @@ export default function Header() {
 
               {/* Right — link sections + View All */}
               <div style={{ display: "flex", flexDirection: "column" }}>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.5rem", flex: 1 }}>
+                <div style={{
+                  display: "grid",
+                  gridTemplateColumns: activeMega.sections.length > 4 ? "1fr 1fr" : "1fr 1fr",
+                  gap: "1.25rem 1.5rem",
+                  flex: 1,
+                  overflowY: activeMega.sections.length > 6 ? "auto" : "visible",
+                  maxHeight: activeMega.sections.length > 6 ? "380px" : "none",
+                }}>
                   {activeMega.sections.map((section) => (
                     <div key={section.heading}>
                       <p style={{
                         fontSize: "0.6rem", fontWeight: 700, letterSpacing: "0.18em",
-                        textTransform: "uppercase", color: "#ccc", marginBottom: "0.85rem",
+                        textTransform: "uppercase", color: "#ccc", marginBottom: "0.75rem",
                       }}>
                         {section.heading}
                       </p>
@@ -573,7 +648,7 @@ export default function Header() {
 
                 {activeMega.viewAll && (
                   <div style={{
-                    marginTop: "2rem", paddingTop: "1.25rem",
+                    marginTop: "1.5rem", paddingTop: "1.25rem",
                     borderTop: "1px solid #f0f0f0",
                   }}>
                     <Link
@@ -596,63 +671,125 @@ export default function Header() {
         </div>
       )}
 
-      {/* ── Mobile menu ── */}
+      {/* ── Mobile menu — accordion style ── */}
       {mobileOpen && (
-        <nav aria-label="Mobile navigation" style={{ borderTop: "1px solid #ebebeb", background: "#fff", maxHeight: "80vh", overflowY: "auto" }}>
+        <nav
+          aria-label="Mobile navigation"
+          style={{
+            borderTop: "1px solid #ebebeb",
+            background: "#fff",
+            maxHeight: "calc(100vh - 64px)",
+            overflowY: "auto",
+            WebkitOverflowScrolling: "touch",
+          }}
+        >
           {nav.map((item) => (
-            <div key={item.label} style={{ borderBottom: "1px solid #f5f5f5" }}>
+            <div key={item.label} style={{ borderBottom: "1px solid #f2f2f2" }}>
               {item.mega ? (
                 <>
-                  <div style={{
-                    padding: "10px 24px",
-                    fontFamily: "var(--body)", fontSize: "0.65rem", fontWeight: 600,
-                    letterSpacing: "0.14em", textTransform: "uppercase", color: "#aaa",
-                  }}>
+                  {/* Accordion trigger */}
+                  <button
+                    onClick={() => toggleMobileSection(item.label)}
+                    aria-expanded={mobileExpanded === item.label}
+                    style={{
+                      width: "100%", display: "flex", alignItems: "center",
+                      justifyContent: "space-between",
+                      padding: "14px 20px",
+                      fontFamily: "var(--body)", fontSize: "0.9rem", fontWeight: 600,
+                      color: mobileExpanded === item.label ? "#C6973E" : "#222",
+                      background: "none", border: "none", cursor: "pointer",
+                      textAlign: "left",
+                    }}
+                  >
                     {item.label}
-                  </div>
-                  {item.mega.sections.flatMap((s) => s.links).map((link) => (
-                    <Link
-                      key={link.href}
-                      href={link.href}
-                      style={{
-                        display: "block", padding: "9px 32px",
-                        fontFamily: "var(--body)", fontSize: "0.85rem",
-                        color: "#555", textDecoration: "none",
-                      }}
-                      onClick={() => setMobileOpen(false)}
-                    >
-                      {link.label}
-                    </Link>
-                  ))}
+                    <ChevronRight open={mobileExpanded === item.label} />
+                  </button>
+
+                  {/* Accordion content */}
+                  {mobileExpanded === item.label && (
+                    <div style={{ background: "#fafafa", paddingBottom: "8px" }}>
+                      {item.mega.sections.map((section) => (
+                        <div key={section.heading}>
+                          <p style={{
+                            padding: "10px 20px 4px 32px",
+                            fontSize: "0.58rem", fontWeight: 700,
+                            letterSpacing: "0.16em", textTransform: "uppercase",
+                            color: "#bbb",
+                          }}>
+                            {section.heading}
+                          </p>
+                          {section.links.map((link) => (
+                            <Link
+                              key={link.href}
+                              href={link.href}
+                              style={{
+                                display: "block", padding: "8px 20px 8px 32px",
+                                fontFamily: "var(--body)", fontSize: "0.85rem",
+                                color: "#444", textDecoration: "none",
+                              }}
+                              onClick={() => { setMobileOpen(false); setMobileExpanded(null); }}
+                            >
+                              {link.label}
+                            </Link>
+                          ))}
+                        </div>
+                      ))}
+                      {item.mega.viewAll && (
+                        <Link
+                          href={item.mega.viewAll.href}
+                          style={{
+                            display: "block", padding: "10px 20px 10px 32px",
+                            fontFamily: "var(--body)", fontSize: "0.75rem", fontWeight: 700,
+                            color: "#C6973E", textDecoration: "none",
+                            letterSpacing: "0.1em", textTransform: "uppercase",
+                          }}
+                          onClick={() => { setMobileOpen(false); setMobileExpanded(null); }}
+                        >
+                          {item.mega.viewAll.label} →
+                        </Link>
+                      )}
+                    </div>
+                  )}
                 </>
               ) : (
                 <Link
                   href={item.href!}
                   style={{
-                    display: "block", padding: "12px 24px",
-                    fontFamily: "var(--body)", fontSize: "0.85rem", fontWeight: 500,
-                    color: "#444", textDecoration: "none",
+                    display: "flex", alignItems: "center",
+                    padding: "14px 20px",
+                    fontFamily: "var(--body)", fontSize: "0.9rem", fontWeight: 500,
+                    color: "#222", textDecoration: "none",
                   }}
-                  onClick={() => setMobileOpen(false)}
+                  onClick={() => { setMobileOpen(false); setMobileExpanded(null); }}
                 >
                   {item.label}
                 </Link>
               )}
             </div>
           ))}
-          <div style={{ padding: "16px 24px" }}>
+
+          {/* Mobile footer — CTA + quick links */}
+          <div style={{ padding: "16px 20px 24px", background: "#fafafa" }}>
             <a
               href="/community"
               style={{
-                display: "block", width: "100%", textAlign: "center",
+                display: "block", textAlign: "center",
                 background: "#C6973E", color: "#fff",
-                fontFamily: "var(--body)", fontSize: "0.72rem", fontWeight: 600,
-                padding: "12px", textDecoration: "none",
+                fontFamily: "var(--body)", fontSize: "0.75rem", fontWeight: 700,
+                padding: "13px", textDecoration: "none",
                 letterSpacing: "0.12em", textTransform: "uppercase",
+                marginBottom: "14px",
               }}
+              onClick={() => setMobileOpen(false)}
             >
               Community →
             </a>
+            <div style={{ display: "flex", justifyContent: "center", gap: "20px", flexWrap: "wrap" }}>
+              <Link href="/blog" style={{ fontSize: "0.78rem", color: "#777", textDecoration: "none" }} onClick={() => setMobileOpen(false)}>All Articles</Link>
+              <Link href="/diamond-price-calculator" style={{ fontSize: "0.78rem", color: "#777", textDecoration: "none" }} onClick={() => setMobileOpen(false)}>Calculator</Link>
+              <Link href="/about-farzana" style={{ fontSize: "0.78rem", color: "#777", textDecoration: "none" }} onClick={() => setMobileOpen(false)}>About</Link>
+              <Link href="/contact" style={{ fontSize: "0.78rem", color: "#777", textDecoration: "none" }} onClick={() => setMobileOpen(false)}>Contact</Link>
+            </div>
           </div>
         </nav>
       )}
