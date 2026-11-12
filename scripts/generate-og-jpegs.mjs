@@ -2,6 +2,7 @@
 // AVIF works great for browsers but most OG scrapers (Facebook, Twitter, Pinterest, etc.)
 // don't support it — so social shares show no image, hurting Google Images indexing.
 // Output: /public/images/og/<original-name>.jpg
+if (process.env.VERCEL) process.exit(0); // OG images are pre-committed; skip on Vercel CI
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
