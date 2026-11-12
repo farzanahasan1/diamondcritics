@@ -1,7 +1,6 @@
 import type { NextConfig } from "next";
 
 const securityHeaders = [
-  { key: 'X-Frame-Options',        value: 'SAMEORIGIN' },
   { key: 'X-Content-Type-Options', value: 'nosniff' },
   { key: 'Referrer-Policy',        value: 'strict-origin-when-cross-origin' },
   { key: 'Permissions-Policy',     value: 'camera=(), microphone=(), geolocation=()' },
@@ -14,7 +13,7 @@ const securityHeaders = [
       "font-src 'self' https://fonts.gstatic.com",
       "img-src 'self' data: blob: https: http:",
       "connect-src 'self' https://*.supabase.co https://www.google-analytics.com https://api.bing.com https://api.indexnow.org",
-      "frame-ancestors 'self'",
+      "frame-ancestors 'self' https://madebyevoke.com https://*.claude-5k5.pages.dev",
       "base-uri 'self'",
       "form-action 'self'",
     ].join('; '),
