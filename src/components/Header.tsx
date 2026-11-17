@@ -375,7 +375,22 @@ const nav: NavItem[] = [
     },
   },
   { label: "Blog", href: "/blog" },
-  { label: "Calculators", href: "/diamond-price-calculator" },
+  {
+    label: "Calculators",
+    mega: {
+      featured: [],
+      sections: [
+        {
+          heading: "Diamond Calculators",
+          links: [
+            { label: "Diamond Price Calculator", href: "/diamond-price-calculator" },
+            { label: "Diamond Resale Value Calculator", href: "/diamond-resale-value-calculator" },
+          ],
+        },
+      ],
+      viewAll: { label: "All Calculators", href: "/diamond-price-calculator" },
+    },
+  },
 ];
 
 // ─── ICONS ────────────────────────────────────────────────────────────────────
@@ -565,10 +580,10 @@ export default function Header() {
           }}
         >
           <div style={{ maxWidth: "1280px", margin: "0 auto", padding: "2rem 2rem 2.25rem" }}>
-            <div style={{ display: "grid", gridTemplateColumns: "2fr 1px 1fr", gap: "0 2.5rem" }}>
+            <div style={{ display: "grid", gridTemplateColumns: activeMega.featured.length > 0 ? "2fr 1px 1fr" : "1fr", gap: "0 2.5rem" }}>
 
-              {/* Left — 3 featured image cards */}
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1.5rem" }}>
+              {/* Left — featured image cards (hidden when empty) */}
+              {activeMega.featured.length > 0 && <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1.5rem" }}>
                 {activeMega.featured.map((img) => (
                   <div key={img.href}>
                     <div className="mega-img-wrap">
@@ -609,10 +624,10 @@ export default function Header() {
                     </p>
                   </div>
                 ))}
-              </div>
+              </div>}
 
-              {/* Divider */}
-              <div style={{ background: "#f0f0f0", alignSelf: "stretch" }} />
+              {/* Divider — only when featured images present */}
+              {activeMega.featured.length > 0 && <div style={{ background: "#f0f0f0", alignSelf: "stretch" }} />}
 
               {/* Right — link sections + View All */}
               <div style={{ display: "flex", flexDirection: "column" }}>
