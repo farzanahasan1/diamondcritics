@@ -42,10 +42,19 @@ const nextConfig: NextConfig = {
         destination: '/category/diamond-retailer-reviews/blue-nile',
         permanent: true,
       },
-      // AVIF→JPG: Google cached old AVIF featured image URLs — redirect permanently to JPG equivalents
       {
         source: '/images/:filename*.avif',
         destination: '/images/:filename*.jpg',
+        permanent: true,
+      },
+      {
+        source: '/community',
+        destination: '/',
+        permanent: true,
+      },
+      {
+        source: '/community/:path*',
+        destination: '/',
         permanent: true,
       },
     ];

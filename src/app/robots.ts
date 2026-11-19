@@ -8,15 +8,7 @@ export default function robots(): MetadataRoute.Robots {
       disallow: [
         "/keystatic/",
         "/api/",
-        "/community/admin",
-        "/community/login",
-        "/community/register",
-        "/community/auth/",
-        "/community/r/*/submit",
-        "/community/u/*/edit",
-        "/community/saved",
-        "/community/notifications",
-        "/community/search",
+        "/community/",
       ],
     },
     sitemap: [

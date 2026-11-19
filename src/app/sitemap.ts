@@ -1,6 +1,5 @@
 import type { MetadataRoute } from "next";
 import { getAllPosts } from "@/lib/content";
-import { createClient } from "@supabase/supabase-js";
 
 const BASE = "https://diamondcritics.com";
 
@@ -43,45 +42,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }));
 
-  // ── Community pages ──────────────────────────────────────────────────────
-  // Individual /community/post/UUID URLs are excluded from sitemap intentionally.
-  // UUID post URLs waste crawl budget and return redirects in GSC.
-  // Google discovers the community through /community and r/[slug] pages only.
-  const communityStatic: MetadataRoute.Sitemap = [
-    { url: `${BASE}/community`, lastModified: new Date(), changeFrequency: "hourly", priority: 0.9 },
-  ];
-
-  let communitySubPages: MetadataRoute.Sitemap = [];
-
-  try {
-    const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-    );
-
-    // Subcommunities (r/[slug]) — real content pages, keep in sitemap
-    const { data: communities } = await supabase
-      .from("communities")
-      .select("slug, updated_at")
-      .order("member_count", { ascending: false });
-
-    if (communities) {
-      communitySubPages = communities.map((c) => ({
-        url: `${BASE}/community/r/${c.slug}`,
-        lastModified: c.updated_at ?? new Date(),
-        changeFrequency: "daily" as const,
-        priority: 0.7,
-      }));
-    }
-  } catch {
-    // Supabase unavailable at build time — community URLs omitted gracefully
-  }
-
   return [
     ...staticPages,
     ...categoryPages,
     ...posts,
-    ...communityStatic,
-    ...communitySubPages,
   ];
 }

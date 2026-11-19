@@ -525,18 +525,6 @@ export default function Header() {
 
           {/* CTA + hamburger */}
           <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-            <a
-              href="/community"
-              className="header-cta"
-              style={{
-                background: "#C6973E", color: "#fff",
-                fontFamily: "var(--body)", fontSize: "0.72rem", fontWeight: 600,
-                padding: "9px 18px", textDecoration: "none",
-                letterSpacing: "0.12em", textTransform: "uppercase",
-              }}
-            >
-              Community →
-            </a>
             <button
               className="header-hamburger"
               onClick={() => { setMobileOpen(!mobileOpen); closeAll(); }}
@@ -785,20 +773,6 @@ export default function Header() {
 
           {/* Mobile footer — CTA + quick links */}
           <div style={{ padding: "16px 20px 24px", background: "#fafafa" }}>
-            <a
-              href="/community"
-              style={{
-                display: "block", textAlign: "center",
-                background: "#C6973E", color: "#fff",
-                fontFamily: "var(--body)", fontSize: "0.75rem", fontWeight: 700,
-                padding: "13px", textDecoration: "none",
-                letterSpacing: "0.12em", textTransform: "uppercase",
-                marginBottom: "14px",
-              }}
-              onClick={() => setMobileOpen(false)}
-            >
-              Community →
-            </a>
             <div style={{ display: "flex", justifyContent: "center", gap: "20px", flexWrap: "wrap" }}>
               <Link href="/blog" style={{ fontSize: "0.78rem", color: "#777", textDecoration: "none" }} onClick={() => setMobileOpen(false)}>All Articles</Link>
               <Link href="/diamond-price-calculator" style={{ fontSize: "0.78rem", color: "#777", textDecoration: "none" }} onClick={() => setMobileOpen(false)}>Calculator</Link>
