@@ -64,6 +64,7 @@ const categoryLabelsSchema: Record<string, string> = {
   "radiant-cut-diamond": "Radiant Cut Diamond",
   "asscher-cut-diamond": "Asscher Cut Diamond",
   "marquise-cut-diamond": "Marquise Cut Diamond",
+  "mens-diamond-rings": "Men's Diamond Rings",
 };
 
 function extractFAQSchema(html: string): object | null {

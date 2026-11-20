@@ -1,0 +1,19 @@
+name = "diamondcritics"
+main = ".open-next/worker.js"
+compatibility_date = "2024-09-23"
+compatibility_flags = ["nodejs_compat"]
+
+assets = { directory = ".open-next/assets", binding = "ASSETS" }
+
+routes = [
+  { pattern = "diamondcritics.com/*", zone_name = "diamondcritics.com" },
+  { pattern = "www.diamondcritics.com/*", zone_name = "diamondcritics.com" }
+]
+
+[[kv_namespaces]]
+binding = "NEXT_INC_CACHE_KV"
+id = "7d1da9b9aaac4d7291d9d49413addc9e"
+
+[[services]]
+binding = "WORKER_SELF_REFERENCE"
+service = "diamondcritics"
