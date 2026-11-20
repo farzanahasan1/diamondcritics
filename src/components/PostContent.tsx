@@ -298,8 +298,8 @@ export default function PostContent({ type, data, related }: Props) {
 
             {/* Main article */}
             <article>
-              {/* Featured image — overrideSrc keeps original URL for Google Images */}
-              {type === "post" && post.featuredImage && (
+              {/* Featured image — skip if content already contains this image (avoids duplicate) */}
+              {type === "post" && post.featuredImage && !contentHtml.slice(0, 2000).includes(post.featuredImage.split("/").pop() ?? "") && (
                 <div style={{ marginBottom: "2.5rem", borderRadius: "4px", overflow: "hidden" }}>
                   <Image
                     src={post.featuredImage}
